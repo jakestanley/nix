@@ -8,7 +8,7 @@ let
 
     src = pkgs.fetchurl {
       url = "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/${geProtonVersion}/${geProtonVersion}.tar.gz";
-      sha256 = "1l3q2vy3w3120772k1y4hbbiz8ag8hsdmyin856x8h8qjlw7h5ip";
+      sha256 = "sha256-Cw0/2e1HfN9wWibN47iK+xk5L7EzDQS3+kTTmhtIxts=";
     };
 
     nativeBuildInputs = [
