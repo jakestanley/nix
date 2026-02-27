@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./autologin.nix
     ];
 
   # Bootloader.
@@ -59,7 +60,6 @@
   services.xserver.enable = true;
 
   # Enable the KDE Plasma Desktop Environment.
-  services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
 
   # Configure keymap in X11
@@ -128,6 +128,7 @@
   #  wget
     vim
     git
+    ripgrep
   ];
 
   environment.variables.EDITOR = "vim";
