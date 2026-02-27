@@ -9,6 +9,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./autologin.nix
+      ./modules/gaming.nix
       ./nvidia.nix
     ];
 

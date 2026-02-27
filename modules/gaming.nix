@@ -1,0 +1,106 @@
+{ pkgs, ... }:
+
+let
+  geProtonVersion = "GE-Proton10-32";
+  geProton = pkgs.stdenvNoCC.mkDerivation {
+    pname = "ge-proton";
+    version = geProtonVersion;
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/${geProtonVersion}/${geProtonVersion}.tar.gz";
+      sha256 = "1l3q2vy3w3120772k1y4hbbiz8ag8hsdmyin856x8h8qjlw7h5ip";
+    };
+
+    nativeBuildInputs = [
+      pkgs.gnutar
+      pkgs.gzip
+    ];
+
+    dontConfigure = true;
+    dontBuild = true;
+
+    outputs = [
+      "out"
+      "steamcompattool"
+    ];
+
+    unpackPhase = ''
+      runHook preUnpack
+      mkdir source
+      tar -xzf "$src" -C source
+      runHook postUnpack
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      mkdir -p "$out" "$steamcompattool"
+      cp -a "source/${geProtonVersion}/." "$out/"
+      cp -a "source/${geProtonVersion}/." "$steamcompattool/"
+      runHook postInstall
+    '';
+  };
+
+  mangoHudConfig = pkgs.writeText "MangoHud.conf" ''
+    toggle_hud=F10
+    fps
+    frametime
+    cpu_temp
+    gpu_temp
+    cpu_load
+    gpu_load
+  '';
+in
+{
+  programs.steam = {
+    enable = true;
+    extraCompatPackages = [ geProton ];
+    extraPackages = [
+      pkgs.gamemode
+      pkgs.mangohud
+    ];
+  };
+
+  programs.gamemode.enable = true;
+
+  # 26.05-pre uses hardware.graphics.enable32Bit as the canonical 32-bit graphics option.
+  hardware.graphics.enable32Bit = true;
+
+  environment.systemPackages = [ pkgs.mangohud ];
+
+  users.groups.jake = { };
+  users.users.jake.extraGroups = [ "jake" ];
+
+  systemd.tmpfiles.settings."10-gaming" = {
+    "/home/jake/.config/MangoHud".d = {
+      mode = "0755";
+      user = "jake";
+      group = "jake";
+    };
+
+    "/home/jake/.config/MangoHud/MangoHud.conf"."L+" = {
+      argument = "${mangoHudConfig}";
+    };
+
+    "/home/jake/.steam".d = {
+      mode = "0755";
+      user = "jake";
+      group = "jake";
+    };
+
+    "/home/jake/.steam/root".d = {
+      mode = "0755";
+      user = "jake";
+      group = "jake";
+    };
+
+    "/home/jake/.steam/root/compatibilitytools.d".d = {
+      mode = "0755";
+      user = "jake";
+      group = "jake";
+    };
+
+    "/home/jake/.steam/root/compatibilitytools.d/GE-Proton"."L+" = {
+      argument = "${geProton.steamcompattool}";
+    };
+  };
+}
