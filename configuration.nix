@@ -107,6 +107,12 @@
     ];
   };
 
+  # stop auto-suspend
+  services.logind.settings.Login = {
+    IdleAction = "ignore";
+    IdleActionSec = "0";
+  };
+
   # Install firefox.
   programs.firefox.enable = true;
 
