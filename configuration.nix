@@ -98,6 +98,7 @@
     isNormalUser = true;
     description = "Jake Stanley";
     extraGroups = [ "networkmanager" "wheel" ];
+    shell = pkgs.zsh;
     packages = with pkgs; [
       kdePackages.kate
     #  thunderbird
@@ -115,6 +116,7 @@
 
   # Install firefox.
   programs.firefox.enable = true;
+  programs.zsh.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
