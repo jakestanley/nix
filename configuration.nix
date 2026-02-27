@@ -45,7 +45,14 @@
     LC_TIME = "en_GB.UTF-8";
   };
 
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+      PermitRootLogin = "no";
+    };
+  };
 
   # Enable the X11 windowing system.
   # You can disable this if you're only using the Wayland session.
@@ -94,6 +101,9 @@
     packages = with pkgs; [
       kdePackages.kate
     #  thunderbird
+    ];
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL0q1CwSf4NG0jPtBtWabETld24LR2QsIB4XQLpukXSK jake@Jacobs-MacBook-Pro.local"
     ];
   };
 
