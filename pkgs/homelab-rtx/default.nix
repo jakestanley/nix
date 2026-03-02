@@ -2,7 +2,8 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "homelab-rtx";
-  version = "unstable-2b93f57";
+  # Setuptools validates project.version as PEP 440, so keep this compliant.
+  version = "0.0.0+unstable.2b93f57";
 
   # Vendored from upstream:
   # git@github.com:jakestanley/homelab-rtx.git
