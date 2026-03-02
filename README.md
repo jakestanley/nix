@@ -38,6 +38,9 @@ kscreen-doctor -o
 
 # homelab-rtx
 - The reusable NixOS module lives at `modules/nixos/rtx.nix`.
+- The canonical local listen port lives at `sources/service-ports/rtx.nix`.
+- To sync that value from `homelab-infra/registry.yaml`, run `./scripts/sync-service-port.sh rtx`.
+- This sync is explicit only; normal Nix evaluation and deploys do not read `homelab-infra`.
 - Host enablement example:
 
 ```nix

@@ -1,36 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  registrySource = builtins.fetchGit {
-    url = "git@github.com:jakestanley/homelab-infra.git";
-    ref = "refs/heads/main";
-    rev = "b5620c88b35ebe60376095f952f38faf0257e937";
-  };
-  registryLines = lib.splitString "\n" (builtins.readFile "${registrySource}/registry.yaml");
-  findRtxPort =
-    let
-      go = state: lines:
-        if lines == [ ] then
-          throw "Failed to resolve services.rtx.upstream.port from homelab-infra/registry.yaml"
-        else
-          let
-            line = builtins.head lines;
-            rest = builtins.tail lines;
-            portMatch = builtins.match "      port:[[:space:]]*([0-9]+)([[:space:]]*#.*)?"
-              line;
-          in
-          if state == "seekServices" then
-            if line == "services:" then go "seekRtx" rest else go state rest
-          else if state == "seekRtx" then
-            if line == "  rtx:" then go "seekUpstream" rest else go state rest
-          else if state == "seekUpstream" then
-            if line == "    upstream:" then go "seekPort" rest else go state rest
-          else if portMatch != null then
-            lib.toInt (builtins.head portMatch)
-          else
-            go state rest;
-    in
-    go "seekServices" registryLines;
+  servicePort = import ../../sources/service-ports/rtx.nix;
   cfg = config.services.rtx;
 in
 {
@@ -48,7 +19,7 @@ in
 
     port = lib.mkOption {
       type = lib.types.port;
-      default = findRtxPort;
+      default = servicePort.port;
       description = "TCP port exposed by homelab-rtx via RTX_PORT.";
     };
 
