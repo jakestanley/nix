@@ -1,5 +1,8 @@
 { ... }:
 
 {
-  # Host-specific Home Manager overrides for shrike belong here.
+  xdg.configFile = {
+    "kscreenlockerrc".source = ./../files/hosts/shrike/kscreenlockerrc;
+    "powerdevilrc".source = ./../files/hosts/shrike/powerdevilrc;
+  };
 }
