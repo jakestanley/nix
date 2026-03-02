@@ -14,15 +14,44 @@
     };
   };
 
-  outputs = inputs@{ nixpkgs, ... }: {
-    nixosConfigurations.shrike = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = {
-        inherit inputs;
-      };
-      modules = [
-        ./hosts/shrike/default.nix
+  outputs = inputs@{ nixpkgs, ... }:
+    let
+      lib = nixpkgs.lib;
+      supportedSystems = [
+        "aarch64-darwin"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "x86_64-linux"
       ];
+      forAllSystems = lib.genAttrs supportedSystems;
+      overlay = final: prev: {
+        homelab-rtx = final.callPackage ./pkgs/homelab-rtx { };
+      };
+    in {
+      overlays.default = overlay;
+
+      nixosModules.rtx = ./modules/nixos/rtx.nix;
+
+      packages = forAllSystems (system:
+        let
+          pkgs = import nixpkgs {
+            inherit system;
+            overlays = [ overlay ];
+          };
+        in {
+          default = pkgs.homelab-rtx;
+          inherit (pkgs) homelab-rtx;
+        });
+
+      nixosConfigurations.shrike = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = {
+          inherit inputs;
+        };
+        modules = [
+          { nixpkgs.overlays = [ overlay ]; }
+          ./hosts/shrike/default.nix
+        ];
+      };
     };
-  };
 }

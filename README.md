@@ -35,3 +35,30 @@ kscreen-doctor -o
 - Normal deploy: `./scripts/deploy-shrike.sh`
 - Test rebuild without switching: `./scripts/deploy-shrike.sh --test`
 - Update inputs explicitly with `nix flake update`, then deploy with `./scripts/deploy-shrike.sh`
+
+# homelab-rtx
+- The reusable NixOS module lives at `modules/nixos/rtx.nix`.
+- Host enablement example:
+
+```nix
+{
+  imports = [ ../../modules/nixos/rtx.nix ];
+
+  services.rtx.enable = true;
+
+  specialisation.gaming.configuration.services.rtx.enable = lib.mkForce false;
+}
+```
+
+# Systemd units and specialisations
+- Package long-lived services into the Nix store and declare them with `systemd.services.<name>`, rather than copying unit files into `/etc/systemd/system`.
+- Keep mutable runtime state under a managed path such as `/var/lib/<name>` with `StateDirectory=`.
+- Enable the service in the default host configuration, then explicitly disable it inside any specialisation that must not run it:
+
+```nix
+{
+  services.example.enable = true;
+
+  specialisation.gaming.configuration.services.example.enable = lib.mkForce false;
+}
+```

@@ -11,6 +11,7 @@
     ../../modules/nixos/greetd-autologin.nix
     ../../modules/nixos/nvidia.nix
     ../../modules/nixos/gaming.nix
+    ../../modules/nixos/rtx.nix
     ../../modules/nixos/reboot-to-windows.nix
   ];
 
@@ -25,7 +26,13 @@
     hostname = "shrike";
   };
 
+  # Hosts opt into the reusable RTX module declaratively here.
+  services.rtx.enable = true;
+
   specialisation.gaming.configuration = {
+    # Long-lived systemd units stay enabled in the default system and are
+    # explicitly forced off here when the gaming boot entry must not run them.
+    services.rtx.enable = lib.mkForce false;
     virtualisation.docker.enable = lib.mkForce false;
   };
 
