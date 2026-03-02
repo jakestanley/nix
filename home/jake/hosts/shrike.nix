@@ -2,10 +2,9 @@
 
 let
   qfont = import "${inputs.plasma-manager}/lib/qfont.nix" { inherit lib; };
-  kateUbuntuMono10NoAA = qfont.fontToString {
-    family = "Ubuntu Mono";
+  kateHack10 = qfont.fontToString {
+    family = "Hack";
     pointSize = 10;
-    styleStrategy.antialiasing = "disable";
   };
   konsoleUbuntuMono10NoAA = qfont.fontToString {
     family = "Ubuntu Mono";
@@ -42,7 +41,7 @@ in
         "TurnOffDisplayWhenIdle" = false;
       };
       "powerdevilrc"."AC][SuspendAndShutdown"."AutoSuspendAction" = 0;
-      "katerc"."KTextEditor Renderer"."Text Font" = kateUbuntuMono10NoAA;
+      "katerc"."KTextEditor Renderer"."Text Font" = kateHack10;
       "konsolerc"."Desktop Entry"."DefaultProfile" = "${konsoleProfileName}.profile";
     };
   };
