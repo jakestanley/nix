@@ -1,4 +1,16 @@
-{ config, lib, ... }:
+{ config, inputs, lib, pkgs, ... }:
+
+let
+  qfont = import "${inputs.plasma-manager}/lib/qfont.nix" { inherit lib; };
+  ubuntuMono13NoAA = qfont.fontToString {
+    family = "Ubuntu Mono";
+    pointSize = 13;
+    styleHint = "monospace";
+    fixedPitch = true;
+    styleStrategy.antialiasing = "disable";
+  };
+  konsoleProfileName = "Shrike";
+in
 
 {
   home.activation.removeLegacyPlasmaSymlinks = lib.hm.dag.entryBefore [ "writeBoundary" ] ''
@@ -12,6 +24,8 @@
     done
   '';
 
+  home.packages = [ pkgs."ubuntu-classic" ];
+
   # networking.firewall.enable = false;
 
   programs.plasma = {
@@ -23,6 +37,18 @@
         "TurnOffDisplayWhenIdle" = false;
       };
       "powerdevilrc"."AC][SuspendAndShutdown"."AutoSuspendAction" = 0;
+      "katerc"."KTextEditor Renderer"."Text Font" = ubuntuMono13NoAA;
+      "konsolerc"."Desktop Entry"."DefaultProfile" = "${konsoleProfileName}.profile";
+    };
+  };
+
+  xdg.dataFile."konsole/${konsoleProfileName}.profile".text = lib.generators.toINI { } {
+    General = {
+      Name = konsoleProfileName;
+      Parent = "FALLBACK/";
+    };
+    Appearance = {
+      Font = ubuntuMono13NoAA;
     };
   };
 
