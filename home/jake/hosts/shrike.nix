@@ -2,9 +2,14 @@
 
 let
   qfont = import "${inputs.plasma-manager}/lib/qfont.nix" { inherit lib; };
-  ubuntuMono13NoAA = qfont.fontToString {
+  kateUbuntuMono10NoAA = qfont.fontToString {
     family = "Ubuntu Mono";
-    pointSize = 13;
+    pointSize = 10;
+    styleStrategy.antialiasing = "disable";
+  };
+  konsoleUbuntuMono10NoAA = qfont.fontToString {
+    family = "Ubuntu Mono";
+    pointSize = 10;
     styleHint = "monospace";
     fixedPitch = true;
     styleStrategy.antialiasing = "disable";
@@ -37,7 +42,7 @@ in
         "TurnOffDisplayWhenIdle" = false;
       };
       "powerdevilrc"."AC][SuspendAndShutdown"."AutoSuspendAction" = 0;
-      "katerc"."KTextEditor Renderer"."Text Font" = ubuntuMono13NoAA;
+      "katerc"."KTextEditor Renderer"."Text Font" = kateUbuntuMono10NoAA;
       "konsolerc"."Desktop Entry"."DefaultProfile" = "${konsoleProfileName}.profile";
     };
   };
@@ -48,7 +53,7 @@ in
       Parent = "FALLBACK/";
     };
     Appearance = {
-      Font = ubuntuMono13NoAA;
+      Font = konsoleUbuntuMono10NoAA;
     };
   };
 
