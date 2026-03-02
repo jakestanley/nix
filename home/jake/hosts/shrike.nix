@@ -6,9 +6,9 @@ let
     family = "Hack";
     pointSize = 10;
   };
-  konsoleUbuntuMono10NoAA = qfont.fontToString {
+  konsoleUbuntuMono = qfont.fontToString {
     family = "Ubuntu Mono";
-    pointSize = 10;
+    pointSize = 11;
     styleHint = "monospace";
     fixedPitch = true;
     styleStrategy.antialiasing = "disable";
@@ -185,7 +185,7 @@ in
       Parent = "FALLBACK/";
     };
     Appearance = {
-      Font = konsoleUbuntuMono10NoAA;
+      Font = konsoleUbuntuMono;
     };
   };
 
