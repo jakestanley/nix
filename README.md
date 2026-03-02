@@ -17,6 +17,6 @@
 - Reload Plasma with `pkill plasmashell && kstart5 plasmashell`
 
 # Flake workflow
-- Normal deploy: `./deploy.sh`
-- Update `nixpkgs`: change the pinned revision in `flake.nix`, then run `./deploy.sh --update`
-- Future release upgrade: change `nixpkgs.url` in `flake.nix` to the target branch or revision, run `nix flake update`, then run `./deploy.sh`
+- Normal deploy: `./scripts/deploy-shrike.sh`
+- Test rebuild without switching: `./scripts/deploy-shrike.sh --test`
+- Update inputs explicitly with `nix flake update`, then deploy with `./scripts/deploy-shrike.sh`
