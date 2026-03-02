@@ -19,7 +19,7 @@ in
       enable = true;
       enableCompletion = true;
       syntaxHighlighting.enable = true;
-      initExtra = ''
+      initContent = ''
         bindkey '^R' history-incremental-search-backward
         bindkey -M emacs '^R' history-incremental-search-backward
         bindkey -M viins '^R' history-incremental-search-backward
