@@ -68,8 +68,8 @@ in
 
   imports =
     [
+      ./platforms/linux.nix
+      ./platforms/darwin.nix
     ]
-    ++ lib.optional pkgs.stdenv.hostPlatform.isLinux ./platforms/linux.nix
-    ++ lib.optional pkgs.stdenv.hostPlatform.isDarwin ./platforms/darwin.nix
     ++ lib.optional (hostname != null && builtins.pathExists hostModule) hostModule;
 }

@@ -1,6 +1,6 @@
-{ ... }:
+{ lib, pkgs, ... }:
 
-{
+lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
   home.homeDirectory = "/home/jake";
 
   programs.git.settings = {

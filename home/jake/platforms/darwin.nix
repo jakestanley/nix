@@ -1,6 +1,6 @@
-{ ... }:
+{ lib, pkgs, ... }:
 
-{
+lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
   home.homeDirectory = "/Users/jake";
 
   programs.git.settings = {
