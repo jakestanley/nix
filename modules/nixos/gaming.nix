@@ -42,6 +42,9 @@ let
 
 in
 {
+  # Specialisations are layered on top of the default system. Any long-lived
+  # service that must not run in gaming mode should be disabled from the host's
+  # specialisation block with `lib.mkForce false`.
   programs.steam = {
     enable = true;
     extraCompatPackages = [ geProton ];
