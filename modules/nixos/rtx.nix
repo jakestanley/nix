@@ -23,6 +23,8 @@ in
       description = "TCP port exposed by homelab-rtx via RTX_PORT.";
     };
 
+    openFirewall = lib.mkEnableOption "open the firewall for the homelab-rtx TCP port";
+
     environmentFile = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
@@ -43,35 +45,41 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    systemd.services.rtx = {
-      description = "homelab-rtx GPU telemetry service";
-      after = [ "network-online.target" ];
-      wants = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
-      path = [ config.hardware.nvidia.package ];
-      environment = {
-        RTX_BIND_HOST = cfg.bindHost;
-        RTX_PORT = toString cfg.port;
-        RTX_LOG_PATH = "/var/lib/rtx/gpu-metrics.csv";
-        RTX_LOG_INTERVAL_SECONDS = "30";
-        RTX_QUERY_TIMEOUT_SECONDS = "5";
-      } // cfg.extraEnvironment;
-      serviceConfig =
-        {
-          DynamicUser = true;
-          ExecStart = lib.getExe cfg.package;
-          NoNewPrivileges = true;
-          Restart = "on-failure";
-          RestartSec = "5s";
-          StandardError = "journal";
-          StandardOutput = "journal";
-          StateDirectory = "rtx";
-          WorkingDirectory = "/var/lib/rtx";
-        }
-        // lib.optionalAttrs (cfg.environmentFile != null) {
-          EnvironmentFile = cfg.environmentFile;
-        };
-    };
-  };
+  config = lib.mkIf cfg.enable (lib.mkMerge [
+    {
+      systemd.services.rtx = {
+	description = "homelab-rtx GPU telemetry service";
+	after = [ "network-online.target" ];
+	wants = [ "network-online.target" ];
+	wantedBy = [ "multi-user.target" ];
+	path = [ config.hardware.nvidia.package ];
+	environment = {
+	  RTX_BIND_HOST = cfg.bindHost;
+	  RTX_PORT = toString cfg.port;
+	  RTX_LOG_PATH = "/var/lib/rtx/gpu-metrics.csv";
+	  RTX_LOG_INTERVAL_SECONDS = "30";
+	  RTX_QUERY_TIMEOUT_SECONDS = "5";
+	} // cfg.extraEnvironment;
+	serviceConfig =
+	  {
+	    DynamicUser = true;
+	    ExecStart = lib.getExe cfg.package;
+	    NoNewPrivileges = true;
+	    Restart = "on-failure";
+	    RestartSec = "5s";
+	    StandardError = "journal";
+	    StandardOutput = "journal";
+	    StateDirectory = "rtx";
+	    WorkingDirectory = "/var/lib/rtx";
+	  }
+	  // lib.optionalAttrs (cfg.environmentFile != null) {
+	    EnvironmentFile = cfg.environmentFile;
+	  };
+      };
+    }
+
+    (lib.mkIf cfg.openFirewall {
+      networking.firewall.allowedTCPPorts = [ cfg.port ];
+    })
+  ]);
 }

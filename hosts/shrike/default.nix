@@ -28,6 +28,7 @@
 
   # Hosts opt into the reusable RTX module declaratively here.
   services.rtx.enable = true;
+  services.rtx.openFirewall = true;
 
   specialisation.gaming.configuration = {
     # Long-lived systemd units stay enabled in the default system and are
