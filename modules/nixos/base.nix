@@ -58,6 +58,7 @@
     ripgrep
     spotify
     fastfetch
+    kdePackages.kdialog
   ];
 
   environment.variables = {
