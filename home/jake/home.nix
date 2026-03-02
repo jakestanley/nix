@@ -19,6 +19,11 @@ in
       enable = true;
       enableCompletion = true;
       syntaxHighlighting.enable = true;
+      initExtra = ''
+        bindkey '^R' history-incremental-search-backward
+        bindkey -M emacs '^R' history-incremental-search-backward
+        bindkey -M viins '^R' history-incremental-search-backward
+      '';
       oh-my-zsh = {
         enable = false;
       };
