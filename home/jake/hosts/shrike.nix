@@ -1,6 +1,16 @@
-{ ... }:
+{ config, lib, ... }:
 
 {
+  home.activation.removeLegacyPlasmaSymlinks = lib.hm.dag.entryBefore [ "writeBoundary" ] ''
+    for file in \
+      "${config.xdg.configHome}/kscreenlockerrc" \
+      "${config.xdg.configHome}/powerdevilrc"
+    do
+      if [ -L "$file" ]; then
+        $DRY_RUN_CMD rm $VERBOSE_ARG "$file"
+      fi
+    done
+  '';
 
   # networking.firewall.enable = false;
 
