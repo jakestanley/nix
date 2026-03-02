@@ -155,11 +155,6 @@ in
         $DRY_RUN_CMD rm $VERBOSE_ARG "$file"
       fi
     done
-
-    staleBackup="${config.xdg.configHome}/powerdevilrc.hm-backup"
-    if [ -e "$staleBackup" ]; then
-      $DRY_RUN_CMD rm $VERBOSE_ARG "$staleBackup"
-    fi
   '';
 
   home.packages = [
@@ -179,15 +174,18 @@ in
     };
   };
 
-  xdg.configFile."powerdevilrc".text = ''
-    [AC][Display]
-    TurnOffDisplayIdleTimeoutSec=-1
-    TurnOffDisplayWhenIdle=false
+  xdg.configFile."powerdevilrc" = {
+    force = true;
+    text = ''
+      [AC][Display]
+      TurnOffDisplayIdleTimeoutSec=-1
+      TurnOffDisplayWhenIdle=false
 
-    [AC][SuspendAndShutdown]
-    AutoSuspendAction=0
-    AutoSuspendIdleTimeoutSec=0
-  '';
+      [AC][SuspendAndShutdown]
+      AutoSuspendAction=0
+      AutoSuspendIdleTimeoutSec=0
+    '';
+  };
 
   xdg.dataFile."konsole/${konsoleProfileName}.profile".text = lib.generators.toINI { } {
     General = {
