@@ -40,15 +40,6 @@ let
     '';
   };
 
-  mangoHudConfig = pkgs.writeText "MangoHud.conf" ''
-    toggle_hud=F10
-    fps
-    frametime
-    cpu_temp
-    gpu_temp
-    cpu_load
-    gpu_load
-  '';
 in
 {
   programs.steam = {
@@ -70,16 +61,6 @@ in
   users.users.jake.extraGroups = [ "jake" ];
 
   systemd.tmpfiles.settings."10-gaming" = {
-    "/home/jake/.config/MangoHud".d = {
-      mode = "0755";
-      user = "jake";
-      group = "jake";
-    };
-
-    "/home/jake/.config/MangoHud/MangoHud.conf"."L+" = {
-      argument = "${mangoHudConfig}";
-    };
-
     "/home/jake/.steam".d = {
       mode = "0755";
       user = "jake";

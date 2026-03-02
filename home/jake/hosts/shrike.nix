@@ -25,4 +25,14 @@
       "powerdevilrc"."AC][SuspendAndShutdown"."AutoSuspendAction" = 0;
     };
   };
+
+  xdg.configFile."MangoHud/MangoHud.conf".text = ''
+    toggle_hud=F10
+    fps
+    frametime
+    cpu_temp
+    gpu_temp
+    cpu_load
+    gpu_load
+  '';
 }
