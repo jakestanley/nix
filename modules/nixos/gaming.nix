@@ -62,7 +62,6 @@ in
 
   programs.gamemode.enable = true;
 
-  # 26.05-pre uses hardware.graphics.enable32Bit as the canonical 32-bit graphics option.
   hardware.graphics.enable32Bit = true;
 
   environment.systemPackages = [ pkgs.mangohud ];
