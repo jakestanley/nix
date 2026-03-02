@@ -1,4 +1,4 @@
-{ lib, pkgs, hostname ? null, ... }:
+{ config, lib, pkgs, hostname ? null, ... }:
 
 let
   hostModule = if hostname == null then null else ./hosts + "/${hostname}.nix";
@@ -7,6 +7,10 @@ in
 {
   home.username = "jake";
   home.stateVersion = "26.05";
+  home.file.".gitconfig".text = ''
+    [include]
+    	path = ${config.xdg.configHome}/git/config
+  '';
 
   programs.home-manager.enable = true;
 
