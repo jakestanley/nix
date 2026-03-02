@@ -18,6 +18,7 @@
       syntaxHighlighting.enable = true;
       oh-my-zsh = {
         enable = false;
+      };
       shellAliases = {
         rm = "rm -I";
         hmtest = "echo HOME_MANAGER_IS_WORKING";
