@@ -1,9 +1,10 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   imports = [
     ./hardware-configuration.nix
     ../../modules/nixos/base.nix
+    ../../modules/nixos/docker.nix
     ../../modules/nixos/home-manager.nix
     ../../modules/nixos/ssh.nix
     ../../modules/nixos/plasma.nix
@@ -22,6 +23,10 @@
 
   home-manager.extraSpecialArgs = {
     hostname = "shrike";
+  };
+
+  specialisation.gaming.configuration = {
+    virtualisation.docker.enable = lib.mkForce false;
   };
 
   system.stateVersion = "26.05";
