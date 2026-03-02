@@ -8,6 +8,7 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
+    backupFileExtension = "hm-backup";
     users.jake = import ../../home/jake/home.nix;
   };
 }
