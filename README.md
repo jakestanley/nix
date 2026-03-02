@@ -19,6 +19,7 @@
 # Display sync
 - Shrike runs a `systemd --user` `display-sync` service in Plasma that disables any `HDMI-*` outputs when any enabled `DP-*` output is present, and re-enables `HDMI-*` outputs when no `DP-*` output is enabled.
 - `kscreen-doctor` is installed via `pkgs.kdePackages.libkscreen`.
+- PowerDevil suspend settings are managed via a literal `powerdevilrc` file in Home Manager because Plasma Manager escaped nested section names incorrectly for this setup.
 - To test `kscreen-doctor -o` over SSH, export the Plasma session environment first:
 
 ```sh

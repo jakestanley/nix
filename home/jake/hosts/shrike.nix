@@ -169,15 +169,20 @@ in
     enable = true;
     configFile = {
       "kscreenlockerrc"."Daemon"."LockOnResume" = false;
-      "powerdevilrc"."AC][Display" = {
-        "TurnOffDisplayIdleTimeoutSec" = -1;
-        "TurnOffDisplayWhenIdle" = false;
-      };
-      "powerdevilrc"."AC][SuspendAndShutdown"."AutoSuspendAction" = 0;
       "katerc"."KTextEditor Renderer"."Text Font" = kateHack10;
       "konsolerc"."Desktop Entry"."DefaultProfile" = "${konsoleProfileName}.profile";
     };
   };
+
+  xdg.configFile."powerdevilrc".text = ''
+    [AC][Display]
+    TurnOffDisplayIdleTimeoutSec=-1
+    TurnOffDisplayWhenIdle=false
+
+    [AC][SuspendAndShutdown]
+    AutoSuspendAction=0
+    AutoSuspendIdleTimeoutSec=0
+  '';
 
   xdg.dataFile."konsole/${konsoleProfileName}.profile".text = lib.generators.toINI { } {
     General = {
