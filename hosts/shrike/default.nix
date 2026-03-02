@@ -4,6 +4,7 @@
   imports = [
     ./hardware-configuration.nix
     ../../modules/nixos/base.nix
+    ../../modules/nixos/home-manager.nix
     ../../modules/nixos/ssh.nix
     ../../modules/nixos/plasma.nix
     ../../modules/nixos/greetd-autologin.nix
@@ -17,6 +18,10 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   networking.hostName = "nixos";
+
+  home-manager.extraSpecialArgs = {
+    hostname = "shrike";
+  };
 
   system.stateVersion = "26.05";
 }

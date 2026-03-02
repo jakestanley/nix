@@ -1,5 +1,5 @@
 { ... }:
 
 {
-  # Placeholder for future shrike-specific Home Manager overrides.
+  # Host-specific Home Manager overrides for shrike belong here.
 }
