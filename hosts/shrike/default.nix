@@ -9,6 +9,7 @@
     ../../modules/nixos/greetd-autologin.nix
     ../../modules/nixos/nvidia.nix
     ../../modules/nixos/gaming.nix
+    ../../modules/nixos/reboot-to-windows.nix
   ];
 
   boot.loader.systemd-boot.enable = true;
