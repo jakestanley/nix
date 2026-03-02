@@ -155,6 +155,11 @@ in
         $DRY_RUN_CMD rm $VERBOSE_ARG "$file"
       fi
     done
+
+    staleBackup="${config.xdg.configHome}/powerdevilrc.hm-backup"
+    if [ -e "$staleBackup" ]; then
+      $DRY_RUN_CMD rm $VERBOSE_ARG "$staleBackup"
+    fi
   '';
 
   home.packages = [
