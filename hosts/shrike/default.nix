@@ -29,6 +29,7 @@
 
   services.homelabOllama.enable = true;
   services.homelabOllama.openFirewall = true;
+  services.homelabOllama.ollamaPackage = pkgs.ollama-cuda;
 
   # Hosts opt into the reusable RTX module declaratively here.
   services.rtx.enable = true;
