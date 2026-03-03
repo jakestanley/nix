@@ -2,7 +2,7 @@
 
 let
   src = builtins.fetchGit {
-    url = "git@github.com:jakestanley/homelab-ollama.git";
+    url = "https://github.com/jakestanley/homelab-ollama.git";
     ref = "refs/heads/systemd";
     rev = "57757f10602cc9f911f72750516748be8d9e2110";
   };
@@ -11,8 +11,7 @@ python3Packages.buildPythonApplication rec {
   pname = "homelab-ollama";
   version = "0.0.0+unstable.57757f1";
 
-  # Pinned private source fetched at build/evaluation time. This host is
-  # expected to have read-only credentials for the upstream repository.
+  # Pinned public source fetched at build/evaluation time.
   inherit src;
 
   pyproject = true;
