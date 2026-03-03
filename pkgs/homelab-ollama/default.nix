@@ -4,12 +4,12 @@ let
   src = builtins.fetchGit {
     url = "https://github.com/jakestanley/homelab-ollama.git";
     ref = "refs/heads/systemd";
-    rev = "57757f10602cc9f911f72750516748be8d9e2110";
+    rev = "6aeadf9370b7ed7ff654c69b2a29aa358593d360";
   };
 in
 python3Packages.buildPythonApplication rec {
   pname = "homelab-ollama";
-  version = "0.0.0+unstable.57757f1";
+  version = "0.0.0+unstable.6aeadf9";
 
   # Pinned public source fetched at build/evaluation time.
   inherit src;
