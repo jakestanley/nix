@@ -16,7 +16,7 @@ in
     demucsPackage = lib.mkOption {
       type = lib.types.nullOr lib.types.package;
       default = null;
-      example = lib.literalExpression "pkgs.python3Packages.demucs";
+      example = lib.literalExpression "pkgs.demucs";
       description = ''
         Optional package providing the `demucs` CLI. When unset, the service
         expects `demucs` to already be available on PATH.

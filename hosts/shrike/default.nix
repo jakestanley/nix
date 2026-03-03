@@ -1,10 +1,7 @@
 { lib, pkgs, ... }:
 
 let
-  demucsCuda = pkgs.python3.withPackages (ps: [
-    ps.demucs
-    ps.pytorchWithCuda
-  ]);
+  demucsCuda = pkgs.demucs;
 in
 {
   imports = [
@@ -49,7 +46,7 @@ in
   services.homelabDemucs.enable = true;
   services.homelabDemucs.openFirewall = true;
   services.homelabDemucs.package = pkgs.homelab-demucs.override {
-    torchPackage = pkgs.python3Packages.pytorchWithCuda;
+    torchPackage = pkgs.python3Packages.torchWithCuda;
   };
   services.homelabDemucs.demucsPackage = demucsCuda;
 
