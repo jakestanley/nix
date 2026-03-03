@@ -34,6 +34,10 @@
     cores = 0;
   };
 
+  environment.systemPackages = [
+    pkgs.ollama-cuda
+  ];
+
   services.homelabOllama.enable = true;
   services.homelabOllama.openFirewall = true;
   services.homelabOllama.ollamaPackage = pkgs.ollama-cuda;
