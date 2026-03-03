@@ -22,6 +22,10 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   networking.hostName = "nixos";
+  networking.interfaces.enp4s0.wakeOnLan = {
+    enable = true;
+    policy = [ "magic" ];
+  };
 
   home-manager.extraSpecialArgs = {
     hostname = "shrike";

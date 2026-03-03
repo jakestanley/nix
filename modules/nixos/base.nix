@@ -56,6 +56,7 @@
     vim
     git
     ripgrep
+    ethtool
     spotify
     fastfetch
     kdePackages.kdialog
