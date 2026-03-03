@@ -16,9 +16,7 @@ buildGoModule rec {
   modRoot = "src";
   subPackages = [ "." ];
 
-  # This must be replaced with the real value after the first nix build reports
-  # the correct hash. There is no local Nix here to precompute it.
-  vendorHash = lib.fakeHash;
+  vendorHash = "sha256-JkyxqGyZXD6cSGAVAbcS5NSw0JiLTdhTmQKYfYkH+h0=";
 
   ldflags = [
     "-s"
