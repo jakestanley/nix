@@ -22,10 +22,6 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   networking.hostName = "nixos";
-  networking.interfaces.enp4s0.wakeOnLan = {
-    enable = true;
-    policy = [ "magic" ];
-  };
 
   home-manager.extraSpecialArgs = {
     hostname = "shrike";
@@ -36,6 +32,17 @@
   nix.settings = {
     max-jobs = 1;
     cores = 0;
+  };
+
+  systemd.services.wake-on-lan-enp4s0 = {
+    description = "Enable wake-on-LAN on enp4s0";
+    after = [ "NetworkManager.service" ];
+    wants = [ "NetworkManager.service" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.ethtool}/bin/ethtool -s enp4s0 wol g";
+    };
   };
 
   environment.systemPackages = [
