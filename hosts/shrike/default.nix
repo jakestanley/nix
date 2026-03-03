@@ -9,6 +9,7 @@
     ../../modules/nixos/ssh.nix
     ../../modules/nixos/plasma.nix
     ../../modules/nixos/greetd-autologin.nix
+    ../../modules/nixos/homelab-demucs.nix
     ../../modules/nixos/homelab-ollama.nix
     ../../modules/nixos/nvidia.nix
     ../../modules/nixos/gaming.nix
@@ -38,6 +39,10 @@
     pkgs.ollama-cuda
   ];
 
+  services.homelabDemucs.enable = true;
+  services.homelabDemucs.openFirewall = true;
+  services.homelabDemucs.demucsPackage = pkgs.python3Packages.demucs;
+
   services.homelabOllama.enable = true;
   services.homelabOllama.openFirewall = true;
   services.homelabOllama.ollamaPackage = pkgs.ollama-cuda;
@@ -49,6 +54,7 @@
   specialisation.gaming.configuration = {
     # Long-lived systemd units stay enabled in the default system and are
     # explicitly forced off here when the gaming boot entry must not run them.
+    services.homelabDemucs.enable = lib.mkForce false;
     services.homelabOllama.enable = lib.mkForce false;
     services.rtx.enable = lib.mkForce false;
     virtualisation.docker.enable = lib.mkForce false;

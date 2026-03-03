@@ -25,12 +25,14 @@
       ];
       forAllSystems = lib.genAttrs supportedSystems;
       overlay = final: prev: {
+        homelab-demucs = final.callPackage ./pkgs/homelab-demucs { };
         homelab-ollama = final.callPackage ./pkgs/homelab-ollama { };
         homelab-rtx = final.callPackage ./pkgs/homelab-rtx { };
       };
     in {
       overlays.default = overlay;
 
+      nixosModules.homelabDemucs = ./modules/nixos/homelab-demucs.nix;
       nixosModules.homelabOllama = ./modules/nixos/homelab-ollama.nix;
       nixosModules.rtx = ./modules/nixos/rtx.nix;
 
@@ -42,7 +44,7 @@
           };
         in {
           default = pkgs.homelab-rtx;
-          inherit (pkgs) homelab-ollama homelab-rtx;
+          inherit (pkgs) homelab-demucs homelab-ollama homelab-rtx;
         });
 
       nixosConfigurations.shrike = nixpkgs.lib.nixosSystem {
