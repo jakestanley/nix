@@ -4,10 +4,10 @@ when:
   - event: manual
     branch: main
 
-steps: 
+steps:
   - name: validate
     image: nixos/nix
     volumes:
       - nix-cache:/nix
     commands:
-      - nix flake check
+      - nix --extra-experimental-features "nix-command flakes" flake check -L --show-trace
