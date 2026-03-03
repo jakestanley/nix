@@ -13,6 +13,7 @@
     ../../modules/nixos/nvidia.nix
     ../../modules/nixos/gaming.nix
     ../../modules/nixos/rtx.nix
+    ../../modules/nixos/sleep-on-lan.nix
     ../../modules/nixos/reboot-to-windows.nix
   ];
 
@@ -56,6 +57,9 @@
   # Hosts opt into the reusable RTX module declaratively here.
   services.rtx.enable = true;
   services.rtx.openFirewall = true;
+
+  services.sleepOnLan.enable = true;
+  services.sleepOnLan.openFirewall = true;
 
   specialisation.gaming.configuration = {
     # Long-lived systemd units stay enabled in the default system and are

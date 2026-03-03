@@ -82,6 +82,23 @@ kscreen-doctor -o
 }
 ```
 
+# sleep-on-lan
+- The reusable NixOS module lives at `modules/nixos/sleep-on-lan.nix`.
+- It renders a JSON config from Nix by default and starts the upstream daemon as a root-owned system service so it can bind `UDP:9` and call `systemctl suspend`.
+- Host enablement example:
+
+```nix
+{
+  imports = [ ../../modules/nixos/sleep-on-lan.nix ];
+
+  services.sleepOnLan = {
+    enable = true;
+    openFirewall = true;
+    listeners = [ "UDP:9" "HTTP:8009" ];
+  };
+}
+```
+
 # Systemd units and specialisations
 - Package long-lived services into the Nix store and declare them with `systemd.services.<name>`, rather than copying unit files into `/etc/systemd/system`.
 - Keep mutable runtime state under a managed path such as `/var/lib/<name>` with `StateDirectory=`.
