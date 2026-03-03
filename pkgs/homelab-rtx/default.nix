@@ -1,15 +1,19 @@
 { lib, python3Packages }:
 
+let
+  src = builtins.fetchGit {
+    url = "https://github.com/jakestanley/homelab-rtx.git";
+    ref = "refs/heads/main";
+    rev = "2104149071b60aa3399e6ef4b1d117eb502409c7";
+  };
+in
 python3Packages.buildPythonApplication rec {
   pname = "homelab-rtx";
   # Setuptools validates project.version as PEP 440, so keep this compliant.
-  version = "0.0.0+unstable.2b93f57";
+  version = "0.0.0+unstable.2104149";
 
-  # Vendored from upstream:
-  # git@github.com:jakestanley/homelab-rtx.git
-  # branch: feature/systemd
-  # rev: 2b93f57e0c886ddf48799abd59d6ed110c526e87
-  src = ./src;
+  # Pinned public source fetched at build/evaluation time.
+  inherit src;
 
   pyproject = true;
 
