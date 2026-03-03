@@ -37,6 +37,17 @@ kscreen-doctor -o
 - Test rebuild without switching: `./scripts/deploy-shrike.sh --test`
 - Update inputs explicitly with `nix flake update`, then deploy with `./scripts/deploy-shrike.sh`
 
+# Service development flow
+- Make app changes in the upstream service repo first, for example `homelab-ollama` or `homelab-rtx`.
+- Create a dedicated branch in this Nix repo for the service change instead of iterating directly on `main`.
+- Push the upstream branch or commit you want to test.
+- Update the pinned commit in this repo's package definition.
+- Do not pin a non-`main` dependency head on this repo's `main` branch. Test branch heads from a branch in this repo, then move `main` here back to a pinned commit from dependency `main`.
+- Prefer squash merges in dependency repos so the commit pinned here represents one reviewed, merged change on dependency `main`.
+- Rebuild on `shrike` with `./scripts/deploy-shrike.sh --test` for a non-persistent test, then `./scripts/deploy-shrike.sh` once satisfied.
+- Check the updated service with `systemctl status <unit>` and `journalctl -u <unit> -f`.
+- Only run `./scripts/sync-service-port.sh <service>` when the upstream port mapping in `homelab-infra/registry.yaml` changes.
+
 # homelab-rtx
 - The reusable NixOS module lives at `modules/nixos/rtx.nix`.
 - The canonical local listen port lives at `sources/service-ports/rtx.nix`.
@@ -51,6 +62,23 @@ kscreen-doctor -o
   services.rtx.enable = true;
 
   specialisation.gaming.configuration.services.rtx.enable = lib.mkForce false;
+}
+```
+
+# homelab-ollama
+- The reusable NixOS module lives at `modules/nixos/homelab-ollama.nix`.
+- The canonical local listen port lives at `sources/service-ports/ollama.nix`.
+- To sync that value from `homelab-infra/registry.yaml`, run `./scripts/sync-service-port.sh ollama`.
+- This sync is explicit only; normal Nix evaluation and deploys do not read `homelab-infra`.
+- Host enablement example:
+
+```nix
+{
+  imports = [ ../../modules/nixos/homelab-ollama.nix ];
+
+  services.homelabOllama.enable = true;
+
+  specialisation.gaming.configuration.services.homelabOllama.enable = lib.mkForce false;
 }
 ```
 
