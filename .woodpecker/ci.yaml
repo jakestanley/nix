@@ -1,0 +1,13 @@
+when:
+  - event: push
+    branch: main
+
+steps: 
+  - name: validate
+    image: nixos/nix
+    volumes:
+      - nix-cache:/nix
+    commands:
+      - nix flake check
+      # TODO: implement later
+      # - ./scripts/compare-ports.sh
