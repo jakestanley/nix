@@ -112,6 +112,8 @@ If that does not work, the configuration is incorrect.
 - Do not make `nixos-rebuild` depend on whatever upstream happens to contain at evaluation time.
 - Updates to external sources must be explicit, reviewable, and committed in this repo.
 - If data must come from another repo, pin that repo to a specific commit and update the pin deliberately.
+- For private service repos, prefer fetching a pinned upstream commit from Nix over vendoring the full app source into this repository when the build host has read-only credentials.
+- Vendoring full upstream service repos into this repository is an exception path, not the default.
 
 ## Remote Access Policy (SSH)
 
