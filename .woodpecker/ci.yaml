@@ -9,6 +9,15 @@ steps:
       - nix-cache:/nix
     commands:
       - nix --extra-experimental-features "nix-command flakes" flake check -L --show-trace
+  - name: enforce-main-pins
+    image: alpine:3.20
+    when:
+      - branch: main
+        event: push
+      - branch: main
+        event: manual
+    commands:
+      - ./scripts/check-main-branch-pins.sh
   # - name: deploy
   #   image: some-image
   #   when:
