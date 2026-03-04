@@ -49,9 +49,22 @@ python3Packages.buildPythonApplication rec {
     path = Path("demucs/audio.py")
     text = path.read_text()
     text = text.replace("import lameenc\n", "")
+    text = text.replace("import numpy as np\n", "import numpy as np\nimport soundfile as sf\n")
     text = text.replace(
         "    encoder = lameenc.Encoder()\n",
         "    import lameenc\n\n    encoder = lameenc.Encoder()\n",
+    )
+    text = text.replace(
+        "        ta.save(str(path), wav, sample_rate=samplerate,\n"
+        "                encoding=encoding, bits_per_sample=bits_per_sample)\n",
+        "        subtype = 'FLOAT' if as_float else f'PCM_{bits_per_sample}'\n"
+        "        sf.write(str(path), wav.t().cpu().numpy(), samplerate,\n"
+        "                 format='WAV', subtype=subtype)\n",
+    )
+    text = text.replace(
+        "        ta.save(str(path), wav, sample_rate=samplerate, bits_per_sample=bits_per_sample)\n",
+        "        sf.write(str(path), wav.t().cpu().numpy(), samplerate,\n"
+        "                 format='FLAC', subtype=f'PCM_{bits_per_sample}')\n",
     )
     path.write_text(text)
     PY
