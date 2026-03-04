@@ -33,6 +33,10 @@ python3Packages.buildPythonApplication rec {
     python3Packages.tqdm
   ];
 
+  # The service uses a deliberately curated runtime: lazy MP3 support and
+  # binary torchaudio packages do not satisfy upstream wheel metadata exactly.
+  dontCheckRuntimeDeps = true;
+
   postPatch = ''
     python - <<'PY'
     from pathlib import Path
