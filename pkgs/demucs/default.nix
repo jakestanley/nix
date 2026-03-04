@@ -1,4 +1,4 @@
-{ lib, python3Packages, doraSearch, openunmix, juliusPackage ? python3Packages.julius, torchPackage ? python3Packages.torch, torchaudioPackage ? python3Packages.torchaudio }:
+{ lib, python3Packages, doraSearch, openunmix, juliusPackage ? python3Packages.julius, torchPackage ? python3Packages.torch, torchaudioPackage ? python3Packages.torchaudio, torchcodecPackage ? python3Packages.torchcodec }:
 
 let
   rev = "b9ab48cad45976ba42b2ff17b229c071f0df9390";
@@ -11,6 +11,9 @@ let
     inherit torchPackage torchaudioPackage;
   };
   effectiveJulius = juliusPackage.override {
+    torch = torchPackage;
+  };
+  effectiveTorchcodec = torchcodecPackage.override {
     torch = torchPackage;
   };
 in
@@ -34,6 +37,7 @@ python3Packages.buildPythonApplication rec {
     python3Packages.pyyaml
     python3Packages.soundfile
     torchPackage
+    effectiveTorchcodec
     torchaudioPackage
     python3Packages.tqdm
   ];
