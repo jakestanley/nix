@@ -115,6 +115,13 @@ If that does not work, the configuration is incorrect.
 - For private service repos, prefer fetching a pinned upstream commit from Nix over vendoring the full app source into this repository when the build host has read-only credentials.
 - Vendoring full upstream service repos into this repository is an exception path, not the default.
 
+## Heavy Runtime Exceptions
+
+- Source-built heavyweight runtimes are still the preferred architecture when practical, ideally backed by a binary cache such as Cachix.
+- Binary-wheel or other reduced-purity runtime compromises are exception paths only.
+- Do not introduce or extend wheel/binary-runtime exceptions for additional services without Jake Stanley's explicit decision.
+- If a temporary exception is approved, document it in an ADR and treat it as a short-term workaround rather than the new default.
+
 ## Remote Access Policy (SSH)
 
 Agents may SSH into `shrike` to **inspect** state only.
