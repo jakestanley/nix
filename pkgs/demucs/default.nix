@@ -1,4 +1,4 @@
-{ lib, python3Packages, doraSearch, torchPackage ? python3Packages.torch, torchaudioPackage ? python3Packages.torchaudio }:
+{ lib, python3Packages, doraSearch, openunmix, torchPackage ? python3Packages.torch, torchaudioPackage ? python3Packages.torchaudio }:
 
 let
   rev = "b9ab48cad45976ba42b2ff17b229c071f0df9390";
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
     doraSearch
     python3Packages.einops
     python3Packages.julius
-    python3Packages.openunmix
+    openunmix
     python3Packages.pyyaml
     torchPackage
     torchaudioPackage
