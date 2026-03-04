@@ -1,4 +1,4 @@
-{ lib, python3Packages, doraSearch, openunmix, torchPackage ? python3Packages.torch, torchaudioPackage ? python3Packages.torchaudio }:
+{ lib, python3Packages, doraSearch, openunmix, juliusPackage ? python3Packages.julius, torchPackage ? python3Packages.torch, torchaudioPackage ? python3Packages.torchaudio }:
 
 let
   rev = "b9ab48cad45976ba42b2ff17b229c071f0df9390";
@@ -9,6 +9,9 @@ let
   };
   effectiveOpenunmix = openunmix.override {
     inherit torchPackage torchaudioPackage;
+  };
+  effectiveJulius = juliusPackage.override {
+    torch = torchPackage;
   };
 in
 python3Packages.buildPythonApplication rec {
@@ -25,7 +28,7 @@ python3Packages.buildPythonApplication rec {
   dependencies = [
     doraSearch
     python3Packages.einops
-    python3Packages.julius
+    effectiveJulius
     effectiveOpenunmix
     python3Packages.pyyaml
     torchPackage
