@@ -65,7 +65,7 @@ in
         after = [ "network-online.target" ];
         wants = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
-        path = lib.optionals (cfg.demucsPackage != null) [ cfg.demucsPackage ];
+        path = [ pkgs.ffmpeg ] ++ lib.optionals (cfg.demucsPackage != null) [ cfg.demucsPackage ];
         environment = {
           HOST = cfg.bindHost;
           PORT = toString cfg.port;
