@@ -69,4 +69,4 @@ if [[ "$USE_SCREEN" == true ]] && [[ -z "${STY:-}" ]]; then
   exec screen -S "$SCREEN_SESSION" bash -lc "cd '$REPO_DIR' && $screen_cmd_str"
 fi
 
-sudo nixos-rebuild "$MODE" --flake .#shrike
+sudo nixos-rebuild "$MODE" --flake .#shrike -L
