@@ -23,7 +23,6 @@ python3Packages.buildPythonApplication rec {
     doraSearch
     python3Packages.einops
     python3Packages.julius
-    python3Packages.lameenc
     python3Packages.openunmix
     python3Packages.pyyaml
     torchPackage
@@ -32,6 +31,19 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postPatch = ''
+    python - <<'PY'
+    from pathlib import Path
+
+    path = Path("demucs/audio.py")
+    text = path.read_text()
+    text = text.replace("import lameenc\n", "")
+    text = text.replace(
+        "    encoder = lameenc.Encoder()\n",
+        "    import lameenc\n\n    encoder = lameenc.Encoder()\n",
+    )
+    path.write_text(text)
+    PY
+
     cat > pyproject.toml <<EOF
     [build-system]
     requires = ["setuptools>=68"]
