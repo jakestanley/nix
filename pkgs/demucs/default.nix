@@ -7,6 +7,9 @@ let
     ref = "refs/heads/main";
     inherit rev;
   };
+  effectiveOpenunmix = openunmix.override {
+    inherit torchPackage torchaudioPackage;
+  };
 in
 python3Packages.buildPythonApplication rec {
   pname = "demucs";
@@ -23,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     doraSearch
     python3Packages.einops
     python3Packages.julius
-    openunmix
+    effectiveOpenunmix
     python3Packages.pyyaml
     torchPackage
     torchaudioPackage

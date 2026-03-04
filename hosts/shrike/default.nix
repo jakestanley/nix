@@ -2,7 +2,8 @@
 
 let
   demucsCuda = pkgs.demucs.override {
-    torchPackage = pkgs.python3Packages.torchWithCuda;
+    torchPackage = pkgs.python3Packages.torch-bin;
+    torchaudioPackage = pkgs.python3Packages.torchaudio-bin;
   };
 in
 {
@@ -60,7 +61,7 @@ in
   services.homelabDemucs.enable = true;
   services.homelabDemucs.openFirewall = true;
   services.homelabDemucs.package = pkgs.homelab-demucs.override {
-    torchPackage = pkgs.python3Packages.torchWithCuda;
+    torchPackage = pkgs.python3Packages.torch-bin;
   };
   services.homelabDemucs.demucsPackage = demucsCuda;
 
