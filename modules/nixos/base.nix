@@ -55,6 +55,7 @@
   environment.systemPackages = with pkgs; [
     vim
     git
+    htop
     ripgrep
     ethtool
     spotify
