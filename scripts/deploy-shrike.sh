@@ -53,20 +53,19 @@ cd "$REPO_DIR"
 
 if [[ "$USE_SCREEN" == true ]] && [[ -z "${STY:-}" ]]; then
   if ! command -v screen >/dev/null 2>&1; then
-    echo "screen is not installed. Re-run with --no-screen or add screen to the system profile." >&2
-    exit 1
-  fi
+    echo "screen is not installed; continuing without it." >&2
+  else
+    screen_cmd=(./scripts/deploy-shrike.sh --no-screen)
+    if [[ "$MODE" == "test" ]]; then
+      screen_cmd+=(--test)
+    fi
+    if [[ "$ALLOW_DIRTY" == true ]]; then
+      screen_cmd+=(--allow-dirty)
+    fi
 
-  screen_cmd=(./scripts/deploy-shrike.sh --no-screen)
-  if [[ "$MODE" == "test" ]]; then
-    screen_cmd+=(--test)
+    printf -v screen_cmd_str '%q ' "${screen_cmd[@]}"
+    exec screen -S "$SCREEN_SESSION" bash -lc "cd '$REPO_DIR' && $screen_cmd_str"
   fi
-  if [[ "$ALLOW_DIRTY" == true ]]; then
-    screen_cmd+=(--allow-dirty)
-  fi
-
-  printf -v screen_cmd_str '%q ' "${screen_cmd[@]}"
-  exec screen -S "$SCREEN_SESSION" bash -lc "cd '$REPO_DIR' && $screen_cmd_str"
 fi
 
 sudo nixos-rebuild "$MODE" --flake .#shrike -L
