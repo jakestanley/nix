@@ -17,6 +17,7 @@ in
     ../../modules/nixos/nvidia.nix
     ../../modules/nixos/gaming.nix
     ../../modules/nixos/rtx.nix
+    ../../modules/nixos/sleep-on-lan.nix
     ../../modules/nixos/reboot-to-windows.nix
   ];
 
@@ -38,6 +39,17 @@ in
     cores = 0;
   };
 
+  systemd.services.wake-on-lan-enp4s0 = {
+    description = "Enable wake-on-LAN on enp4s0";
+    after = [ "NetworkManager.service" ];
+    wants = [ "NetworkManager.service" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.ethtool}/bin/ethtool -s enp4s0 wol g";
+    };
+  };
+
   environment.systemPackages = [
     demucsCuda
     pkgs.ollama-cuda
@@ -57,6 +69,9 @@ in
   # Hosts opt into the reusable RTX module declaratively here.
   services.rtx.enable = true;
   services.rtx.openFirewall = true;
+
+  services.sleepOnLan.enable = true;
+  services.sleepOnLan.openFirewall = true;
 
   specialisation.gaming.configuration = {
     # Long-lived systemd units stay enabled in the default system and are

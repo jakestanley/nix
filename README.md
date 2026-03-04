@@ -82,6 +82,23 @@ kscreen-doctor -o
 }
 ```
 
+# sleep-on-lan
+- The reusable NixOS module lives at `modules/nixos/sleep-on-lan.nix`.
+- It renders a JSON config from Nix by default and starts the upstream daemon as a root-owned system service so it can bind `UDP:9` and call `systemctl suspend`.
+- Host enablement example:
+
+```nix
+{
+  imports = [ ../../modules/nixos/sleep-on-lan.nix ];
+
+  services.sleepOnLan = {
+    enable = true;
+    openFirewall = true;
+    listeners = [ "UDP:9" "HTTP:8009" ];
+  };
+}
+```
+
 # homelab-demucs
 - The reusable NixOS module lives at `modules/nixos/homelab-demucs.nix`.
 - The canonical local listen port lives at `sources/service-ports/demucs.nix`.

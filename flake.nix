@@ -28,6 +28,7 @@
         homelab-demucs = final.callPackage ./pkgs/homelab-demucs { };
         homelab-ollama = final.callPackage ./pkgs/homelab-ollama { };
         homelab-rtx = final.callPackage ./pkgs/homelab-rtx { };
+        sleep-on-lan = final.callPackage ./pkgs/sleep-on-lan { };
       };
     in {
       overlays.default = overlay;
@@ -35,6 +36,7 @@
       nixosModules.homelabDemucs = ./modules/nixos/homelab-demucs.nix;
       nixosModules.homelabOllama = ./modules/nixos/homelab-ollama.nix;
       nixosModules.rtx = ./modules/nixos/rtx.nix;
+      nixosModules.sleepOnLan = ./modules/nixos/sleep-on-lan.nix;
 
       packages = forAllSystems (system:
         let
@@ -44,7 +46,7 @@
           };
         in {
           default = pkgs.homelab-rtx;
-          inherit (pkgs) homelab-demucs homelab-ollama homelab-rtx;
+          inherit (pkgs) homelab-demucs homelab-ollama homelab-rtx sleep-on-lan;
         });
 
       nixosConfigurations.shrike = nixpkgs.lib.nixosSystem {
