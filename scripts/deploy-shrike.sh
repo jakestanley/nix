@@ -3,10 +3,11 @@ set -euo pipefail
 
 usage() {
   cat <<'EOF'
-Usage: ./scripts/deploy-shrike.sh [--test] [--allow-dirty]
+Usage: ./scripts/deploy-shrike.sh [--test] [--allow-dirty] [--no-screen]
 
   --test         Run nixos-rebuild test instead of switch.
   --allow-dirty  Skip the clean git tree check.
+  --no-screen    Run directly instead of re-execing inside screen.
   -h, --help     Show this help text.
 EOF
 }
@@ -15,6 +16,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 MODE="switch"
 ALLOW_DIRTY=false
+USE_SCREEN=true
+SCREEN_SESSION="deploy-shrike"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -23,6 +26,9 @@ while [[ $# -gt 0 ]]; do
       ;;
     --allow-dirty)
       ALLOW_DIRTY=true
+      ;;
+    --no-screen)
+      USE_SCREEN=false
       ;;
     -h|--help)
       usage
@@ -44,4 +50,22 @@ if [[ "$ALLOW_DIRTY" != true ]] && [[ -n "$(git -C "$REPO_DIR" status --porcelai
 fi
 
 cd "$REPO_DIR"
-sudo nixos-rebuild "$MODE" --flake .#shrike
+
+if [[ "$USE_SCREEN" == true ]] && [[ -z "${STY:-}" ]]; then
+  if ! command -v screen >/dev/null 2>&1; then
+    echo "screen is not installed; continuing without it." >&2
+  else
+    screen_cmd=(./scripts/deploy-shrike.sh --no-screen)
+    if [[ "$MODE" == "test" ]]; then
+      screen_cmd+=(--test)
+    fi
+    if [[ "$ALLOW_DIRTY" == true ]]; then
+      screen_cmd+=(--allow-dirty)
+    fi
+
+    printf -v screen_cmd_str '%q ' "${screen_cmd[@]}"
+    exec screen -S "$SCREEN_SESSION" bash -lc "cd '$REPO_DIR' && $screen_cmd_str"
+  fi
+fi
+
+sudo nixos-rebuild "$MODE" --flake .#shrike -L

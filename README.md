@@ -99,6 +99,23 @@ kscreen-doctor -o
 }
 ```
 
+# homelab-demucs
+- The reusable NixOS module lives at `modules/nixos/homelab-demucs.nix`.
+- The canonical local listen port lives at `sources/service-ports/demucs.nix`.
+- To sync that value from `homelab-infra/registry.yaml`, run `./scripts/sync-service-port.sh demucs`.
+- This sync is explicit only; normal Nix evaluation and deploys do not read `homelab-infra`.
+- Host enablement example:
+
+```nix
+{
+  imports = [ ../../modules/nixos/homelab-demucs.nix ];
+
+  services.homelabDemucs.enable = true;
+
+  specialisation.gaming.configuration.services.homelabDemucs.enable = lib.mkForce false;
+}
+```
+
 # Systemd units and specialisations
 - Package long-lived services into the Nix store and declare them with `systemd.services.<name>`, rather than copying unit files into `/etc/systemd/system`.
 - Keep mutable runtime state under a managed path such as `/var/lib/<name>` with `StateDirectory=`.
