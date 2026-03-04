@@ -30,7 +30,9 @@ python3Packages.buildPythonApplication rec {
     python3Packages.einops
     effectiveJulius
     effectiveOpenunmix
+    python3Packages.omegaconf
     python3Packages.pyyaml
+    python3Packages.soundfile
     torchPackage
     torchaudioPackage
     python3Packages.tqdm
