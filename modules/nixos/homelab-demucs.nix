@@ -70,6 +70,8 @@ in
           HOST = cfg.bindHost;
           PORT = toString cfg.port;
           STORAGE_ROOT = "/var/lib/demucs";
+          HOME = "/var/lib/demucs";
+          XDG_CACHE_HOME = "/var/lib/demucs/.cache";
           MAX_CONCURRENT_JOBS = "1";
           DEMUCS_DEFAULT_MODEL = "htdemucs";
           DEMUCS_MODELS = "htdemucs,htdemucs_ft,mdx,mdx_q";
