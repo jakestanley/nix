@@ -207,6 +207,35 @@ in
     gpu_load
   '';
 
+  home.file.".config/sunshine/sunshine.conf".text = ''
+    encoder = nvenc
+    nvenc_preset = 1
+    capture = nvfbc
+    min_fps_factor = 1
+    hevc_mode = 0
+    qp = 28
+    bitrate = 50000
+  '';
+
+  home.file.".config/sunshine/apps.json".text = builtins.toJSON {
+    env = {
+      PATH = "$(PATH):/run/current-system/sw/bin:$(HOME)/.local/bin";
+    };
+    apps = [
+      {
+        name = "Desktop";
+        "image-path" = "desktop.png";
+      }
+      {
+        name = "Steam Big Picture";
+        detached = [
+          "setsid steam steam://open/bigpicture"
+        ];
+        "image-path" = "steam.png";
+      }
+    ];
+  };
+
   systemd.user.services.display-sync = {
     Unit = {
       Description = "Auto toggle HDMI outputs based on DisplayPort state";
