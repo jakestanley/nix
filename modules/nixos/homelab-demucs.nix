@@ -3,24 +3,43 @@
 let
   servicePort = import ../../sources/service-ports/demucs.nix;
   cfg = config.services.homelabDemucs;
-  demucsExecutable =
-    if cfg.demucsPackage == null then "demucs"
-    else lib.getExe cfg.demucsPackage;
+  torchBin = pkgs.python3Packages.torch-bin.overrideAttrs (_: {
+    dontCheckRuntimeDeps = true;
+  });
+  torchaudioBin = pkgs.python3Packages.torchaudio-bin.override {
+    "torch-bin" = torchBin;
+  };
+  doraSearch = pkgs.callPackage ../../pkgs/dora-search { };
+  openunmix = pkgs.callPackage ../../pkgs/openunmix {
+    torchPackage = torchBin;
+    torchaudioPackage = torchaudioBin;
+  };
+  demucsCuda = pkgs.callPackage ../../pkgs/demucs {
+    inherit doraSearch openunmix;
+    torchPackage = torchBin;
+    torchaudioPackage = torchaudioBin;
+  };
+  homelabDemucsBinary = pkgs.callPackage ../../pkgs/homelab-demucs {
+    torchPackage = torchBin;
+  };
+  demucsExecutable = lib.getExe cfg.demucsPackage;
 in
 {
   options.services.homelabDemucs = {
     enable = lib.mkEnableOption "homelab-demucs separation service";
 
-    package = lib.mkPackageOption pkgs "homelab-demucs" { };
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = homelabDemucsBinary;
+      example = lib.literalExpression "pkgs.callPackage ../../pkgs/homelab-demucs { }";
+      description = "Package providing the homelab-demucs service executable.";
+    };
 
     demucsPackage = lib.mkOption {
-      type = lib.types.nullOr lib.types.package;
-      default = null;
-      example = lib.literalExpression "pkgs.demucs";
-      description = ''
-        Optional package providing the `demucs` CLI. When unset, the service
-        expects `demucs` to already be available on PATH.
-      '';
+      type = lib.types.package;
+      default = demucsCuda;
+      example = lib.literalExpression "pkgs.callPackage ../../pkgs/demucs { }";
+      description = "Package providing the `demucs` CLI used by the service.";
     };
 
     bindHost = lib.mkOption {
@@ -65,7 +84,7 @@ in
         after = [ "network-online.target" ];
         wants = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
-        path = [ pkgs.ffmpeg ] ++ lib.optionals (cfg.demucsPackage != null) [ cfg.demucsPackage ];
+        path = [ pkgs.ffmpeg cfg.demucsPackage ];
         environment = {
           HOST = cfg.bindHost;
           PORT = toString cfg.port;

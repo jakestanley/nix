@@ -1,16 +1,7 @@
-{ lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
-  torchBin = pkgs.python3Packages.torch-bin.overrideAttrs (_: {
-    dontCheckRuntimeDeps = true;
-  });
-  torchaudioBin = pkgs.python3Packages.torchaudio-bin.override {
-    "torch-bin" = torchBin;
-  };
-  demucsCuda = pkgs.demucs.override {
-    torchPackage = torchBin;
-    torchaudioPackage = torchaudioBin;
-  };
+  demucsServiceEnabled = true;
 in
 {
   imports = [
@@ -59,17 +50,14 @@ in
     };
   };
 
-  environment.systemPackages = [
-    demucsCuda
-    pkgs.ollama-cuda
-  ];
+  environment.systemPackages =
+    lib.optionals config.services.homelabDemucs.enable [ config.services.homelabDemucs.demucsPackage ]
+    ++ [
+      pkgs.ollama-cuda
+    ];
 
-  services.homelabDemucs.enable = true;
-  services.homelabDemucs.openFirewall = true;
-  services.homelabDemucs.package = pkgs.homelab-demucs.override {
-    torchPackage = torchBin;
-  };
-  services.homelabDemucs.demucsPackage = demucsCuda;
+  services.homelabDemucs.enable = demucsServiceEnabled;
+  services.homelabDemucs.openFirewall = demucsServiceEnabled;
 
   services.homelabOllama.enable = true;
   services.homelabOllama.openFirewall = true;
