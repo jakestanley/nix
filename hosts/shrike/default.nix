@@ -12,6 +12,7 @@ in
     ../../modules/nixos/ssh.nix
     ../../modules/nixos/plasma.nix
     ../../modules/nixos/greetd-autologin.nix
+    ../../modules/nixos/homelab-arcade.nix
     ../../modules/nixos/homelab-demucs.nix
     ../../modules/nixos/homelab-ollama.nix
     ../../modules/nixos/nvidia.nix
@@ -59,6 +60,12 @@ in
   services.homelabDemucs.enable = demucsServiceEnabled;
   services.homelabDemucs.openFirewall = demucsServiceEnabled;
 
+  services.homelabArcade.enable = true;
+  services.homelabArcade.openFirewall = true;
+  services.homelabArcade.createUser = false;
+  services.homelabArcade.user = "jake";
+  services.homelabArcade.group = "users";
+
   services.homelabOllama.enable = true;
   services.homelabOllama.openFirewall = true;
   services.homelabOllama.ollamaPackage = pkgs.ollama-cuda;
@@ -71,8 +78,9 @@ in
   services.sleepOnLan.openFirewall = true;
 
   specialisation.gaming.configuration = {
-    # Long-lived systemd units stay enabled in the default system and are
-    # explicitly forced off here when the gaming boot entry must not run them.
+    # Long-lived systemd units that must not run while gaming are explicitly
+    # forced off here. Arcade stays enabled because it is the control deck for
+    # those gaming workloads.
     services.homelabDemucs.enable = lib.mkForce false;
     services.homelabOllama.enable = lib.mkForce false;
     services.rtx.enable = lib.mkForce false;
