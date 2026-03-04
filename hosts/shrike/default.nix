@@ -1,7 +1,9 @@
 { lib, pkgs, ... }:
 
 let
-  demucsCuda = pkgs.demucs;
+  demucsCuda = pkgs.demucs.override {
+    torchPackage = pkgs.python3Packages.torchWithCuda;
+  };
 in
 {
   imports = [

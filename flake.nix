@@ -25,6 +25,7 @@
       ];
       forAllSystems = lib.genAttrs supportedSystems;
       overlay = final: prev: {
+        demucs = final.callPackage ./pkgs/demucs { };
         homelab-demucs = final.callPackage ./pkgs/homelab-demucs { };
         homelab-ollama = final.callPackage ./pkgs/homelab-ollama { };
         homelab-rtx = final.callPackage ./pkgs/homelab-rtx { };
@@ -46,7 +47,7 @@
           };
         in {
           default = pkgs.homelab-rtx;
-          inherit (pkgs) homelab-demucs homelab-ollama homelab-rtx sleep-on-lan;
+          inherit (pkgs) demucs homelab-demucs homelab-ollama homelab-rtx sleep-on-lan;
         });
 
       nixosConfigurations.shrike = nixpkgs.lib.nixosSystem {
