@@ -1,9 +1,15 @@
 { lib, pkgs, ... }:
 
 let
+  torchBin = pkgs.python3Packages.torch-bin.overrideAttrs (_: {
+    dontCheckRuntimeDeps = true;
+  });
+  torchaudioBin = pkgs.python3Packages.torchaudio-bin.override {
+    "torch-bin" = torchBin;
+  };
   demucsCuda = pkgs.demucs.override {
-    torchPackage = pkgs.python3Packages.torch-bin;
-    torchaudioPackage = pkgs.python3Packages.torchaudio-bin;
+    torchPackage = torchBin;
+    torchaudioPackage = torchaudioBin;
   };
 in
 {
@@ -61,7 +67,7 @@ in
   services.homelabDemucs.enable = true;
   services.homelabDemucs.openFirewall = true;
   services.homelabDemucs.package = pkgs.homelab-demucs.override {
-    torchPackage = pkgs.python3Packages.torch-bin;
+    torchPackage = torchBin;
   };
   services.homelabDemucs.demucsPackage = demucsCuda;
 
