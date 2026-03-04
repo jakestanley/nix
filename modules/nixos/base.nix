@@ -56,6 +56,7 @@
     vim
     git
     htop
+    screen
     ripgrep
     ethtool
     spotify
