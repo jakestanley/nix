@@ -4,12 +4,12 @@ let
   src = builtins.fetchGit {
     url = "https://github.com/jakestanley/homelab-demucs.git";
     ref = "refs/heads/systemd";
-    rev = "27a4f39b1be15ba53880788aad0dfedbe88271ef";
+    rev = "0295b0a5e239aee57e7dba61212840c506738269";
   };
 in
 python3Packages.buildPythonApplication rec {
   pname = "homelab-demucs";
-  version = "0.0.0+unstable.27a4f39";
+  version = "0.0.0+unstable.0295b0a";
 
   # Pinned public source fetched at build/evaluation time.
   inherit src;
