@@ -1,7 +1,7 @@
 { lib, python3Packages }:
 
 let
-  rev = "f937e905b13695300a2d0affc1a8a233758f2136";
+  rev = "d0bf37616e317ad39d43f70b81361055f1e447d9";
   src = builtins.fetchGit {
     url = "https://github.com/jakestanley/homelab-arcade.git";
     ref = "refs/heads/systemd";
@@ -20,7 +20,6 @@ python3Packages.buildPythonApplication rec {
 
   inherit src;
   pyproject = true;
-  patches = [ ./cs2-exec-wrapper.patch ];
 
   build-system = [
     python3Packages.setuptools
