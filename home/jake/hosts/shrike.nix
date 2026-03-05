@@ -210,7 +210,7 @@ in
   home.file.".config/sunshine/sunshine.conf".text = ''
     encoder = nvenc
     nvenc_preset = 1
-    capture = nvfbc
+    capture = kms
     origin_web_ui_allowed = lan
     min_fps_factor = 1
     hevc_mode = 0
