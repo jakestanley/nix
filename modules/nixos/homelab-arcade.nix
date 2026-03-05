@@ -5,6 +5,13 @@ let
   cfg = config.services.homelabArcade;
   defaultGameTcpPorts = [ 27015 ];
   defaultGameUdpPorts = [ 27015 27102 27131 ];
+  rconPkg = pkgs.python3Packages.rcon or (pkgs.python3Packages.callPackage ../../pkgs/rcon { });
+  runtimePythonPath = lib.makeSearchPath pkgs.python3.sitePackages [
+    cfg.package
+    pkgs.python3Packages.flask
+    pkgs.python3Packages.pyyaml
+    rconPkg
+  ];
 in
 {
   options.services.homelabArcade = {
@@ -99,6 +106,7 @@ in
           PORTAL_PORT = toString cfg.port;
           XDG_CACHE_HOME = "/var/lib/homelab-arcade/.cache";
           PYTHONUNBUFFERED = "1";
+          PYTHONPATH = runtimePythonPath;
           HOMELAB_ARCADE_CONFIG_PATH = cfg.configFile;
         }
         // cfg.extraEnvironment;
