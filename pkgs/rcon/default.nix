@@ -12,7 +12,11 @@ python3Packages.buildPythonPackage rec {
 
   build-system = [
     python3Packages.setuptools
+    python3Packages."setuptools-scm"
+    python3Packages.wheel
   ];
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   pythonImportsCheck = [
     "rcon"

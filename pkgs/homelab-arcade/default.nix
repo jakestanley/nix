@@ -7,6 +7,7 @@ let
     ref = "refs/heads/systemd";
     inherit rev;
   };
+  rconPkg = python3Packages.rcon or (python3Packages.callPackage ../rcon { });
 in
 python3Packages.buildPythonApplication rec {
   pname = "homelab-arcade";
@@ -22,7 +23,7 @@ python3Packages.buildPythonApplication rec {
   dependencies = [
     python3Packages.flask
     python3Packages.pyyaml
-    python3Packages.rcon
+    rconPkg
   ];
 
   postPatch = ''
