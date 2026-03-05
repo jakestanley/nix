@@ -1,7 +1,7 @@
 { lib, python3Packages }:
 
 let
-  rev = "d0bf37616e317ad39d43f70b81361055f1e447d9";
+  rev = "a04b982f0f1d53cc2baaf206d83ffba8370421cc";
   src = builtins.fetchGit {
     url = "https://github.com/jakestanley/homelab-arcade.git";
     ref = "refs/heads/systemd";
