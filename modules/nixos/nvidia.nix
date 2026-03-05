@@ -5,6 +5,14 @@
 
   services.xserver.videoDrivers = [ "nvidia" ];
 
+  # Ensure both native and Steam (32-bit) Vulkan ICDs come from the NVIDIA
+  # userspace stack under /run/opengl-driver{,-32}.
+  hardware.graphics = {
+    enable = true;
+    extraPackages = [ config.hardware.nvidia.package ];
+    extraPackages32 = [ config.hardware.nvidia.package.lib32 ];
+  };
+
   hardware.nvidia = {
     modesetting.enable = true;
     nvidiaSettings = true;
