@@ -12,6 +12,13 @@ There is no manual configuration.
 ## Canonical Workflow
 
 - All changes happen in this repository.
+- Scope boundary: do not modify sibling repositories unless explicitly requested for cross-repo work in the current turn.
+- Before editing or committing, verify target context with:
+  - `pwd`
+  - `git rev-parse --show-toplevel`
+  - `git branch --show-current`
+- Do not commit or push unless explicitly requested in the current turn.
+- Do not commit on repo/branch confusion. If there is any ambiguity, stop and ask for confirmation before editing or staging anything.
 - Do not treat `/etc/nixos` as the canonical source of truth.
 - Deploy via `./scripts/deploy-shrike.sh`.
 - Rebuild via `sudo nixos-rebuild switch --flake .#shrike`.
