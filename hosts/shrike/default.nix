@@ -15,6 +15,7 @@ in
     ../../modules/nixos/homelab-demucs.nix
     ../../modules/nixos/homelab-ollama.nix
     ../../modules/nixos/nvidia.nix
+    ../../modules/nixos/sunshine.nix
     ../../modules/nixos/gaming.nix
     ../../modules/nixos/rtx.nix
     ../../modules/nixos/sleep-on-lan.nix
@@ -76,6 +77,7 @@ in
     services.homelabDemucs.enable = lib.mkForce false;
     services.homelabOllama.enable = lib.mkForce false;
     services.rtx.enable = lib.mkForce false;
+    services.sunshine.enable = lib.mkForce false;
     virtualisation.docker.enable = lib.mkForce false;
   };
 
