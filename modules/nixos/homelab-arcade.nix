@@ -6,11 +6,15 @@ let
   defaultGameTcpPorts = [ 27015 ];
   defaultGameUdpPorts = [ 27015 27102 27131 ];
   rconPkg = pkgs.python3Packages.rcon or (pkgs.python3Packages.callPackage ../../pkgs/rcon { });
-  runtimePythonPath = lib.makeSearchPath pkgs.python3.sitePackages [
-    cfg.package
+  appPythonPath = lib.makeSearchPath pkgs.python3.sitePackages [ cfg.package ];
+  depsPythonPath = pkgs.python3Packages.makePythonPath [
     pkgs.python3Packages.flask
     pkgs.python3Packages.pyyaml
     rconPkg
+  ];
+  runtimePythonPath = lib.concatStringsSep ":" [
+    appPythonPath
+    depsPythonPath
   ];
 in
 {
