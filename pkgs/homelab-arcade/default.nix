@@ -8,6 +8,11 @@ let
     inherit rev;
   };
   rconPkg = python3Packages.rcon or (python3Packages.callPackage ../rcon { });
+  runtimeDeps = [
+    python3Packages.flask
+    python3Packages.pyyaml
+    rconPkg
+  ];
 in
 python3Packages.buildPythonApplication rec {
   pname = "homelab-arcade";
@@ -20,11 +25,8 @@ python3Packages.buildPythonApplication rec {
     python3Packages.setuptools
   ];
 
-  propagatedBuildInputs = [
-    python3Packages.flask
-    python3Packages.pyyaml
-    rconPkg
-  ];
+  propagatedBuildInputs = runtimeDeps;
+  pythonPath = runtimeDeps;
 
   postPatch = ''
     substituteInPlace pyproject.toml \
