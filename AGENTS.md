@@ -28,6 +28,15 @@ If a change is not committed, it does not exist.
 
 ---
 
+## Branch Discipline
+
+- One feature per branch. Each branch delivers exactly one coherent change.
+- Derive the scope of work from the branch name before starting. If the name is ambiguous, ask before editing anything.
+- Do not commit unrelated changes on a feature branch. Note them in `agent-notes/` for a future branch.
+- A branch is ready to merge only when all items in the Merge Checklist below are satisfied. Present the checklist to the user before proposing a merge.
+
+---
+
 ## System Model
 
 - NixOS unstable
@@ -52,6 +61,15 @@ If a change is not committed, it does not exist.
 6. No ad-hoc hacks to “just make it work”.
 
 If something requires a manual fix, it must be encoded declaratively.
+
+---
+
+## Upstream Change Policy
+
+- Default behavior: do not patch around upstream defects locally.
+- Prefer requesting the required fix in the upstream service repository.
+- Use local patching only when explicitly requested by Jake Stanley for a temporary unblocker.
+- When a temporary local patch is approved, record the upstream issue/PR reference in `agent-notes/<branch-name>.md`.
 
 ---
 
@@ -160,3 +178,40 @@ Enforcement:
 
 - `agent-notes/` is for timestamped investigation and handoff notes between agents.
 - These notes are context only, must stay uncommitted, and are ignored via `.gitignore`.
+- Maintain one file per branch: `agent-notes/<branch-name>.md`.
+
+Each branch notes file must contain:
+
+**Feature goal** — a short plain-English description of what this branch accomplishes and what "done" looks like.
+
+**Progress log** — append a timestamped entry each session covering: what changed and why, decisions made (including rejected approaches), and any open questions.
+
+Example entry:
+```
+2025-03-05 — Added wireguard module under modules/vpn/wireguard.nix.
+Rejected inline config.nix assignment; kept as a service module for consistency.
+Open: confirm peer pubkey with user before finalising.
+```
+
+---
+
+## Flake Hygiene
+
+- Do not add a new flake input unless it is strictly necessary for the current feature.
+- Do not duplicate an input already satisfiable from existing entries in `flake.nix`.
+- Do not add overlays that re-export packages already available from `nixpkgs`.
+- If you add an input, document the reason in the branch progress log.
+
+---
+
+## Merge Checklist
+
+Do not propose a merge until every item is confirmed. Present this list to the user.
+
+- [ ] All flake inputs point to a release tag or immutable revision — not a branch or `HEAD`.
+- [ ] No custom or forked inputs are pinned to a non-release commit.
+- [ ] No `builtins.fetchGit`, `builtins.fetchTarball`, or `fetchFromGitHub` referencing a moving target.
+- [ ] `nix flake check` passes without errors.
+- [ ] No unrelated changes are included on this branch.
+- [ ] Feature goal in `agent-notes/<branch-name>.md` is marked complete and progress log is current.
+- [ ] Any approved unfree/impure exceptions are recorded in the progress log and in an ADR.
