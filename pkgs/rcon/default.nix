@@ -1,6 +1,13 @@
-{ lib, python3Packages, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  wheel,
+}:
 
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "rcon";
   version = "2.4.9";
   pyproject = true;
@@ -11,9 +18,9 @@ python3Packages.buildPythonPackage rec {
   };
 
   build-system = [
-    python3Packages.setuptools
-    python3Packages."setuptools-scm"
-    python3Packages.wheel
+    setuptools
+    setuptools-scm
+    wheel
   ];
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
