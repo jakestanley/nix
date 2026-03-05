@@ -212,10 +212,8 @@ in
     nvenc_preset = 1
     capture = kms
     origin_web_ui_allowed = lan
-    min_fps_factor = 1
     hevc_mode = 0
     qp = 28
-    bitrate = 50000
   '';
 
   home.file.".config/sunshine/apps.json".text = builtins.toJSON {
