@@ -20,6 +20,7 @@ python3Packages.buildPythonApplication rec {
 
   inherit src;
   pyproject = true;
+  patches = [ ./cs2-exec-wrapper.patch ];
 
   build-system = [
     python3Packages.setuptools

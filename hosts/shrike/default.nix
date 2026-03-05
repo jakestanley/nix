@@ -67,6 +67,7 @@ in
   services.homelabArcade.user = "jake";
   services.homelabArcade.group = "users";
   services.homelabArcade.extraEnvironment = {
+    CS2_EXEC_WRAPPER = "${pkgs.steam-run}/bin/steam-run";
     CS2_PATH = "/home/jake/.local/share/Steam/steamapps/common/Counter-Strike Global Offensive";
   };
 

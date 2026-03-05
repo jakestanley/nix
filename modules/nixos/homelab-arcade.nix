@@ -5,7 +5,6 @@ let
   cfg = config.services.homelabArcade;
   defaultGameTcpPorts = [ 27015 ];
   defaultGameUdpPorts = [ 27015 27102 27131 ];
-  wrappedExecStart = "${pkgs.steam-run}/bin/steam-run ${lib.getExe cfg.package}";
   rconPkg = pkgs.python3Packages.rcon or (pkgs.python3Packages.callPackage ../../pkgs/rcon { });
   appPythonPath = lib.makeSearchPath pkgs.python3.sitePackages [ cfg.package ];
   depsPythonPath = pkgs.python3Packages.makePythonPath [
@@ -119,7 +118,7 @@ in
           {
             User = cfg.user;
             Group = cfg.group;
-            ExecStart = wrappedExecStart;
+            ExecStart = lib.getExe cfg.package;
             KillSignal = "SIGTERM";
             NoNewPrivileges = true;
             Restart = "on-failure";

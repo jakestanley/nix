@@ -1,0 +1,15 @@
+--- a/cs2/server.py
++++ b/cs2/server.py
+@@ -216,7 +216,12 @@ class ServerManager:
+         if not rcon_password:
+             raise RuntimeError("RCON_PASSWORD is not set")
+ 
++        # Optional wrapper for Linux hosts that need to launch CS2 through a
++        # compatibility/runtime command such as steam-run.
++        wrapper_parts = shlex.split(os.environ.get("CS2_EXEC_WRAPPER", "").strip())
++
+         args = [
++            *wrapper_parts,
+             str(exe),
+             "-dedicated",
+             "-usercon",

@@ -122,6 +122,8 @@ kscreen-doctor -o
 - To sync that value from `homelab-infra/registry.yaml`, run `./scripts/sync-service-port.sh arcade`.
 - This sync is explicit only; normal Nix evaluation and deploys do not read `homelab-infra`.
 - The package manages the controller/supervisor only. Actual game installs remain host-managed outside Nix and are referenced via mutable host config at `/etc/arcade/config.yaml`.
+- The supervisor runs directly (not under `steam-run`) so host config paths under `/etc/arcade` remain visible at runtime.
+- If CS2 needs Steam runtime libraries, set `CS2_EXEC_WRAPPER` (for example `${pkgs.steam-run}/bin/steam-run`) so only the CS2 game process is wrapped.
 - First-time host setup:
   - Install game servers outside Nix (for example via Steam/SteamCMD as your normal host user).
   - Set the install paths in `/etc/arcade/config.yaml`:
