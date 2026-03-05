@@ -211,6 +211,7 @@ in
     encoder = nvenc
     nvenc_preset = 1
     capture = nvfbc
+    origin_web_ui_allowed = lan
     min_fps_factor = 1
     hevc_mode = 0
     qp = 28
