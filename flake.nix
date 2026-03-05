@@ -25,7 +25,6 @@
       ];
       forAllSystems = lib.genAttrs supportedSystems;
       overlay = final: prev: {
-        rcon = final.callPackage ./pkgs/rcon { };
         homelab-arcade = final.callPackage ./pkgs/homelab-arcade { };
         homelab-demucs = final.callPackage ./pkgs/homelab-demucs { };
         homelab-ollama = final.callPackage ./pkgs/homelab-ollama { };

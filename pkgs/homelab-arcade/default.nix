@@ -1,4 +1,4 @@
-{ lib, python3Packages, rcon }:
+{ lib, python3Packages }:
 
 let
   rev = "f937e905b13695300a2d0affc1a8a233758f2136";
@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
   dependencies = [
     python3Packages.flask
     python3Packages.pyyaml
-    rcon
+    python3Packages.rcon
   ];
 
   postPatch = ''
