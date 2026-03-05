@@ -66,6 +66,9 @@ in
   services.homelabArcade.createUser = false;
   services.homelabArcade.user = "jake";
   services.homelabArcade.group = "users";
+  services.homelabArcade.extraEnvironment = {
+    CS2_PATH = "/home/jake/.local/share/Steam/steamapps/common/Counter-Strike Global Offensive";
+  };
 
   services.homelabOllama.enable = true;
   services.homelabOllama.openFirewall = true;
