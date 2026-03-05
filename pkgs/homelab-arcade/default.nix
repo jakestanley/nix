@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     python3Packages.setuptools
   ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     python3Packages.flask
     python3Packages.pyyaml
     rconPkg
