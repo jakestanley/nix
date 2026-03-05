@@ -34,6 +34,7 @@
     in {
       overlays.default = overlay;
 
+      nixosModules.cs2Dedicated = ./modules/nixos/cs2-dedicated.nix;
       nixosModules.homelabArcade = ./modules/nixos/homelab-arcade.nix;
       nixosModules.homelabDemucs = ./modules/nixos/homelab-demucs.nix;
       nixosModules.homelabOllama = ./modules/nixos/homelab-ollama.nix;

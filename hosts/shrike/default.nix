@@ -12,7 +12,7 @@ in
     ../../modules/nixos/ssh.nix
     ../../modules/nixos/plasma.nix
     ../../modules/nixos/greetd-autologin.nix
-    ../../modules/nixos/homelab-arcade.nix
+    ../../modules/nixos/cs2-dedicated.nix
     ../../modules/nixos/homelab-demucs.nix
     ../../modules/nixos/homelab-ollama.nix
     ../../modules/nixos/nvidia.nix
@@ -61,18 +61,22 @@ in
   services.homelabDemucs.enable = demucsServiceEnabled;
   services.homelabDemucs.openFirewall = demucsServiceEnabled;
 
-  services.homelabArcade.enable = true;
-  services.homelabArcade.openFirewall = true;
-  services.homelabArcade.createUser = false;
-  services.homelabArcade.user = "jake";
-  services.homelabArcade.group = "users";
-  services.homelabArcade.extraEnvironment = {
-    CS2_PATH = "/home/jake/.local/share/Steam/steamapps/common/Counter-Strike Global Offensive";
-    CS2_EXEC_WRAPPER = "${pkgs.steam-run}/bin/steam-run";
-    LD_LIBRARY_PATH = "/home/jake/.local/share/Steam/linux64:/home/jake/.steam/sdk64";
-    RCON_STABILIZATION_SECONDS = "3";
-    RCON_STABILIZATION_MAX_ATTEMPTS = "12";
-    RCON_STABILIZATION_RETRY_DELAY = "1";
+  services.cs2Dedicated = {
+    enable = true;
+    openFirewall = true;
+    user = "jake";
+    group = "users";
+    bindIp = "10.92.8.4";
+    port = 27015;
+    maxPlayers = 64;
+    steamRoot = "/home/jake/.local/share/Steam";
+    cs2Path = "/home/jake/.local/share/Steam/steamapps/common/Counter-Strike Global Offensive";
+    rconPasswordFile = "/etc/arcade/rcon_password";
+    extraLibraryPaths = [ "/home/jake/.steam/sdk64" ];
+    startupCvars = {
+      game_alias = "competitive";
+      map = "de_dust2";
+    };
   };
 
   services.homelabOllama.enable = true;
@@ -88,8 +92,7 @@ in
 
   specialisation.gaming.configuration = {
     # Long-lived systemd units that must not run while gaming are explicitly
-    # forced off here. Arcade stays enabled because it is the control deck for
-    # those gaming workloads.
+    # forced off here.
     services.homelabDemucs.enable = lib.mkForce false;
     services.homelabOllama.enable = lib.mkForce false;
     services.rtx.enable = lib.mkForce false;
