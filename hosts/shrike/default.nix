@@ -67,8 +67,11 @@ in
   services.homelabArcade.user = "jake";
   services.homelabArcade.group = "users";
   services.homelabArcade.extraEnvironment = {
-    CS2_EXEC_WRAPPER = "${pkgs.steam-run}/bin/steam-run";
     CS2_PATH = "/home/jake/.local/share/Steam/steamapps/common/Counter-Strike Global Offensive";
+    LD_LIBRARY_PATH = "/home/jake/.local/share/Steam/linux64:/home/jake/.steam/sdk64";
+    RCON_STABILIZATION_SECONDS = "3";
+    RCON_STABILIZATION_MAX_ATTEMPTS = "12";
+    RCON_STABILIZATION_RETRY_DELAY = "1";
   };
 
   services.homelabOllama.enable = true;
