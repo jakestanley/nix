@@ -28,52 +28,59 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    python - <<'PY'
-    from pathlib import Path
+python - <<'PY'
+from pathlib import Path
+from textwrap import dedent
 
-    pyproject = """
-[build-system]
-requires = ["setuptools>=68"]
-build-backend = "setuptools.build_meta"
+pyproject = dedent(
+    """
+    [build-system]
+    requires = ["setuptools>=68"]
+    build-backend = "setuptools.build_meta"
 
-[project]
-name = "homelab-demucs"
-version = "${version}"
-description = "Host-run HTTP service for Demucs separation jobs"
-requires-python = ">=3.11"
+    [project]
+    name = "homelab-demucs"
+    version = "${version}"
+    description = "Host-run HTTP service for Demucs separation jobs"
+    requires-python = ">=3.11"
 
-[project.scripts]
-homelab-demucs = "demucs_service.server:main"
+    [project.scripts]
+    homelab-demucs = "demucs_service.server:main"
 
-[tool.setuptools.packages.find]
-include = ["demucs_service"]
+    [tool.setuptools.packages.find]
+    include = ["demucs_service"]
 
-[tool.setuptools.package-data]
-demucs_service = ["static/*.html", "openapi.json"]
-""".lstrip()
-    Path("pyproject.toml").write_text(pyproject)
+    [tool.setuptools.package-data]
+    demucs_service = ["static/*.html", "openapi.json"]
+    """
+).lstrip()
+Path("pyproject.toml").write_text(pyproject)
 
-    path = Path("demucs_service/app.py")
-    text = path.read_text()
+path = Path("demucs_service/app.py")
+text = path.read_text()
 
-    old = '''def _sniff_mp3(file_storage) -> bool:
-'''
-    insert = '''def check_cuda() -> tuple[dict | None, str | None]:
-    try:
-        return check_cuda_or_raise(), None
-    except Exception as exc:
-        return None, str(exc)
+old = "def _sniff_mp3(file_storage) -> bool:\n"
+insert = dedent(
+    """\
+    def check_cuda() -> tuple[dict | None, str | None]:
+        try:
+            return check_cuda_or_raise(), None
+        except Exception as exc:
+            return None, str(exc)
 
 
-def _sniff_mp3(file_storage) -> bool:
-'''
-    if old not in text:
-        raise RuntimeError("Expected _sniff_mp3 anchor was not found in demucs_service/app.py")
-    text = text.replace(old, insert, 1)
+    def _sniff_mp3(file_storage) -> bool:
+    """
+)
+if old not in text:
+    raise RuntimeError("Expected _sniff_mp3 anchor was not found in demucs_service/app.py")
+text = text.replace(old, insert, 1)
 
-    text = text.replace("    cuda_info = check_cuda_or_raise()\\n", "    check_cuda_or_raise()\\n", 1)
+text = text.replace("    cuda_info = check_cuda_or_raise()\\n", "    check_cuda_or_raise()\\n", 1)
 
-    old = '''    @app.get("/health")
+old = dedent(
+    """\
+    @app.get("/health")
     def health() -> object:
         return jsonify({"ok": True})
 
@@ -89,8 +96,11 @@ def _sniff_mp3(file_storage) -> bool:
                 "cuda": cuda_info,
             }
         )
-'''
-    replacement = '''    @app.get("/health")
+    """
+)
+replacement = dedent(
+    """\
+    @app.get("/health")
     def health() -> object:
         _, cuda_error = check_cuda()
         if cuda_error:
@@ -120,17 +130,23 @@ def _sniff_mp3(file_storage) -> bool:
                 "cuda_error": cuda_error,
             }
         )
-'''
-    if old not in text:
-        raise RuntimeError("Expected /health + /api/status block was not found in demucs_service/app.py")
-    text = text.replace(old, replacement, 1)
+    """
+)
+if old not in text:
+    raise RuntimeError("Expected /health + /api/status block was not found in demucs_service/app.py")
+text = text.replace(old, replacement, 1)
 
-    old = '''    @app.post("/api/jobs")
+old = dedent(
+    """\
+    @app.post("/api/jobs")
     def create_job() -> object:
         mode = request.form.get("mode", "4")
         model = request.form.get("model", settings.demucs_default_model)
-'''
-    replacement = '''    @app.post("/api/jobs")
+    """
+)
+replacement = dedent(
+    """\
+    @app.post("/api/jobs")
     def create_job() -> object:
         mode = request.form.get("mode", "4")
         _, cuda_error = check_cuda()
@@ -138,13 +154,14 @@ def _sniff_mp3(file_storage) -> bool:
             return error_response("cuda_unavailable", cuda_error, 503)
 
         model = request.form.get("model", settings.demucs_default_model)
-'''
-    if old not in text:
-        raise RuntimeError("Expected /api/jobs block was not found in demucs_service/app.py")
-    text = text.replace(old, replacement, 1)
+    """
+)
+if old not in text:
+    raise RuntimeError("Expected /api/jobs block was not found in demucs_service/app.py")
+text = text.replace(old, replacement, 1)
 
-    path.write_text(text)
-    PY
+path.write_text(text)
+PY
   '';
 
   pythonImportsCheck = [ "demucs_service" ];
