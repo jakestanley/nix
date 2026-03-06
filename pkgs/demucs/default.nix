@@ -3,7 +3,7 @@
   python3Packages,
   torchPackage ? python3Packages.torch,
   torchaudioPackage ? python3Packages.torchaudio,
-  openunmixPackage ? python3Packages.openunmix,
+  openunmixPackage ? null,
   juliusPackage ? python3Packages.julius,
 }:
 
@@ -14,6 +14,31 @@ let
     ref = "refs/heads/main";
     inherit rev;
   };
+  openunmix =
+    if openunmixPackage != null then
+      openunmixPackage
+    else
+      python3Packages.buildPythonApplication rec {
+        pname = "openunmix";
+        version = "1.3.0+unstable.fb672c9";
+        src = builtins.fetchGit {
+          url = "https://github.com/sigsep/open-unmix-pytorch.git";
+          ref = "refs/heads/master";
+          rev = "fb672c9584997c2b05e148eeaa65b4c23ed4693b";
+        };
+        pyproject = true;
+
+        build-system = [
+          python3Packages.setuptools
+        ];
+
+        dependencies = [
+          python3Packages.numpy
+          torchPackage
+          torchaudioPackage
+          python3Packages.tqdm
+        ];
+      };
 in
 python3Packages.buildPythonApplication rec {
   pname = "demucs";
@@ -25,7 +50,7 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = [
     python3Packages.einops
     juliusPackage
-    openunmixPackage
+    openunmix
     python3Packages.omegaconf
     python3Packages.pyyaml
     torchPackage
