@@ -118,7 +118,16 @@ kscreen-doctor -o
 
 # cs2-dedicated
 - The reusable NixOS module lives at `modules/nixos/cs2-dedicated.nix`.
-- Start the server:
+- Generate and set an RCON password file (default path in `hosts/shrike/default.nix`) before starting the service:
+
+```sh
+sudo install -d -m 750 -o root -g users /etc/arcade
+openssl rand -base64 24 | tr -d '\n' | sudo tee /etc/arcade/rcon_password >/dev/null
+sudo chmod 640 /etc/arcade/rcon_password
+sudo chown root:users /etc/arcade/rcon_password
+```
+
+- By default the service is installed but does not auto-start on boot. Start it manually:
 
 ```sh
 sudo systemctl start cs2-dedicated

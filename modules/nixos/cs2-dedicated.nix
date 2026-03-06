@@ -253,6 +253,16 @@ in
 
     openFirewall = lib.mkEnableOption "open the firewall for the CS2 game port";
 
+    autoStart = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Whether to start CS2 automatically on boot. When disabled, the unit is
+        installed and can be started manually with `systemctl start
+        cs2-dedicated`, but is not pulled into `multi-user.target`.
+      '';
+    };
+
     extraFirewallTcpPorts = lib.mkOption {
       type = lib.types.listOf lib.types.port;
       default = [ ];
@@ -287,11 +297,19 @@ in
     }
 
     {
+      systemd.targets.cs2-dedicated = {
+        description = "Counter-Strike 2 dedicated runtime target";
+        after = [ "network-online.target" ];
+        wants = [ "network-online.target" ];
+        wantedBy = lib.optionals cfg.autoStart [ "multi-user.target" ];
+      };
+
       systemd.services.cs2-dedicated = {
         description = "Counter-Strike 2 dedicated server";
         after = [ "network-online.target" ];
         wants = [ "network-online.target" ];
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [ "cs2-dedicated.target" ];
+        partOf = [ "cs2-dedicated.target" ];
         unitConfig = lib.optionalAttrs (requiredConditionPaths != [ ]) {
           ConditionPathExists = requiredConditionPaths;
         };
