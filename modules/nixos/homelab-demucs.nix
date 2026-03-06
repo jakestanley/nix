@@ -96,6 +96,8 @@ in
           DEMUCS_MODELS = "htdemucs,htdemucs_ft,mdx,mdx_q";
           DEMUCS_BIN = demucsExecutable;
           DEMUCS_DEVICE = "cuda";
+          # Ensure CUDA runtime can resolve the active NVIDIA driver userspace.
+          LD_LIBRARY_PATH = "/run/opengl-driver/lib:/run/opengl-driver-32/lib";
           JOB_TIMEOUT_SECONDS = "180";
           OUTPUT_FORMAT_VERSION = "v1-wav";
         } // cfg.extraEnvironment;
