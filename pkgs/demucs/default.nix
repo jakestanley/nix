@@ -1,11 +1,18 @@
 {
   lib,
-  python3Packages,
-  torchPackage ? python3Packages.torch,
-  torchaudioPackage ? python3Packages.torchaudio,
+  python3,
+  buildPythonApplication,
+  setuptools,
+  numpy,
+  tqdm,
+  einops,
+  omegaconf,
+  pyyaml,
+  torchPackage ? python3.pkgs.torch,
+  torchaudioPackage ? python3.pkgs.torchaudio,
   openunmixPackage ? null,
-  doraSearchPackage ? python3Packages.callPackage ../dora-search { inherit torchPackage; },
-  juliusPackage ? python3Packages.julius,
+  doraSearchPackage ? python3.pkgs.callPackage ../dora-search { inherit torchPackage; },
+  juliusPackage ? python3.pkgs.julius,
 }:
 
 let
@@ -19,7 +26,7 @@ let
     if openunmixPackage != null then
       openunmixPackage
     else
-      python3Packages.buildPythonApplication rec {
+      buildPythonApplication rec {
         pname = "openunmix";
         version = "1.3.0+unstable.fb672c9";
         src = builtins.fetchGit {
@@ -30,18 +37,18 @@ let
         pyproject = true;
 
         build-system = [
-          python3Packages.setuptools
+          setuptools
         ];
 
         dependencies = [
-          python3Packages.numpy
+          numpy
           torchPackage
           torchaudioPackage
-          python3Packages.tqdm
+          tqdm
         ];
       };
 in
-python3Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "demucs";
   version = "4.1.0a3+unstable.${lib.substring 0 7 rev}";
 
@@ -50,14 +57,14 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = [
     doraSearchPackage
-    python3Packages.einops
+    einops
     juliusPackage
     openunmix
-    python3Packages.omegaconf
-    python3Packages.pyyaml
+    omegaconf
+    pyyaml
     torchPackage
     torchaudioPackage
-    python3Packages.tqdm
+    tqdm
   ];
 
   pythonImportsCheck = [ "demucs" ];

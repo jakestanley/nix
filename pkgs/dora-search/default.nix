@@ -1,27 +1,41 @@
-{ lib, python3Packages, torchPackage ? python3Packages.torch }:
+{
+  lib,
+  python3,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  retrying,
+  submitit,
+  treetable,
+  torchPackage ? python3.pkgs.torch,
+}:
 
-python3Packages.buildPythonPackage rec {
+let
+  hydraCore = python3.pkgs."hydra-core";
+  pytorchLightning = python3.pkgs."pytorch-lightning";
+in
+buildPythonPackage rec {
   pname = "dora-search";
   version = "0.1.12";
   pyproject = true;
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     pname = "dora_search";
     inherit version;
     hash = "sha256-KVb9LEx+S5pIMOg/DUz5Yb5Fz7oaLwVwKB6R0VrFFvs=";
   };
 
   build-system = [
-    python3Packages.setuptools
+    setuptools
   ];
 
   dependencies = [
-    python3Packages."hydra-core"
-    python3Packages."pytorch-lightning"
-    python3Packages.retrying
-    python3Packages.submitit
+    hydraCore
+    pytorchLightning
+    retrying
+    submitit
     torchPackage
-    python3Packages.treetable
+    treetable
   ];
 
   pythonImportsCheck = [ "dora" "dora.log" ];
