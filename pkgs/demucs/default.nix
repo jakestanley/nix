@@ -1,13 +1,6 @@
 {
   lib,
   python3,
-  buildPythonApplication,
-  setuptools,
-  numpy,
-  tqdm,
-  einops,
-  omegaconf,
-  pyyaml,
   torchPackage ? python3.pkgs.torch,
   torchaudioPackage ? python3.pkgs.torchaudio,
   openunmixPackage ? null,
@@ -16,6 +9,7 @@
 }:
 
 let
+  pyPkgs = python3.pkgs;
   rev = "b9ab48cad45976ba42b2ff17b229c071f0df9390";
   src = builtins.fetchGit {
     url = "https://github.com/adefossez/demucs.git";
@@ -26,7 +20,7 @@ let
     if openunmixPackage != null then
       openunmixPackage
     else
-      buildPythonApplication rec {
+      pyPkgs.buildPythonApplication rec {
         pname = "openunmix";
         version = "1.3.0+unstable.fb672c9";
         src = builtins.fetchGit {
@@ -37,18 +31,18 @@ let
         pyproject = true;
 
         build-system = [
-          setuptools
+          pyPkgs.setuptools
         ];
 
         dependencies = [
-          numpy
+          pyPkgs.numpy
           torchPackage
           torchaudioPackage
-          tqdm
+          pyPkgs.tqdm
         ];
       };
 in
-buildPythonApplication rec {
+pyPkgs.buildPythonApplication rec {
   pname = "demucs";
   version = "4.1.0a3+unstable.${lib.substring 0 7 rev}";
 
@@ -57,14 +51,14 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [
     doraSearchPackage
-    einops
+    pyPkgs.einops
     juliusPackage
     openunmix
-    omegaconf
-    pyyaml
+    pyPkgs.omegaconf
+    pyPkgs.pyyaml
     torchPackage
     torchaudioPackage
-    tqdm
+    pyPkgs.tqdm
   ];
 
   pythonImportsCheck = [ "demucs" ];
