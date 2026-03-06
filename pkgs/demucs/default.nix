@@ -1,4 +1,4 @@
-{ lib, python3Packages, doraSearch, openunmix, juliusPackage ? python3Packages.julius, torchPackage ? python3Packages.torch, torchaudioPackage ? python3Packages.torchaudio }:
+{ lib, python3Packages, juliusPackage ? python3Packages.julius, torchPackage ? python3Packages.torch, torchaudioPackage ? python3Packages.torchaudio }:
 
 let
   rev = "b9ab48cad45976ba42b2ff17b229c071f0df9390";
@@ -7,9 +7,64 @@ let
     ref = "refs/heads/main";
     inherit rev;
   };
-  effectiveOpenunmix = openunmix.override {
-    inherit torchPackage torchaudioPackage;
+  doraSearch = python3Packages.buildPythonPackage rec {
+    pname = "dora-search";
+    version = "0.0.0+compat";
+    src = ../dora-search/src;
+    pyproject = true;
+
+    build-system = [
+      python3Packages.setuptools
+    ];
+
+    postPatch = ''
+      cat > pyproject.toml <<EOF
+      [build-system]
+      requires = ["setuptools>=68"]
+      build-backend = "setuptools.build_meta"
+
+      [project]
+      name = "dora-search"
+      version = "${version}"
+      description = "Minimal runtime compatibility shim for Demucs"
+      requires-python = ">=3.11"
+
+      [tool.setuptools]
+      include-package-data = true
+
+      [tool.setuptools.packages.find]
+      include = ["dora"]
+      EOF
+    '';
+
+    pythonImportsCheck = [ "dora" "dora.log" ];
   };
+  openunmix = python3Packages.buildPythonApplication rec {
+    pname = "openunmix";
+    version = "1.3.0+unstable.fb672c9";
+    src = builtins.fetchGit {
+      url = "https://github.com/sigsep/open-unmix-pytorch.git";
+      ref = "refs/heads/master";
+      rev = "fb672c9584997c2b05e148eeaa65b4c23ed4693b";
+    };
+    pyproject = true;
+
+    build-system = [
+      python3Packages.setuptools
+    ];
+
+    dependencies = [
+      python3Packages.numpy
+      torchPackage
+      torchaudioPackage
+      python3Packages.tqdm
+    ];
+
+    pythonImportsCheck = [ "openunmix" "openunmix.filtering" ];
+  };
+  effectiveOpenunmix = openunmix.overrideAttrs (_: {
+    dontCheckRuntimeDeps = true;
+  });
   effectiveJulius = juliusPackage.override {
     torch = torchPackage;
   };

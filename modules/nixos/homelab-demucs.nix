@@ -3,43 +3,37 @@
 let
   servicePort = import ../../sources/service-ports/demucs.nix;
   cfg = config.services.homelabDemucs;
-  torchBin = pkgs.python3Packages.torch-bin.overrideAttrs (_: {
-    dontCheckRuntimeDeps = true;
-  });
-  torchaudioBin = pkgs.python3Packages.torchaudio-bin.override {
-    "torch-bin" = torchBin;
-  };
-  doraSearch = pkgs.callPackage ../../pkgs/dora-search { };
-  openunmix = pkgs.callPackage ../../pkgs/openunmix {
-    torchPackage = torchBin;
-    torchaudioPackage = torchaudioBin;
-  };
-  demucsCuda = pkgs.callPackage ../../pkgs/demucs {
-    inherit doraSearch openunmix;
-    torchPackage = torchBin;
-    torchaudioPackage = torchaudioBin;
-  };
-  homelabDemucsBinary = pkgs.callPackage ../../pkgs/homelab-demucs {
-    torchPackage = torchBin;
-  };
-  demucsExecutable = lib.getExe cfg.demucsPackage;
+  demucsExecutableLooksLikePath = lib.hasPrefix "/" cfg.demucsExecutable;
+  demucsExecutableLooksLikeCommand = builtins.match "^[A-Za-z0-9._+-]+$" cfg.demucsExecutable != null;
+  executableCheckScript = pkgs.writeShellScript "homelab-demucs-check-executable" ''
+    set -euo pipefail
+    target=${lib.escapeShellArg cfg.demucsExecutable}
+
+    if [[ "$target" = /* ]]; then
+      if [[ ! -x "$target" ]]; then
+        echo "homelab-demucs: demucs executable is not executable: $target" >&2
+        exit 1
+      fi
+    elif ! command -v "$target" >/dev/null 2>&1; then
+      echo "homelab-demucs: demucs executable not found in PATH: $target" >&2
+      exit 1
+    fi
+  '';
 in
 {
   options.services.homelabDemucs = {
     enable = lib.mkEnableOption "homelab-demucs separation service";
 
-    package = lib.mkOption {
-      type = lib.types.package;
-      default = homelabDemucsBinary;
-      example = lib.literalExpression "pkgs.callPackage ../../pkgs/homelab-demucs { }";
-      description = "Package providing the homelab-demucs service executable.";
-    };
+    package = lib.mkPackageOption pkgs "homelab-demucs" { };
 
-    demucsPackage = lib.mkOption {
-      type = lib.types.package;
-      default = demucsCuda;
-      example = lib.literalExpression "pkgs.callPackage ../../pkgs/demucs { }";
-      description = "Package providing the `demucs` CLI used by the service.";
+    demucsExecutable = lib.mkOption {
+      type = lib.types.str;
+      default = "demucs";
+      example = "${pkgs.demucsCuda}/bin/demucs";
+      description = ''
+        Executable used by homelab-demucs for separation jobs. This is managed
+        outside the homelab-demucs service module.
+      '';
     };
 
     bindHost = lib.mkOption {
@@ -56,6 +50,16 @@ in
     };
 
     openFirewall = lib.mkEnableOption "open the firewall for the homelab-demucs TCP port";
+
+    device = lib.mkOption {
+      type = lib.types.str;
+      default = "cuda";
+      example = "cuda";
+      description = ''
+        Device string passed to homelab-demucs via `DEMUCS_DEVICE`.
+        No automatic CPU fallback is applied by this module.
+      '';
+    };
 
     environmentFile = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
@@ -75,33 +79,56 @@ in
       };
       description = "Additional environment variables passed to homelab-demucs.";
     };
+
+    runtimePackages = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = [ pkgs.ffmpeg ];
+      description = ''
+        Runtime packages added to PATH for the service process. This can include
+        a Demucs package when you want the service to resolve `demucs` by name.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable (lib.mkMerge [
     {
-      systemd.services.demucs = {
-        description = "Demucs separation API service";
+      assertions = [
+        {
+          assertion = demucsExecutableLooksLikePath || demucsExecutableLooksLikeCommand;
+          message = "services.homelabDemucs.demucsExecutable must be an absolute path or a simple command name.";
+        }
+        {
+          assertion = demucsExecutableLooksLikePath || (cfg.runtimePackages != [ ]);
+          message = "services.homelabDemucs.demucsExecutable is not absolute; set runtimePackages so the executable can be resolved in PATH.";
+        }
+      ];
+    }
+
+    {
+      systemd.services.homelab-demucs = {
+        description = "homelab-demucs separation API service";
         after = [ "network-online.target" ];
         wants = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
-        path = [ pkgs.ffmpeg cfg.demucsPackage ];
+        path = cfg.runtimePackages;
         environment = {
           HOST = cfg.bindHost;
           PORT = toString cfg.port;
-          STORAGE_ROOT = "/var/lib/demucs";
-          HOME = "/var/lib/demucs";
-          XDG_CACHE_HOME = "/var/lib/demucs/.cache";
+          STORAGE_ROOT = "/var/lib/homelab-demucs";
+          HOME = "/var/lib/homelab-demucs";
+          XDG_CACHE_HOME = "/var/lib/homelab-demucs/.cache";
           MAX_CONCURRENT_JOBS = "1";
           DEMUCS_DEFAULT_MODEL = "htdemucs";
           DEMUCS_MODELS = "htdemucs,htdemucs_ft,mdx,mdx_q";
-          DEMUCS_BIN = demucsExecutable;
-          DEMUCS_DEVICE = "cuda";
+          DEMUCS_BIN = cfg.demucsExecutable;
+          DEMUCS_DEVICE = cfg.device;
           JOB_TIMEOUT_SECONDS = "180";
           OUTPUT_FORMAT_VERSION = "v1-wav";
         } // cfg.extraEnvironment;
         serviceConfig =
           {
             DynamicUser = true;
+            ExecStartPre = executableCheckScript;
             ExecStart = lib.getExe cfg.package;
             KillSignal = "SIGTERM";
             NoNewPrivileges = true;
@@ -109,9 +136,9 @@ in
             RestartSec = "5s";
             StandardError = "journal";
             StandardOutput = "journal";
-            StateDirectory = "demucs";
+            StateDirectory = "homelab-demucs";
             TimeoutStopSec = "30s";
-            WorkingDirectory = "/var/lib/demucs";
+            WorkingDirectory = "/var/lib/homelab-demucs";
           }
           // lib.optionalAttrs (cfg.environmentFile != null) {
             EnvironmentFile = cfg.environmentFile;

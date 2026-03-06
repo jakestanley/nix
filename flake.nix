@@ -25,6 +25,7 @@
       ];
       forAllSystems = lib.genAttrs supportedSystems;
       overlay = final: prev: {
+        demucsCuda = final.callPackage ./pkgs/demucs { };
         homelab-demucs = final.callPackage ./pkgs/homelab-demucs { };
         homelab-ollama = final.callPackage ./pkgs/homelab-ollama { };
         homelab-rtx = final.callPackage ./pkgs/homelab-rtx { };
@@ -35,6 +36,7 @@
 
       nixosModules.homelabDemucs = ./modules/nixos/homelab-demucs.nix;
       nixosModules.homelabOllama = ./modules/nixos/homelab-ollama.nix;
+      nixosModules.gpuRuntime = ./modules/nixos/gpu-runtime.nix;
       nixosModules.rtx = ./modules/nixos/rtx.nix;
       nixosModules.sleepOnLan = ./modules/nixos/sleep-on-lan.nix;
 
@@ -46,7 +48,7 @@
           };
         in {
           default = pkgs.homelab-rtx;
-          inherit (pkgs) homelab-demucs homelab-ollama homelab-rtx sleep-on-lan;
+          inherit (pkgs) demucsCuda homelab-demucs homelab-ollama homelab-rtx sleep-on-lan;
         });
 
       nixosConfigurations.shrike = nixpkgs.lib.nixosSystem {

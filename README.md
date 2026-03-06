@@ -104,13 +104,24 @@ kscreen-doctor -o
 - The canonical local listen port lives at `sources/service-ports/demucs.nix`.
 - To sync that value from `homelab-infra/registry.yaml`, run `./scripts/sync-service-port.sh demucs`.
 - This sync is explicit only; normal Nix evaluation and deploys do not read `homelab-infra`.
+- Service unit name: `homelab-demucs`.
+- The Demucs runtime binary is separate from this service module (`pkgs.demucsCuda` in this flake).
+- Demucs internals needed for packaging are encapsulated inside `pkgs/demucs/default.nix`.
+- `services.homelabDemucs.demucsExecutable` should point at the Demucs binary you want to use.
+- `services.homelabDemucs.device` defaults to `cuda` and does not auto-fallback to CPU.
+- Source-built CUDA Demucs builds can be very heavy on first build.
+- A binary cache (for example, Cachix) is recommended before enabling this on additional hosts.
+- Smoke-check CUDA availability and runtime wiring with `./scripts/check-demucs-cuda.sh`.
 - Host enablement example:
 
 ```nix
 {
   imports = [ ../../modules/nixos/homelab-demucs.nix ];
 
+  environment.systemPackages = [ pkgs.demucsCuda ];
+
   services.homelabDemucs.enable = true;
+  services.homelabDemucs.demucsExecutable = "${pkgs.demucsCuda}/bin/demucs";
 
   specialisation.gaming.configuration.services.homelabDemucs.enable = lib.mkForce false;
 }
