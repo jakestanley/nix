@@ -27,7 +27,7 @@ in
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  networking.hostName = "nixos";
+  networking.hostName = "shrike";
 
   home-manager.extraSpecialArgs = {
     hostname = "shrike";
