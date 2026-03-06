@@ -85,5 +85,15 @@ in
     "/home/jake/.steam/root/compatibilitytools.d/GE-Proton"."L+" = {
       argument = "${geProton.steamcompattool}";
     };
+
+    "/home/jake/.local/share/Steam/compatibilitytools.d".d = {
+      mode = "0755";
+      user = "jake";
+      group = "users";
+    };
+
+    "/home/jake/.local/share/Steam/compatibilitytools.d/GE-Proton"."L+" = {
+      argument = "${geProton.steamcompattool}";
+    };
   };
 }
