@@ -30,135 +30,116 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
 python - <<'PY'
 from pathlib import Path
-from textwrap import dedent
+import re
 
-pyproject = dedent(
-    """
-    [build-system]
-    requires = ["setuptools>=68"]
-    build-backend = "setuptools.build_meta"
+pyproject = """
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
 
-    [project]
-    name = "homelab-demucs"
-    version = "${version}"
-    description = "Host-run HTTP service for Demucs separation jobs"
-    requires-python = ">=3.11"
+[project]
+name = "homelab-demucs"
+version = "${version}"
+description = "Host-run HTTP service for Demucs separation jobs"
+requires-python = ">=3.11"
 
-    [project.scripts]
-    homelab-demucs = "demucs_service.server:main"
+[project.scripts]
+homelab-demucs = "demucs_service.server:main"
 
-    [tool.setuptools.packages.find]
-    include = ["demucs_service"]
+[tool.setuptools.packages.find]
+include = ["demucs_service"]
 
-    [tool.setuptools.package-data]
-    demucs_service = ["static/*.html", "openapi.json"]
-    """
-).lstrip()
+[tool.setuptools.package-data]
+demucs_service = ["static/*.html", "openapi.json"]
+""".lstrip()
 Path("pyproject.toml").write_text(pyproject)
 
 path = Path("demucs_service/app.py")
 text = path.read_text()
 
-old = "def _sniff_mp3(file_storage) -> bool:\n"
-insert = dedent(
-    """\
-    def check_cuda() -> tuple[dict | None, str | None]:
-        try:
-            return check_cuda_or_raise(), None
-        except Exception as exc:
-            return None, str(exc)
-
-
-    def _sniff_mp3(file_storage) -> bool:
-    """
+check_cuda_fn = (
+    "def check_cuda() -> tuple[dict | None, str | None]:\n"
+    "    try:\n"
+    "        return check_cuda_or_raise(), None\n"
+    "    except Exception as exc:\n"
+    "        return None, str(exc)\n"
 )
-if old not in text:
-    raise RuntimeError("Expected _sniff_mp3 anchor was not found in demucs_service/app.py")
-text = text.replace(old, insert, 1)
+if "def check_cuda() -> tuple[dict | None, str | None]:" not in text:
+    sniff_anchor = "def _sniff_mp3(file_storage) -> bool:\n"
+    if sniff_anchor in text:
+        text = text.replace(sniff_anchor, f"{check_cuda_fn}\n{sniff_anchor}", 1)
+    else:
+        print("warning: demucs_service/app.py missing _sniff_mp3 anchor; skipped check_cuda insertion")
 
-text = text.replace("    cuda_info = check_cuda_or_raise()\\n", "    check_cuda_or_raise()\\n", 1)
+text = text.replace("    cuda_info = check_cuda_or_raise()\n", "    check_cuda_or_raise()\n", 1)
 
-old = dedent(
-    """\
-    @app.get("/health")
-    def health() -> object:
-        return jsonify({"ok": True})
+if '"error": "cuda_unavailable"' not in text:
+    health_pattern = re.compile(
+        r'    @app\.get\("/health"\)\n'
+        r'    def health\(\) -> object:\n'
+        r'(?:        .*\n|\n)*?(?=\n    @app\.get\("/api/status"\)\n)',
+        re.S,
+    )
+    health_replacement = (
+        '    @app.get("/health")\n'
+        '    def health() -> object:\n'
+        '        _, cuda_error = check_cuda()\n'
+        '        if cuda_error:\n'
+        '            return (\n'
+        '                jsonify(\n'
+        '                    {\n'
+        '                        "ok": False,\n'
+        '                        "error": "cuda_unavailable",\n'
+        '                        "message": cuda_error,\n'
+        '                    }\n'
+        '                ),\n'
+        '                503,\n'
+        '            )\n'
+        '        return jsonify({"ok": True})\n'
+    ).rstrip("\n")
+    text, replaced = health_pattern.subn(health_replacement, text, count=1)
+    if replaced == 0:
+        print("warning: demucs_service/app.py missing /health block anchor; skipped /health patch")
 
-    @app.get("/api/status")
-    def status() -> object:
-        worker_status = worker.status()
-        return jsonify(
-            {
-                "service": "demucs",
-                "running_jobs": worker_status["running_jobs"],
-                "max_concurrent_jobs": settings.max_concurrent_jobs,
-                "storage_volume": _storage_volume_status(settings.storage_root),
-                "cuda": cuda_info,
-            }
-        )
-    """
-)
-replacement = dedent(
-    """\
-    @app.get("/health")
-    def health() -> object:
-        _, cuda_error = check_cuda()
-        if cuda_error:
-            return (
-                jsonify(
-                    {
-                        "ok": False,
-                        "error": "cuda_unavailable",
-                        "message": cuda_error,
-                    }
-                ),
-                503,
-            )
-        return jsonify({"ok": True})
+if '"cuda_error": cuda_error' not in text:
+    status_pattern = re.compile(
+        r'    @app\.get\("/api/status"\)\n'
+        r'    def status\(\) -> object:\n'
+        r'(?:        .*\n|\n)*?(?=\n    @app\.post\("/api/admin/clear-caches"\)\n)',
+        re.S,
+    )
+    status_replacement = (
+        '    @app.get("/api/status")\n'
+        '    def status() -> object:\n'
+        '        worker_status = worker.status()\n'
+        '        cuda_info, cuda_error = check_cuda()\n'
+        '        return jsonify(\n'
+        '            {\n'
+        '                "service": "demucs",\n'
+        '                "running_jobs": worker_status["running_jobs"],\n'
+        '                "max_concurrent_jobs": settings.max_concurrent_jobs,\n'
+        '                "storage_volume": _storage_volume_status(settings.storage_root),\n'
+        '                "cuda": cuda_info,\n'
+        '                "cuda_error": cuda_error,\n'
+        '            }\n'
+        '        )\n'
+    ).rstrip("\n")
+    text, replaced = status_pattern.subn(status_replacement, text, count=1)
+    if replaced == 0:
+        print("warning: demucs_service/app.py missing /api/status block anchor; skipped /api/status patch")
 
-    @app.get("/api/status")
-    def status() -> object:
-        worker_status = worker.status()
-        cuda_info, cuda_error = check_cuda()
-        return jsonify(
-            {
-                "service": "demucs",
-                "running_jobs": worker_status["running_jobs"],
-                "max_concurrent_jobs": settings.max_concurrent_jobs,
-                "storage_volume": _storage_volume_status(settings.storage_root),
-                "cuda": cuda_info,
-                "cuda_error": cuda_error,
-            }
-        )
-    """
-)
-if old not in text:
-    raise RuntimeError("Expected /health + /api/status block was not found in demucs_service/app.py")
-text = text.replace(old, replacement, 1)
-
-old = dedent(
-    """\
-    @app.post("/api/jobs")
-    def create_job() -> object:
-        mode = request.form.get("mode", "4")
-        model = request.form.get("model", settings.demucs_default_model)
-    """
-)
-replacement = dedent(
-    """\
-    @app.post("/api/jobs")
-    def create_job() -> object:
-        mode = request.form.get("mode", "4")
-        _, cuda_error = check_cuda()
-        if cuda_error:
-            return error_response("cuda_unavailable", cuda_error, 503)
-
-        model = request.form.get("model", settings.demucs_default_model)
-    """
-)
-if old not in text:
-    raise RuntimeError("Expected /api/jobs block was not found in demucs_service/app.py")
-text = text.replace(old, replacement, 1)
+if 'return error_response("cuda_unavailable", cuda_error, 503)' not in text:
+    job_anchor = '    @app.post("/api/jobs")\n    def create_job() -> object:\n'
+    job_insertion = (
+        '        _, cuda_error = check_cuda()\n'
+        '        if cuda_error:\n'
+        '            return error_response("cuda_unavailable", cuda_error, 503)\n'
+        '\n'
+    )
+    if job_anchor in text:
+        text = text.replace(job_anchor, f"{job_anchor}{job_insertion}", 1)
+    else:
+        print("warning: demucs_service/app.py missing /api/jobs anchor; skipped /api/jobs patch")
 
 path.write_text(text)
 PY
