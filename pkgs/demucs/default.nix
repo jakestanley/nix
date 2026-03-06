@@ -4,6 +4,7 @@
   torchPackage ? python3Packages.torch,
   torchaudioPackage ? python3Packages.torchaudio,
   openunmixPackage ? null,
+  doraSearchPackage ? python3Packages.callPackage ../dora-search { inherit torchPackage; },
   juliusPackage ? python3Packages.julius,
 }:
 
@@ -48,6 +49,7 @@ python3Packages.buildPythonApplication rec {
   format = "setuptools";
 
   propagatedBuildInputs = [
+    doraSearchPackage
     python3Packages.einops
     juliusPackage
     openunmix
