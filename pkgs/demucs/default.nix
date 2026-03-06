@@ -1,80 +1,65 @@
-{ lib, python3Packages, doraSearch, openunmix, juliusPackage ? python3Packages.julius, torchPackage ? python3Packages.torch, torchaudioPackage ? python3Packages.torchaudio }:
+{
+  lib,
+  python,
+  torchPackage ? python.pkgs.torch,
+  torchaudioPackage ? python.pkgs.torchaudio,
+  openunmixPackage ? null,
+  doraSearchPackage ? python.pkgs.callPackage ../dora-search { inherit torchPackage; },
+  juliusPackage ? python.pkgs.julius,
+}:
 
 let
+  pyPkgs = python.pkgs;
   rev = "b9ab48cad45976ba42b2ff17b229c071f0df9390";
   src = builtins.fetchGit {
     url = "https://github.com/adefossez/demucs.git";
     ref = "refs/heads/main";
     inherit rev;
   };
-  effectiveOpenunmix = openunmix.override {
-    inherit torchPackage torchaudioPackage;
-  };
-  effectiveJulius = juliusPackage.override {
-    torch = torchPackage;
-  };
+  openunmix =
+    if openunmixPackage != null then
+      openunmixPackage
+    else
+      pyPkgs.buildPythonApplication rec {
+        pname = "openunmix";
+        version = "1.3.0+unstable.fb672c9";
+        src = builtins.fetchGit {
+          url = "https://github.com/sigsep/open-unmix-pytorch.git";
+          ref = "refs/heads/master";
+          rev = "fb672c9584997c2b05e148eeaa65b4c23ed4693b";
+        };
+        pyproject = true;
+
+        build-system = [
+          pyPkgs.setuptools
+        ];
+
+        dependencies = [
+          pyPkgs.numpy
+          torchPackage
+          torchaudioPackage
+          pyPkgs.tqdm
+        ];
+      };
 in
-python3Packages.buildPythonApplication rec {
+pyPkgs.buildPythonApplication rec {
   pname = "demucs";
   version = "4.1.0a3+unstable.${lib.substring 0 7 rev}";
 
   inherit src;
-  pyproject = true;
+  format = "setuptools";
 
-  build-system = [
-    python3Packages.setuptools
-  ];
-
-  dependencies = [
-    doraSearch
-    python3Packages.einops
-    effectiveJulius
-    effectiveOpenunmix
-    python3Packages.omegaconf
-    python3Packages.pyyaml
-    python3Packages.soundfile
+  propagatedBuildInputs = [
+    doraSearchPackage
+    pyPkgs.einops
+    juliusPackage
+    openunmix
+    pyPkgs.omegaconf
+    pyPkgs.pyyaml
     torchPackage
     torchaudioPackage
-    python3Packages.tqdm
+    pyPkgs.tqdm
   ];
-
-  # The service uses a deliberately curated runtime: lazy MP3 support and
-  # binary torchaudio packages do not satisfy upstream wheel metadata exactly.
-  dontCheckRuntimeDeps = true;
-
-  postPatch = ''
-    python - <<'PY'
-    from pathlib import Path
-
-    path = Path("demucs/audio.py")
-    text = path.read_text()
-    text = text.replace("import lameenc\n", "")
-    text = text.replace("import numpy as np\n", "import numpy as np\nimport soundfile as sf\n")
-    text = text.replace(
-        "    encoder = lameenc.Encoder()\n",
-        "    import lameenc\n\n    encoder = lameenc.Encoder()\n",
-    )
-    text = text.replace(
-        "        ta.save(str(path), wav, sample_rate=samplerate,\n"
-        "                encoding=encoding, bits_per_sample=bits_per_sample)\n",
-        "        subtype = 'FLOAT' if as_float else f'PCM_{bits_per_sample}'\n"
-        "        sf.write(str(path), wav.t().cpu().numpy(), samplerate,\n"
-        "                 format='WAV', subtype=subtype)\n",
-    )
-    text = text.replace(
-        "        ta.save(str(path), wav, sample_rate=samplerate, bits_per_sample=bits_per_sample)\n",
-        "        sf.write(str(path), wav.t().cpu().numpy(), samplerate,\n"
-        "                 format='FLAC', subtype=f'PCM_{bits_per_sample}')\n",
-    )
-    path.write_text(text)
-    PY
-
-    cat > pyproject.toml <<EOF
-    [build-system]
-    requires = ["setuptools>=68"]
-    build-backend = "setuptools.build_meta"
-    EOF
-  '';
 
   pythonImportsCheck = [ "demucs" ];
 

@@ -12,6 +12,7 @@ in
     ../../modules/nixos/ssh.nix
     ../../modules/nixos/plasma.nix
     ../../modules/nixos/greetd-autologin.nix
+    ../../modules/nixos/gpu-runtime.nix
     ../../modules/nixos/homelab-demucs.nix
     ../../modules/nixos/homelab-ollama.nix
     ../../modules/nixos/nvidia.nix
@@ -52,13 +53,14 @@ in
   };
 
   environment.systemPackages =
-    lib.optionals config.services.homelabDemucs.enable [ config.services.homelabDemucs.demucsPackage ]
-    ++ [
+    [
+      pkgs.demucsCuda
       pkgs.ollama-cuda
     ];
 
   services.homelabDemucs.enable = demucsServiceEnabled;
   services.homelabDemucs.openFirewall = demucsServiceEnabled;
+  services.homelabDemucs.demucsExecutable = "${pkgs.demucsCuda}/bin/demucs";
 
   services.homelabOllama.enable = true;
   services.homelabOllama.openFirewall = true;
