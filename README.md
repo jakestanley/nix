@@ -116,6 +116,21 @@ kscreen-doctor -o
 }
 ```
 
+# cs2-dedicated
+- The reusable NixOS module lives at `modules/nixos/cs2-dedicated.nix`.
+- Start the server:
+
+```sh
+sudo systemctl start cs2-dedicated
+```
+
+- Submit RCON commands:
+
+```sh
+cs2-rcon "status"
+cs2-rcon "changelevel de_mirage"
+```
+
 # Systemd units and specialisations
 - Package long-lived services into the Nix store and declare them with `systemd.services.<name>`, rather than copying unit files into `/etc/systemd/system`.
 - Keep mutable runtime state under a managed path such as `/var/lib/<name>` with `StateDirectory=`.
