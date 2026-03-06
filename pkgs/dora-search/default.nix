@@ -8,7 +8,6 @@
 let
   pyPkgs = python.pkgs;
   hydraCore = pyPkgs."hydra-core";
-  pytorchLightning = pyPkgs."pytorch-lightning";
   treetable =
     if treetablePackage != null then
       treetablePackage
@@ -43,7 +42,6 @@ pyPkgs.buildPythonPackage rec {
 
   dependencies = [
     hydraCore
-    pytorchLightning
     pyPkgs.retrying
     pyPkgs.submitit
     torchPackage
