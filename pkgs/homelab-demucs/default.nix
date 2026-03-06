@@ -28,29 +28,30 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    cat > pyproject.toml <<EOF
-    [build-system]
-    requires = ["setuptools>=68"]
-    build-backend = "setuptools.build_meta"
-
-    [project]
-    name = "homelab-demucs"
-    version = "${version}"
-    description = "Host-run HTTP service for Demucs separation jobs"
-    requires-python = ">=3.11"
-
-    [project.scripts]
-    homelab-demucs = "demucs_service.server:main"
-
-    [tool.setuptools.packages.find]
-    include = ["demucs_service"]
-
-    [tool.setuptools.package-data]
-    demucs_service = ["static/*.html", "openapi.json"]
-    EOF
-
     python - <<'PY'
     from pathlib import Path
+
+    pyproject = """
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "homelab-demucs"
+version = "${version}"
+description = "Host-run HTTP service for Demucs separation jobs"
+requires-python = ">=3.11"
+
+[project.scripts]
+homelab-demucs = "demucs_service.server:main"
+
+[tool.setuptools.packages.find]
+include = ["demucs_service"]
+
+[tool.setuptools.package-data]
+demucs_service = ["static/*.html", "openapi.json"]
+""".lstrip()
+    Path("pyproject.toml").write_text(pyproject)
 
     path = Path("demucs_service/app.py")
     text = path.read_text()
