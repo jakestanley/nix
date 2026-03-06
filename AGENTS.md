@@ -122,6 +122,20 @@ If that does not work, the configuration is incorrect.
 - Do not introduce or extend wheel/binary-runtime exceptions for additional services without Jake Stanley's explicit decision.
 - If a temporary exception is approved, document it in an ADR and treat it as a short-term workaround rather than the new default.
 
+## Source-Build Triage Baseline
+
+- When triaging dependency build failures for Demucs/CUDA, start from a clean source-build baseline before deeper debugging.
+- Run this exact sequence from the repository root:
+
+```sh
+cd /path/to/nixos-shrike
+git checkout demucs-cuda-clean
+nix build .#demucsCuda --no-substitute -L
+```
+
+- Treat the first failure from this command as the focal triage point.
+- Do not optimize with binary substitutes until source evaluation/build issues are resolved.
+
 ## Remote Access Policy (SSH)
 
 Agents may SSH into `shrike` to **inspect** state only.

@@ -111,6 +111,14 @@ kscreen-doctor -o
 - `services.homelabDemucs.device` defaults to `cuda` and does not auto-fallback to CPU.
 - Source-built CUDA Demucs builds can be very heavy on first build.
 - A binary cache (for example, Cachix) is recommended before enabling this on additional hosts.
+- Source-build triage baseline (run first when debugging dependency failures):
+
+```sh
+cd /path/to/nixos-shrike
+git checkout demucs-cuda-clean
+nix build .#demucsCuda --no-substitute -L
+```
+
 - Smoke-check CUDA availability and runtime wiring with `./scripts/check-demucs-cuda.sh`.
 - Host enablement example:
 
@@ -126,6 +134,28 @@ kscreen-doctor -o
   specialisation.gaming.configuration.services.homelabDemucs.enable = lib.mkForce false;
 }
 ```
+
+## Cachix quick start for demucsCuda
+- Add your Cachix cache as a substituter in NixOS config:
+
+```nix
+{
+  nix.settings = {
+    substituters = [ "https://<cache-name>.cachix.org" ];
+    trusted-public-keys = [ "<cache-name>.cachix.org-1:<public-key>" ];
+  };
+}
+```
+
+- Build and push `demucsCuda` from a machine with CUDA working:
+
+```sh
+nix shell nixpkgs#cachix -c cachix authtoken <token>
+nix shell nixpkgs#cachix -c cachix watch-store <cache-name> &
+nix build .#demucsCuda
+```
+
+- Any host with the same flake inputs and Cachix key configured can then substitute this build.
 
 # Systemd units and specialisations
 - Package long-lived services into the Nix store and declare them with `systemd.services.<name>`, rather than copying unit files into `/etc/systemd/system`.

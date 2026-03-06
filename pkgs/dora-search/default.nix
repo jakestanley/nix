@@ -1,13 +1,30 @@
 {
   lib,
-  python3,
-  torchPackage ? python3.pkgs.torch,
+  python,
+  torchPackage ? python.pkgs.torch,
+  treetablePackage ? null,
 }:
 
 let
-  pyPkgs = python3.pkgs;
+  pyPkgs = python.pkgs;
   hydraCore = pyPkgs."hydra-core";
   pytorchLightning = pyPkgs."pytorch-lightning";
+  treetable =
+    if treetablePackage != null then
+      treetablePackage
+    else if pyPkgs ? treetable then
+      pyPkgs.treetable
+    else
+      pyPkgs.buildPythonPackage rec {
+        pname = "treetable";
+        version = "0.2.6";
+        format = "setuptools";
+
+        src = pyPkgs.fetchPypi {
+          inherit pname version;
+          hash = "sha256-fh1i285QP78kVhruFGG4+8wsIy/0VmHDudDCCBx5W98=";
+        };
+      };
 in
 pyPkgs.buildPythonPackage rec {
   pname = "dora-search";
@@ -30,7 +47,7 @@ pyPkgs.buildPythonPackage rec {
     pyPkgs.retrying
     pyPkgs.submitit
     torchPackage
-    pyPkgs.treetable
+    treetable
   ];
 
   pythonImportsCheck = [ "dora" "dora.log" ];

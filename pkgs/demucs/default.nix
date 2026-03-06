@@ -1,15 +1,15 @@
 {
   lib,
-  python3,
-  torchPackage ? python3.pkgs.torch,
-  torchaudioPackage ? python3.pkgs.torchaudio,
+  python,
+  torchPackage ? python.pkgs.torch,
+  torchaudioPackage ? python.pkgs.torchaudio,
   openunmixPackage ? null,
-  doraSearchPackage ? python3.pkgs.callPackage ../dora-search { inherit torchPackage; },
-  juliusPackage ? python3.pkgs.julius,
+  doraSearchPackage ? python.pkgs.callPackage ../dora-search { inherit torchPackage; },
+  juliusPackage ? python.pkgs.julius,
 }:
 
 let
-  pyPkgs = python3.pkgs;
+  pyPkgs = python.pkgs;
   rev = "b9ab48cad45976ba42b2ff17b229c071f0df9390";
   src = builtins.fetchGit {
     url = "https://github.com/adefossez/demucs.git";

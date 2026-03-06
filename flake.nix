@@ -25,7 +25,7 @@
       ];
       forAllSystems = lib.genAttrs supportedSystems;
       overlay = final: prev: {
-        demucsCuda = final.callPackage ./pkgs/demucs { };
+        demucsCuda = final.python3Packages.callPackage ./pkgs/demucs { };
         homelab-demucs = final.callPackage ./pkgs/homelab-demucs { };
         homelab-ollama = final.callPackage ./pkgs/homelab-ollama { };
         homelab-rtx = final.callPackage ./pkgs/homelab-rtx { };
