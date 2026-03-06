@@ -48,6 +48,102 @@ python3Packages.buildPythonApplication rec {
     [tool.setuptools.package-data]
     demucs_service = ["static/*.html", "openapi.json"]
     EOF
+
+    python - <<'PY'
+    from pathlib import Path
+
+    path = Path("demucs_service/app.py")
+    text = path.read_text()
+
+    old = '''def _sniff_mp3(file_storage) -> bool:
+'''
+    insert = '''def check_cuda() -> tuple[dict | None, str | None]:
+    try:
+        return check_cuda_or_raise(), None
+    except Exception as exc:
+        return None, str(exc)
+
+
+def _sniff_mp3(file_storage) -> bool:
+'''
+    if old not in text:
+        raise RuntimeError("Expected _sniff_mp3 anchor was not found in demucs_service/app.py")
+    text = text.replace(old, insert, 1)
+
+    text = text.replace("    cuda_info = check_cuda_or_raise()\\n", "    check_cuda_or_raise()\\n", 1)
+
+    old = '''    @app.get("/health")
+    def health() -> object:
+        return jsonify({"ok": True})
+
+    @app.get("/api/status")
+    def status() -> object:
+        worker_status = worker.status()
+        return jsonify(
+            {
+                "service": "demucs",
+                "running_jobs": worker_status["running_jobs"],
+                "max_concurrent_jobs": settings.max_concurrent_jobs,
+                "storage_volume": _storage_volume_status(settings.storage_root),
+                "cuda": cuda_info,
+            }
+        )
+'''
+    replacement = '''    @app.get("/health")
+    def health() -> object:
+        _, cuda_error = check_cuda()
+        if cuda_error:
+            return (
+                jsonify(
+                    {
+                        "ok": False,
+                        "error": "cuda_unavailable",
+                        "message": cuda_error,
+                    }
+                ),
+                503,
+            )
+        return jsonify({"ok": True})
+
+    @app.get("/api/status")
+    def status() -> object:
+        worker_status = worker.status()
+        cuda_info, cuda_error = check_cuda()
+        return jsonify(
+            {
+                "service": "demucs",
+                "running_jobs": worker_status["running_jobs"],
+                "max_concurrent_jobs": settings.max_concurrent_jobs,
+                "storage_volume": _storage_volume_status(settings.storage_root),
+                "cuda": cuda_info,
+                "cuda_error": cuda_error,
+            }
+        )
+'''
+    if old not in text:
+        raise RuntimeError("Expected /health + /api/status block was not found in demucs_service/app.py")
+    text = text.replace(old, replacement, 1)
+
+    old = '''    @app.post("/api/jobs")
+    def create_job() -> object:
+        mode = request.form.get("mode", "4")
+        model = request.form.get("model", settings.demucs_default_model)
+'''
+    replacement = '''    @app.post("/api/jobs")
+    def create_job() -> object:
+        mode = request.form.get("mode", "4")
+        _, cuda_error = check_cuda()
+        if cuda_error:
+            return error_response("cuda_unavailable", cuda_error, 503)
+
+        model = request.form.get("model", settings.demucs_default_model)
+'''
+    if old not in text:
+        raise RuntimeError("Expected /api/jobs block was not found in demucs_service/app.py")
+    text = text.replace(old, replacement, 1)
+
+    path.write_text(text)
+    PY
   '';
 
   pythonImportsCheck = [ "demucs_service" ];
