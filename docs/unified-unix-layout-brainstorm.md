@@ -47,11 +47,10 @@ Use this repository (`nix`) as the single declarative source of truth for Unix-l
 │   │   ├── plasma.nix
 │   │   ├── greetd-autologin.nix
 │   │   └── ...
-│   └── home-manager/
-│       ├── base.nix
-│       └── profiles/
-│           ├── workstation.nix
-│           └── minimal.nix
+│   ├── shared/
+│   │   └── editor-env.nix
+│   └── home-manager/   (optional future)
+│       └── ...
 ├── pkgs/
 ├── scripts/
 │   ├── deploy-shrike.sh
@@ -97,7 +96,11 @@ Use this repository (`nix`) as the single declarative source of truth for Unix-l
 - Reusable NixOS system modules.
 - Should be host-agnostic and parameterized where possible.
 
-### `modules/home-manager/` (new)
+### `modules/shared/` (new)
+- Cross-target shared values used by both NixOS and Home Manager.
+- Keep this small and data-oriented (for example `editor-env.nix`).
+
+### `modules/home-manager/` (optional future)
 - Reusable HM modules for composable profiles.
 - Keeps `home/jake/default.nix` thin and declarative.
 
