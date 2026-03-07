@@ -49,6 +49,19 @@
           inherit (pkgs) homelab-demucs homelab-ollama homelab-rtx sleep-on-lan;
         });
 
+      homeConfigurations.turing = inputs.home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs {
+          system = "aarch64-darwin";
+          overlays = [ overlay ];
+        };
+        extraSpecialArgs = {
+          hostname = "turing";
+        };
+        modules = [
+          ./home/jake/home.nix
+        ];
+      };
+
       nixosConfigurations.shrike = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = {
