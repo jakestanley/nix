@@ -1,5 +1,9 @@
 { config, lib, ... }:
 
+let
+  editorEnv = import ../../../modules/shared/editor-env.nix;
+in
+
 {
   home.activation.ensureLocalZshOverrides = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     for file in \
@@ -205,6 +209,28 @@
     };
     initContent = ''
       bindkey '^R' history-incremental-search-backward
+      typeset -gaU FZF_IGNORE_PATTERNS
+      FZF_IGNORE_PATTERNS+=( '*.class' )
+
+      # Load local alias/function overrides after HM shellAliases so local,
+      # untracked work aliases can override tracked defaults when needed.
+      typeset -gi _unixcfg_local_overrides_loaded=0
+      _unixcfg_load_local_shell_overrides() {
+        (( _unixcfg_local_overrides_loaded )) && return
+        _unixcfg_local_overrides_loaded=1
+
+        local local_aliases="''${ZDOTDIR:-$HOME}/.zsh_aliases"
+        [[ -r "$local_aliases" ]] && source "$local_aliases"
+
+        local local_functions="''${ZDOTDIR:-$HOME}/.zsh_functions"
+        [[ -r "$local_functions" ]] && source "$local_functions"
+      }
+
+      autoload -Uz add-zsh-hook
+      add-zsh-hook precmd _unixcfg_load_local_shell_overrides
+      if ! (( ''${precmd_functions[(Ie)_dotfiles_prompt_apply_screen_prefix]} )); then
+        add-zsh-hook precmd _dotfiles_prompt_apply_screen_prefix
+      fi
     '';
     oh-my-zsh = {
       enable = false;
@@ -228,8 +254,7 @@
       ugx = "chmod ug+x";
       gr = "git_root";
     };
-    sessionVariables = {
-      EDITOR = "vim";
+    sessionVariables = editorEnv // {
       UNIXCFG_REPO = "${config.home.homeDirectory}/git/github.com/jakestanley/nix";
     };
   };
