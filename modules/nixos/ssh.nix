@@ -1,5 +1,9 @@
-{ ... }:
+{ config, lib, ... }:
 
+let
+  jakeAuthorizedKeys =
+    lib.attrByPath [ "users" "users" "jake" "openssh" "authorizedKeys" "keys" ] [ ] config;
+in
 {
   services.openssh = {
     enable = true;
@@ -10,7 +14,12 @@
     };
   };
 
-  users.users.jake.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL0q1CwSf4NG0jPtBtWabETld24LR2QsIB4XQLpukXSK jake@Jacobs-MacBook-Pro.local"
+  assertions = [
+    {
+      assertion = jakeAuthorizedKeys != [ ];
+      message = ''
+        users.users.jake.openssh.authorizedKeys.keys must be set per host with at least one key.
+      '';
+    }
   ];
 }

@@ -1,5 +1,9 @@
 { pkgs, ... }:
 
+let
+  editorEnv = import ../shared/editor-env.nix;
+in
+
 {
   networking.networkmanager.enable = true;
 
@@ -64,8 +68,5 @@
     kdePackages.kdialog
   ];
 
-  environment.variables = {
-    EDITOR = "vim";
-    VISUAL = "vim";
-  };
+  environment.variables = editorEnv;
 }
