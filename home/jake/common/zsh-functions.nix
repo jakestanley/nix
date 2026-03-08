@@ -67,29 +67,6 @@
     cd "$UNIXCFG_REPO"
   '';
 
-  # Prompt helpers
-  _dotfiles_prompt_screen_prefix = ''
-    if [[ -n "''${STY:-}" ]]; then
-      echo "%F{magenta}[screen]%f "
-    fi
-  '';
-
-  _dotfiles_prompt_apply_screen_prefix = ''
-    local prefix="$(_dotfiles_prompt_screen_prefix)"
-
-    if [[ -z "$prefix" ]]; then
-      if [[ -n "''${DOTFILES_PROMPT_BASE:-}" ]]; then
-        PROMPT="$DOTFILES_PROMPT_BASE"
-      fi
-      return 0
-    fi
-
-    if [[ -z "''${DOTFILES_PROMPT_BASE:-}" ]]; then
-      DOTFILES_PROMPT_BASE="$PROMPT"
-    fi
-    PROMPT="''${prefix}''${DOTFILES_PROMPT_BASE}"
-  '';
-
   git_amend_add_8h = ''
     local hours="''${1:-8}"
 
