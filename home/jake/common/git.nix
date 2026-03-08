@@ -1,9 +1,17 @@
-{ config, ... }:
+{ config, lib, ... }:
 
 {
   home.file.".gitconfig".text = ''
     [include]
       path = ${config.xdg.configHome}/git/config
+  '';
+
+  home.activation.ensureGitignoreGlobal = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    target="${config.home.homeDirectory}/.gitignore_global"
+    if [ ! -e "$target" ]; then
+      $DRY_RUN_CMD cp ${./config/gitignore_global.default} "$target"
+      $DRY_RUN_CMD chmod 0644 "$target"
+    fi
   '';
 
   programs.git = {
