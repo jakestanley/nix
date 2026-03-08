@@ -50,7 +50,13 @@ fi
 
 cd "$REPO_DIR"
 
-nix \
+NIX_BIN="$(command -v nix)"
+if [[ -z "$NIX_BIN" ]]; then
+  echo "Could not find 'nix' in PATH." >&2
+  exit 1
+fi
+
+sudo -H "$NIX_BIN" \
   --extra-experimental-features "nix-command flakes" \
   run ".#darwin-rebuild" -- \
   switch --flake ".#turing"
