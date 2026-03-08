@@ -52,6 +52,16 @@ in
       pkgs.gamemode
       pkgs.mangohud
     ];
+
+    package = pkgs.steam.override {
+      extraEnv = {
+        MANGOHUD= "1";
+        # run mangohud but don't display initially, i.e you're streaming to a 10foot
+        MANGOHUD_CONFIG = "read_cfg,no_display";
+        # this doesn't work so you'll still have to add gamemoderun %command% to every game for now
+        #GAMEMODERUN = "1";
+      };
+    };
   };
 
   programs.gamemode.enable = true;
