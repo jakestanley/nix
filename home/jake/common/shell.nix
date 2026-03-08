@@ -66,6 +66,16 @@ in
       bindkey '^R' history-incremental-search-backward
       typeset -gaU FZF_IGNORE_PATTERNS
       FZF_IGNORE_PATTERNS+=( ${fzfPatternArgs} )
+      ${lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
+        rfcdate() {
+          date -Idate
+        }
+      ''}
+      ${lib.optionalString pkgs.stdenv.hostPlatform.isLinux ''
+        rfcdate() {
+          date --rfc-3339=date
+        }
+      ''}
 
       # Load local alias/function overrides after HM shellAliases so local,
       # untracked work aliases can override tracked defaults when needed.
@@ -105,7 +115,6 @@ in
       www = "cd /var/www";
       dots = "cd $UNIXCFG_REPO";
       tmux = "tmux-auto";
-      rfcdate = "date --rfc-3339=date";
       ugx = "chmod ug+x";
       gr = "git_root";
     };
