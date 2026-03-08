@@ -13,8 +13,13 @@ let
   ];
 in
 {
-  home.file.".screenrc".source = ./config/screenrc;
-  
+  programs.screen = {
+    enable = true;
+    screenrc = ''
+      startup_message off
+    '';
+  };
+
   programs.tmux = {
     enable = true;
     shell = "${pkgs.zsh}/bin/zsh";

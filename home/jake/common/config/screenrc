@@ -1,7 +1,0 @@
-### GNU Screen config
-###
-### Link to `~/.screenrc` via `./scripts/screen.sh`.
-
-# Disable the startup/landing page.
-startup_message off
-
