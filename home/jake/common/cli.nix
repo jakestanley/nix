@@ -1,10 +1,23 @@
 { lib, pkgs, ... }:
 
+let
+  tmuxPlatformExtraConfig = lib.concatStrings [
+    (lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
+      # macOS = dark neutral bar (home)
+      set -g status-style bg=colour235,fg=white
+    '')
+    (lib.optionalString pkgs.stdenv.hostPlatform.isLinux ''
+      # Linux = red bar (non-home)
+      set -g status-style bg=red,fg=white
+    '')
+  ];
+in
 {
   home.file.".screenrc".source = ./config/screenrc;
   
   programs.tmux = {
     enable = true;
+    shell = "${pkgs.zsh}/bin/zsh";
     mouse = false;
     clock24 = true;
     historyLimit = 10000;
@@ -25,6 +38,9 @@
       set -g status-left "#[bold fg=colour39]#H #[fg=colour244]| #(whoami) "
       set -g status-right "#[fg=colour244]%Y-%m-%d #[fg=colour39]%H:%M"
       #
+
+      # ---- OS-based colouring (Nix-selected) ----
+      ${tmuxPlatformExtraConfig}
 
       # https://old.reddit.com/r/tmux/comments/mesrci/tmux_2_doesnt_seem_to_use_256_colors/
       set -g default-terminal "xterm-256color"
