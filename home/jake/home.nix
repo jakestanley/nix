@@ -14,6 +14,7 @@ in
     [
       ./common/git.nix
       ./common/shell.nix
+      ./common/ssh.nix
       ./common/cli.nix
       ./common/editor.nix
       ./platforms/linux.nix
