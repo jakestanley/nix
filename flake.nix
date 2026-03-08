@@ -7,6 +7,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -47,7 +51,34 @@
         in {
           default = pkgs.homelab-rtx;
           inherit (pkgs) homelab-demucs homelab-ollama homelab-rtx sleep-on-lan;
+        }
+        // lib.optionalAttrs (lib.hasAttrByPath [ "packages" system "darwin-rebuild" ] inputs.nix-darwin) {
+          darwin-rebuild = inputs.nix-darwin.packages.${system}.darwin-rebuild;
         });
+
+      darwinConfigurations.turing = inputs.nix-darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        specialArgs = {
+          inherit inputs;
+        };
+        modules = [
+          { nixpkgs.overlays = [ overlay ]; }
+          ./hosts/turing/default.nix
+          inputs.home-manager.darwinModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              backupFileExtension = "hm-backup";
+              extraSpecialArgs = {
+                inherit inputs;
+                hostname = "turing";
+              };
+              users.jake = import ./home/jake/home.nix;
+            };
+          }
+        ];
+      };
 
       homeConfigurations.turing = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {
