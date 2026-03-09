@@ -469,6 +469,74 @@
     dock = {
       autohide = false;
       mru-spaces = false;
+      persistent-apps = [
+        { app = "/System/Applications/Calendar.app"; }
+        { app = "/Applications/1Password.app"; }
+        { app = "/Applications/WhatsApp.app"; }
+        { app = "/System/Applications/Messages.app"; }
+        { app = "/Applications/Safari.app"; }
+        { app = "/Applications/Numbers Creator Studio.app"; }
+        { app = "/System/Applications/Mail.app"; }
+        { app = "/Applications/Obsidian.app"; }
+        { app = "/Applications/ChatGPT.app"; }
+        { app = "/Applications/Claude.app"; }
+        { app = "/Applications/Visual Studio Code.app"; }
+        { app = "/Applications/Ableton Live 11 Standard.app"; }
+        { app = "/Applications/Mixed In Key 11.app"; }
+        { app = "/Applications/Guitar Pro 8.app"; }
+        { app = "/Applications/Spotify.app"; }
+        { app = "/Applications/Flight Deck.app"; }
+        { app = "/System/Applications/Music.app"; }
+        { app = "/Applications/Discord.app"; }
+        { app = "/Applications/Windows App.app"; }
+        { app = "/Applications/Tunnelblick.app"; }
+        { app = "/System/Applications/Utilities/Terminal.app"; }
+        { app = "/System/Applications/Utilities/Activity Monitor.app"; }
+        { app = "/System/Applications/iPhone Mirroring.app"; }
+        { app = "/System/Applications/System Settings.app"; }
+      ];
+      persistent-others = [
+        {
+          folder = {
+            path = "/Users/jake/Desktop/Dock Folders/Music";
+            arrangement = "name";
+            displayas = "stack";
+            showas = "fan";
+          };
+        }
+        {
+          folder = {
+            path = "/Users/jake/Desktop/Dock Folders/Games";
+            arrangement = "name";
+            displayas = "stack";
+            showas = "automatic";
+          };
+        }
+        {
+          folder = {
+            path = "/Users/jake/Desktop/Dock Folders/Work";
+            arrangement = "name";
+            displayas = "stack";
+            showas = "fan";
+          };
+        }
+        {
+          folder = {
+            path = "/Users/jake/Desktop/Dock Folders/Development";
+            arrangement = "name";
+            displayas = "stack";
+            showas = "fan";
+          };
+        }
+        {
+          folder = {
+            path = "/Users/jake/Downloads";
+            arrangement = "date-added";
+            displayas = "folder";
+            showas = "grid";
+          };
+        }
+      ];
       show-recents = false;
       # defaults read com.apple.dock tilesize
       tilesize = 50;
