@@ -35,15 +35,15 @@
         sleep-on-lan = final.callPackage ./pkgs/sleep-on-lan { };
       };
 
-      mkTuringDarwin = extraModules: inputs.nix-darwin.lib.darwinSystem {
+      mkTuringDarwin = dockProfile: inputs.nix-darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         specialArgs = {
           inherit inputs;
+          inherit dockProfile;
         };
         modules = [
           { nixpkgs.overlays = [ overlay ]; }
           ./hosts/turing/default.nix
-        ] ++ extraModules ++ [
           inputs.home-manager.darwinModules.home-manager
           {
             home-manager = {
@@ -81,11 +81,9 @@
           darwin-rebuild = inputs.nix-darwin.packages.${system}.darwin-rebuild;
         });
 
-      darwinConfigurations.turing = mkTuringDarwin [ ];
-      darwinConfigurations.turing-personal = mkTuringDarwin [ ];
-      darwinConfigurations.turing-work = mkTuringDarwin [
-        ./hosts/turing/dock-work.nix
-      ];
+      darwinConfigurations.turing = mkTuringDarwin "personal";
+      darwinConfigurations.turing-personal = mkTuringDarwin "personal";
+      darwinConfigurations.turing-work = mkTuringDarwin "work";
 
       homeConfigurations.turing = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {
