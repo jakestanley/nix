@@ -7,6 +7,7 @@ in
   imports = [
     ./hardware-configuration.nix
     ../../modules/nixos/base.nix
+    ../../modules/nixos/docker.nix
     ../../modules/nixos/home-manager.nix
     ../../modules/nixos/ssh.nix
   ];
@@ -24,6 +25,11 @@ in
 
   home-manager.extraSpecialArgs = {
     hostname = "adler";
+  };
+
+  services.tailscale = {
+    enable = true;
+    openFirewall = true;
   };
 
   services.samba = {
