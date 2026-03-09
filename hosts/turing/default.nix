@@ -1,4 +1,4 @@
-{ pkgs, dockProfile ? "personal", ... }:
+{ pkgs, inputs, dockProfile ? "personal", ... }:
 
 let
   mkDockFolder = {
@@ -129,6 +129,7 @@ in
 
   environment.systemPackages = [
     pkgs.vim
+    inputs.cherri.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
   # Adopt Homebrew declaratively without removing unmanaged packages yet.
@@ -539,6 +540,7 @@ in
       "tunnelblick"
       "blender"
       "font-ubuntu-mono"
+      "font-ubuntu-mono-nerd-font"
       "obsidian"
       "visual-studio-code"
       "caffeine"

@@ -16,7 +16,8 @@ if [[ $# -ne 1 ]]; then
   exit 1
 fi
 
-case "$1" in
+profile="$1"
+case "$profile" in
   personal)
     target="turing-personal"
     ;;
@@ -46,7 +47,13 @@ fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+SCRIPT_PATH="$SCRIPT_DIR/$(basename "${BASH_SOURCE[0]}")"
 cd "$REPO_DIR"
+
+# sudoers allows this exact script path with work|personal args.
+if [[ "$(id -u)" -ne 0 ]]; then
+  exec sudo "$SCRIPT_PATH" "$profile"
+fi
 
 NIX_BIN="$(command -v nix)"
 if [[ -z "$NIX_BIN" ]]; then
@@ -54,7 +61,7 @@ if [[ -z "$NIX_BIN" ]]; then
   exit 1
 fi
 
-sudo -H "$NIX_BIN" \
+"$NIX_BIN" \
   --extra-experimental-features "nix-command flakes" \
   run ".#darwin-rebuild" -- \
   switch --flake ".#${target}"
