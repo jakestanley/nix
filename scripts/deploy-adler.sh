@@ -68,4 +68,11 @@ if [[ "$USE_SCREEN" == true ]] && [[ -z "${STY:-}" ]]; then
   fi
 fi
 
-sudo nixos-rebuild "$MODE" --flake .#adler -L
+if ! command -v nixos-rebuild >/dev/null 2>&1; then
+  echo "Could not find 'nixos-rebuild' in PATH." >&2
+  echo "This deploy script must run on a NixOS system after initial install." >&2
+  exit 1
+fi
+
+NIXOS_REBUILD_BIN="$(command -v nixos-rebuild)"
+sudo "$NIXOS_REBUILD_BIN" "$MODE" --flake .#adler -L
