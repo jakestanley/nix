@@ -50,9 +50,13 @@ fi
 
 cd "$REPO_DIR"
 
-nix \
-  --extra-experimental-features "nix-command flakes" \
-  build ".#homeConfigurations.turing.activationPackage" \
-  --no-write-lock-file
+NIX_BIN="$(command -v nix)"
+if [[ -z "$NIX_BIN" ]]; then
+  echo "Could not find 'nix' in PATH." >&2
+  exit 1
+fi
 
-"$REPO_DIR/result/activate"
+sudo -H "$NIX_BIN" \
+  --extra-experimental-features "nix-command flakes" \
+  run ".#darwin-rebuild" -- \
+  switch --flake ".#turing"
