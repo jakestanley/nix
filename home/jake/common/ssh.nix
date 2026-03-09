@@ -20,6 +20,14 @@
           HostKeyAlias = "shrike.stanley.arpa";
         };
       };
+
+      "adler.stanley.arpa" = {
+        hostname = "adler.stanley.arpa";
+        user = "jake";
+        extraOptions = {
+          HostKeyAlias = "adler.stanley.arpa";
+        };
+      };
     };
   };
 }
