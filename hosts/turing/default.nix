@@ -470,7 +470,9 @@
       autohide = false;
       mru-spaces = false;
       show-recents = false;
+      # defaults read com.apple.dock tilesize
       tilesize = 50;
+      magnification = false;
     };
 
     finder = {
