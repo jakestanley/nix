@@ -465,5 +465,42 @@
     ];
   };
 
+  system.defaults = {
+    dock = {
+      autohide = false;
+      mru-spaces = false;
+      show-recents = false;
+      tilesize = 50;
+    };
+
+    finder = {
+      AppleShowAllExtensions = false;
+      FXEnableExtensionChangeWarning = true;
+      FXPreferredViewStyle = "Nlsv";
+      ShowPathbar = false;
+      ShowStatusBar = true;
+    };
+
+    trackpad = {
+      Clicking = true;
+      TrackpadRightClick = true;
+      TrackpadThreeFingerDrag = false;
+    };
+
+    screencapture = {
+      disable-shadow = false;
+      location = "/Users/jake/Desktop";
+      type = "png";
+    };
+
+    NSGlobalDomain = {
+      NSAutomaticCapitalizationEnabled = true;
+      NSAutomaticDashSubstitutionEnabled = true;
+      NSAutomaticPeriodSubstitutionEnabled = true;
+      NSAutomaticQuoteSubstitutionEnabled = true;
+      NSAutomaticSpellingCorrectionEnabled = true;
+    };
+  };
+
   system.stateVersion = 6;
 }
