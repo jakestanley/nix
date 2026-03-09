@@ -1,10 +1,12 @@
 { ... }:
 
+let 
+  publicKeys = (import ../../modules/nixos/public-keys.nix {}).publicKeys;
+in
 {
   imports = [
     ./hardware-configuration.nix
     ../../modules/nixos/base.nix
-../../modules/nixos/public-keys.nix
     ../../modules/nixos/home-manager.nix
     ../../modules/nixos/ssh.nix
   ];

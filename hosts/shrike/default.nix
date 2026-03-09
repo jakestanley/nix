@@ -2,13 +2,13 @@
 
 let
   demucsServiceEnabled = true;
+  publicKeys = (import ../../modules/nixos/public-keys.nix {}).publicKeys;
 in
 {
   imports = [
     ./hardware-configuration.nix
     ../../modules/nixos/base.nix
     ../../modules/nixos/docker.nix
-    ../../modules/nixos/public-keys.nix
     ../../modules/nixos/home-manager.nix
     ../../modules/nixos/ssh.nix
     ../../modules/nixos/plasma.nix
