@@ -34,6 +34,31 @@
         homelab-rtx = final.callPackage ./pkgs/homelab-rtx { };
         sleep-on-lan = final.callPackage ./pkgs/sleep-on-lan { };
       };
+
+      mkTuringDarwin = extraModules: inputs.nix-darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        specialArgs = {
+          inherit inputs;
+        };
+        modules = [
+          { nixpkgs.overlays = [ overlay ]; }
+          ./hosts/turing/default.nix
+        ] ++ extraModules ++ [
+          inputs.home-manager.darwinModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              backupFileExtension = "hm-backup";
+              extraSpecialArgs = {
+                inherit inputs;
+                hostname = "turing";
+              };
+              users.jake = import ./home/jake/home.nix;
+            };
+          }
+        ];
+      };
     in {
       overlays.default = overlay;
 
@@ -56,29 +81,11 @@
           darwin-rebuild = inputs.nix-darwin.packages.${system}.darwin-rebuild;
         });
 
-      darwinConfigurations.turing = inputs.nix-darwin.lib.darwinSystem {
-        system = "aarch64-darwin";
-        specialArgs = {
-          inherit inputs;
-        };
-        modules = [
-          { nixpkgs.overlays = [ overlay ]; }
-          ./hosts/turing/default.nix
-          inputs.home-manager.darwinModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              backupFileExtension = "hm-backup";
-              extraSpecialArgs = {
-                inherit inputs;
-                hostname = "turing";
-              };
-              users.jake = import ./home/jake/home.nix;
-            };
-          }
-        ];
-      };
+      darwinConfigurations.turing = mkTuringDarwin [ ];
+      darwinConfigurations.turing-personal = mkTuringDarwin [ ];
+      darwinConfigurations.turing-work = mkTuringDarwin [
+        ./hosts/turing/dock-work.nix
+      ];
 
       homeConfigurations.turing = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {
