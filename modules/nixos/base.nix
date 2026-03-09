@@ -1,7 +1,21 @@
-{ pkgs, ... }:
+{ inputs, lib, pkgs, ... }:
 
 let
   editorEnv = import ../shared/editor-env.nix;
+  flakeSelf = inputs.self;
+  rawShortRevision =
+    if flakeSelf ? shortRev && flakeSelf.shortRev != null then flakeSelf.shortRev
+    else if flakeSelf ? dirtyShortRev && flakeSelf.dirtyShortRev != null then flakeSelf.dirtyShortRev
+    else null;
+  shortRevision =
+    if rawShortRevision == null then null else lib.removeSuffix "-dirty" rawShortRevision;
+  fullRevision =
+    if flakeSelf ? rev && flakeSelf.rev != null then flakeSelf.rev
+    else if flakeSelf ? dirtyRev && flakeSelf.dirtyRev != null then flakeSelf.dirtyRev
+    else null;
+  isDirty =
+    (flakeSelf ? dirtyRev && flakeSelf.dirtyRev != null)
+    || (flakeSelf ? dirtyShortRev && flakeSelf.dirtyShortRev != null);
 in
 
 {
@@ -55,6 +69,11 @@ in
 
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  system.configurationRevision = fullRevision;
+  system.nixos.tags =
+    lib.optional (shortRevision != null) "git-${shortRevision}"
+    ++ lib.optional isDirty "dirty";
 
   environment.systemPackages = with pkgs; [
     vim
