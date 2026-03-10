@@ -17,7 +17,7 @@
     modesetting.enable = true;
     nvidiaSettings = true;
     open = false;
-    powerManagement.enable = false;
+    powerManagement.enable = true;
   };
 
   systemd.services.nvidia-persistence-mode = {

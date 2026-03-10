@@ -1,7 +1,12 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 
 let
   editorEnv = import ../shared/editor-env.nix;
+  flakeSelf = inputs.self;
+  configurationRevision =
+    if flakeSelf ? dirtyShortRev && flakeSelf.dirtyShortRev != null then flakeSelf.dirtyShortRev
+    else if flakeSelf ? shortRev && flakeSelf.shortRev != null then flakeSelf.shortRev
+    else null;
 in
 
 {
@@ -42,6 +47,8 @@ in
 
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  system.configurationRevision = configurationRevision;
 
   environment.systemPackages = with pkgs; [
     vim
