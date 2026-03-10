@@ -19,7 +19,7 @@ in
 
   # Hardware config mounts ZFS datasets (data/media, data/archive). Import the pool at boot.
   boot.supportedFilesystems = [ "zfs" ];
-  boot.zfs.extraPools = [ "data" ];
+  # boot.zfs.extraPools = [ "data" ];
 
   networking.hostName = "adler";
   networking.hostId = "ad1e5f01";
