@@ -68,7 +68,11 @@ in
 
   hardware.graphics.enable32Bit = true;
 
-  environment.systemPackages = [ pkgs.mangohud ];
+  environment.systemPackages = [ 
+    pkgs.mangohud 
+    # some actual games
+    pkgs.dsda-doom
+  ];
 
   users.groups.jake = { };
   users.users.jake.extraGroups = [ "jake" ];
