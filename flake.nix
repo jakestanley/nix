@@ -1,5 +1,5 @@
 {
-  description = "shrike NixOS configuration";
+  description = "multi-host NixOS and nix-darwin configuration";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/dd9b079222d43e1943b6ebd802f04fd959dc8e61";
@@ -63,6 +63,30 @@
           }
         ];
       };
+
+      mkLinuxHome = hostname: system: inputs.home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [ overlay ];
+        };
+        extraSpecialArgs = {
+          inherit hostname;
+        };
+        modules = [
+          ./home/jake/home.nix
+        ];
+      };
+
+      mkNixosHost = hostname: nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = {
+          inherit inputs;
+        };
+        modules = [
+          { nixpkgs.overlays = [ overlay ]; }
+          (./hosts + "/${hostname}/default.nix")
+        ];
+      };
     in {
       overlays.default = overlay;
 
@@ -101,16 +125,11 @@
           ./home/jake/home.nix
         ];
       };
+      homeConfigurations.adler = mkLinuxHome "adler" "x86_64-linux";
 
-      nixosConfigurations.shrike = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = {
-          inherit inputs;
-        };
-        modules = [
-          { nixpkgs.overlays = [ overlay ]; }
-          ./hosts/shrike/default.nix
-        ];
+      nixosConfigurations = {
+        shrike = mkNixosHost "shrike";
+        adler = mkNixosHost "adler";
       };
     };
 }

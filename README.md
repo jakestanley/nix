@@ -33,9 +33,27 @@ kscreen-doctor -o
 - If `wayland-0` does not exist, check available sockets with `ls /run/user/1000/wayland-*`.
 
 # Flake workflow
-- Normal deploy: `./scripts/deploy-shrike.sh`
-- Test rebuild without switching: `./scripts/deploy-shrike.sh --test`
-- Update inputs explicitly with `nix flake update`, then deploy with `./scripts/deploy-shrike.sh`
+- `shrike` deploy: `./scripts/deploy-shrike.sh` (or `--test`)
+- `adler` deploy: `./scripts/deploy-adler.sh` (or `--test`)
+- `turing` deploy: `./scripts/deploy-turing.sh`
+- Update inputs explicitly with `nix flake update`, then deploy the relevant host script above.
+
+# Host manual steps
+
+## shrike
+- No required manual post-deploy steps currently.
+
+## adler
+- After first deploy that enables Tailscale, authenticate the node into your tailnet:
+
+```sh
+sudo tailscale up
+```
+
+- Verify with `tailscale status` and `systemctl status tailscaled docker`.
+
+## turing
+- No required manual post-deploy steps currently.
 
 # Service development flow
 - Make app changes in the upstream service repo first, for example `homelab-ollama` or `homelab-rtx`.

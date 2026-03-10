@@ -31,23 +31,11 @@ in
 
   services.printing.enable = false;
 
-  services.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
-
   users.users.jake = {
     isNormalUser = true;
     description = "Jake Stanley";
     extraGroups = [ "networkmanager" "wheel" ];
     shell = pkgs.zsh;
-    packages = with pkgs; [
-      kdePackages.kate
-    ];
   };
 
   services.logind.settings.Login = {
@@ -55,7 +43,6 @@ in
     IdleActionSec = "0";
   };
 
-  programs.firefox.enable = true;
   programs.zsh.enable = true;
 
   nixpkgs.config.allowUnfree = true;
@@ -70,9 +57,8 @@ in
     screen
     ripgrep
     ethtool
-    spotify
     fastfetch
-    kdePackages.kdialog
+    efibootmgr
   ];
 
   environment.variables = editorEnv;
