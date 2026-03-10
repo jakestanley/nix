@@ -590,6 +590,12 @@ in
   system.defaults = {
     dock = dockCommon // dockProfileOverrides;
 
+    CustomUserPreferences."com.apple.desktopservices" = {
+      # Prevent Finder from writing .DS_Store to network and USB/external volumes.
+      DSDontWriteNetworkStores = true;
+      DSDontWriteUSBStores = true;
+    };
+
     finder = {
       AppleShowAllExtensions = false;
       FXEnableExtensionChangeWarning = true;
