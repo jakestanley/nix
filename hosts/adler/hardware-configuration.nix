@@ -37,13 +37,13 @@
   fileSystems."/var/media" = {
     device = "data/media";
     fsType = "zfs";
-    options = [ "nofail" "x-systemd.requires=zfs-import-data.service" ];
+    options = [ "nofail" ];
   };
 
   fileSystems."/var/archive" = {
     device = "data/archive";
     fsType = "zfs";
-    options = [ "nofail" "x-systemd.requires=zfs-import-data.service" ];
+    options = [ "nofail" ];
   };
 
   swapDevices = [ ];
