@@ -7,7 +7,7 @@ in
 {
   imports = [
     ./hardware-configuration.nix
-    ../../modules/nixos/base.nix
+    ../../modules/nixos/desktop.nix
     ../../modules/nixos/docker.nix
     ../../modules/nixos/home-manager.nix
     ../../modules/nixos/ssh.nix
