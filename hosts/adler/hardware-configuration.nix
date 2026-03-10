@@ -18,11 +18,6 @@
       fsType = "ext4";
     };
 
-  fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/1567721f-fee5-4f77-a0cb-19901910d943";
-      fsType = "ext4";
-    };
-
   fileSystems."/var/lib" =
     { device = "/dev/disk/by-uuid/82467efe-b39d-414b-82ec-f33f8c23020f";
       fsType = "ext4";
@@ -32,6 +27,11 @@
     { device = "/dev/disk/by-uuid/7CB3-D62D";
       fsType = "vfat";
       options = [ "fmask=0022" "dmask=0022" ];
+    };
+
+  fileSystems."/home" =
+    { device = "/dev/disk/by-uuid/1567721f-fee5-4f77-a0cb-19901910d943";
+      fsType = "ext4";
     };
 
   fileSystems."/var/media" =
