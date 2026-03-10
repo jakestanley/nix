@@ -34,15 +34,17 @@
   #     fsType = "ext4";
   #   };
 
-  fileSystems."/var/media" =
-    { device = "data/media";
-      fsType = "zfs";
-    };
+  fileSystems."/var/media" = {
+    device = "data/media";
+    fsType = "zfs";
+    options = [ "nofail" "x-systemd.requires=zfs-import-data.service" ];
+  };
 
-  fileSystems."/var/archive" =
-    { device = "data/archive";
-      fsType = "zfs";
-    };
+  fileSystems."/var/archive" = {
+    device = "data/archive";
+    fsType = "zfs";
+    options = [ "nofail" "x-systemd.requires=zfs-import-data.service" ];
+  };
 
   swapDevices = [ ];
 
