@@ -65,6 +65,8 @@ in
     ++ [
       pkgs.ollama-cuda
       pkgs.vscode
+      # TODO make this a common package
+      pkgs.duf
     ];
 
   services.homelabDemucs.enable = demucsServiceEnabled;
