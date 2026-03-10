@@ -32,6 +32,7 @@ in
 
   users.users.jake.openssh.authorizedKeys.keys = [
     publicKeys.turing
+    publicKeys.adler
   ];
 
   home-manager.extraSpecialArgs = {
