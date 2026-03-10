@@ -27,6 +27,9 @@ in
   boot.supportedFilesystems = [ "zfs" ];
   boot.zfs.extraPools = [ "data" ];
 
+  # increase zfs mount timeout
+  systemd.services.zfs-import-data.serviceConfig.TimeoutSec = "300";
+
   networking.hostName = "adler";
   networking.hostId = "2a0f5297";
 
