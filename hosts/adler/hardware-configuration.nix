@@ -18,14 +18,14 @@
       fsType = "ext4";
     };
 
-  fileSystems."/var/lib" =
-    { device = "/dev/disk/by-uuid/82467efe-b39d-414b-82ec-f33f8c23020f";
-      fsType = "ext4";
-    };
+  # fileSystems."/var/lib" =
+  #   { device = "/dev/disk/by-uuid/82467efe-b39d-414b-82ec-f33f8c23020f";
+  #     fsType = "ext4";
+  #   };
 
   fileSystems."/boot/efi" =
     { device = "/dev/disk/by-uuid/7CB3-D62D";
-      fsType = "vfat";
+      fsType = "vfat";  
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
