@@ -72,6 +72,7 @@ in
     pkgs.mangohud 
     # some actual games
     pkgs.dsda-doom
+    pkgs.dsda-launcher
   ];
 
   users.groups.jake = { };
