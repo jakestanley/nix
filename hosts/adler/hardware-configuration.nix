@@ -34,15 +34,15 @@
   #     fsType = "ext4";
   #   };
 
-  # fileSystems."/var/media" =
-  #   { device = "data/media";
-  #     fsType = "zfs";
-  #   };
+  fileSystems."/var/media" =
+    { device = "data/media";
+      fsType = "zfs";
+    };
 
-  # fileSystems."/var/archive" =
-  #   { device = "data/archive";
-  #     fsType = "zfs";
-  #   };
+  fileSystems."/var/archive" =
+    { device = "data/archive";
+      fsType = "zfs";
+    };
 
   swapDevices = [ ];
 

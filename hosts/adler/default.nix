@@ -17,9 +17,15 @@ in
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
+  # create zfs mount points
+  systemd.tmpfiles.rules = [
+    "d /var/media   0755 root root -"
+    "d /var/archive 0755 root root -"
+  ];
+
   # Hardware config mounts ZFS datasets (data/media, data/archive). Import the pool at boot.
   boot.supportedFilesystems = [ "zfs" ];
-  # boot.zfs.extraPools = [ "data" ];
+  boot.zfs.extraPools = [ "data" ];
 
   networking.hostName = "adler";
   networking.hostId = "ad1e5f01";
