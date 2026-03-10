@@ -58,6 +58,7 @@ in
     ripgrep
     ethtool
     fastfetch
+    efibootmgr
   ];
 
   environment.variables = editorEnv;
