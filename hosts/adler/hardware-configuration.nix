@@ -29,10 +29,10 @@
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/1567721f-fee5-4f77-a0cb-19901910d943";
-      fsType = "ext4";
-    };
+  # fileSystems."/home" =
+  #   { device = "/dev/disk/by-uuid/1567721f-fee5-4f77-a0cb-19901910d943";
+  #     fsType = "ext4";
+  #   };
 
   # fileSystems."/var/media" =
   #   { device = "data/media";
