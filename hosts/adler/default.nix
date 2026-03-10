@@ -37,7 +37,7 @@ in
   };
 
   systemd.services.smbd = {
-    requires = [ "var-media.mount" "var-archive.mount" ];
+    wants = [ "var-media.mount" "var-archive.mount" ];
     after = [ "var-media.mount" "var-archive.mount" ];
   };
 
