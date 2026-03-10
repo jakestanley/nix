@@ -59,6 +59,7 @@ in
     lib.optionals config.services.homelabDemucs.enable [ config.services.homelabDemucs.demucsPackage ]
     ++ [
       pkgs.ollama-cuda
+      pkgs.vscode
     ];
 
   services.homelabDemucs.enable = demucsServiceEnabled;
