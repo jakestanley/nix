@@ -36,11 +36,6 @@ in
     openFirewall = true;
   };
 
-  systemd.services.smbd = {
-    wants = [ "var-media.mount" "var-archive.mount" ];
-    after = [ "var-media.mount" "var-archive.mount" ];
-  };
-
   services.samba = {
     enable = true;
     openFirewall = true;
