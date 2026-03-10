@@ -55,6 +55,9 @@ in
     };
   };
 
+  # homelab self signed cert
+  security.pki.certificateFiles = [ ../../ca.crt ];
+
   environment.systemPackages =
     lib.optionals config.services.homelabDemucs.enable [ config.services.homelabDemucs.demucsPackage ]
     ++ [
