@@ -28,7 +28,7 @@ in
   boot.zfs.extraPools = [ "data" ];
 
   networking.hostName = "adler";
-  networking.hostId = "ad1e5f01";
+  networking.hostId = "2a0f5297";
 
   users.users.jake.openssh.authorizedKeys.keys = [
     publicKeys.turing
