@@ -10,6 +10,7 @@ in
     ../../modules/nixos/docker.nix
     ../../modules/nixos/home-manager.nix
     ../../modules/nixos/ssh.nix
+    ./homelab
   ];
 
   boot.loader.systemd-boot.enable = true;

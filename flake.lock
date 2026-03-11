@@ -60,6 +60,22 @@
         "type": "github"
       }
     },
+    "homelab-infra": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1772703277,
+        "narHash": "sha256-cUSn6ihnvFLKX+mC8bfXtaOe6j3HWW8pX/fbC2sTLh8=",
+        "ref": "refs/heads/main",
+        "rev": "89d40e2743909bfc3fcad179ddc9788162bdac73",
+        "revCount": 33,
+        "type": "git",
+        "url": "ssh://git@github.com/jakestanley/homelab-infra"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@github.com/jakestanley/homelab-infra"
+      }
+    },
     "nix-darwin": {
       "inputs": {
         "nixpkgs": [
@@ -123,6 +139,7 @@
       "inputs": {
         "cherri": "cherri",
         "home-manager": "home-manager",
+        "homelab-infra": "homelab-infra",
         "nix-darwin": "nix-darwin",
         "nixpkgs": "nixpkgs",
         "plasma-manager": "plasma-manager"
