@@ -63,5 +63,12 @@ pkgs.testers.runNixOSTest {
     imports = [ ../hosts/adler/homelab/nginx.nix ];
   };
 
-  testScript = { nodes, ... }: builtins.readFile ./nginx.py;
+  testScript = { nodes, ... }: 
+    let
+      execStart = nodes.machine.config.systemd.services.nginx.serviceConfig.ExecStart;
+      nginxConf = builtins.head (builtins.match ".*-c '([^']+)'.*" execStart);
+    in
+    ''
+      nginx_conf = "${nginxConf}"
+    '' + builtins.readFile ./nginx.py;
 }

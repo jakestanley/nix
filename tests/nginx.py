@@ -4,7 +4,6 @@ import tempfile # type: ignore
 # TODO: disable typing idgas
 
 # /nix/store/4lb0cvvkzzzsk1l6wpfsw136axr4fxlv-nginx-1.28.2/conf/nginx.conf
-nginx_conf = machine.succeed("find /nix/store -name '*nginx.conf' -maxdepth 2").strip()
 print(nginx_conf)
 
 # TODO: fail if empty
