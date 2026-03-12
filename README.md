@@ -68,6 +68,22 @@ Alternatively, generate certs using the scripts in [homelab-edge](https://github
 
 As you should know, if you generate new certs as you'll need to re-add them to client trust stores.
 
+### OpenVPN
+
+The PKI files are managed outside of Nix. Copy them from the Ubuntu box before first activation:
+```bash
+sudo scp -r user@ubuntu:/etc/openvpn /etc/openvpn
+```
+
+Ensure correct permissions:
+```bash
+sudo chmod 600 /etc/openvpn/ca.key
+sudo chmod 600 /etc/openvpn/server_YeWnWJLw5SiBcE91.key
+sudo chmod 600 /etc/openvpn/tls-crypt.key
+```
+
+The client configs and CCD directory are included in the copy. The `ipp.txt` lease file will be created automatically by OpenVPN on first run if it does not exist.
+
 ## turing
 - No required manual post-deploy steps currently.
 

@@ -6,6 +6,14 @@ let
 in
 
 {
+
+    # VPN masquerade rule
+    networking.nat = {
+        enable = true;
+        internalInterfaces = [ "tun0" ];
+        externalInterface = "eno1";
+    };
+
   services.openvpn.servers.stanley = {
     config = ''
       port 1194

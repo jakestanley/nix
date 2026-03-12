@@ -16,7 +16,7 @@ steps:
       - chmod 700 /tmp/ssh
       - chmod 600 /tmp/ssh/*
       - echo "system-features = kvm nixos-test" >> /etc/nix/nix.conf
-      - nix --extra-experimental-features "nix-command flakes" flake check -L --show-trace --rebuild --option sandbox false
+      - nix --extra-experimental-features "nix-command flakes" flake check -L --show-trace --no-eval-cache --option sandbox false
   - name: enforce-main-pins
     image: alpine:3.20
     when:
