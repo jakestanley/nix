@@ -26,20 +26,10 @@
     };
   };
 
-  {
-    let
-      pkgs = nixpkgs.legacyPackages.x86_64-linux;
-    in {
-      checks.x86_64-linux = {
-          dns = import ./tests/dns.nix { inherit pkgs; };
-          nginx = import ./tests/nginx.nix { inherit pkgs; };
-      };
-    };
-  };
-
   outputs = inputs@{ nixpkgs, ... }:
     let
       lib = nixpkgs.lib;
+      pkgs = nixpkgs.legacyPackages.x86_64-linux;
       supportedSystems = [
         "aarch64-darwin"
         "aarch64-linux"
@@ -145,6 +135,11 @@
       nixosConfigurations = {
         shrike = mkNixosHost "shrike";
         adler = mkNixosHost "adler";
+      };
+
+      checks.x86_64-linux = {
+        dns = import ./tests/dns.nix { inherit pkgs; };
+        nginx = import ./tests/nginx.nix { inherit pkgs; };
       };
     };
 }
