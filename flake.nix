@@ -26,9 +26,15 @@
     };
   };
 
-  checks.x86_64-linux = {
-    dns = import ./tests/dns.nix { inherit pkgs; };
-    nginx = import ./tests/nginx.nix { inherit pkgs; };
+  {
+    let
+      pkgs = nixpkgs.legacyPackages.x86_64-linux;
+    in {
+      checks.x86_64-linux = {
+          dns = import ./tests/dns.nix { inherit pkgs; };
+          nginx = import ./tests/nginx.nix { inherit pkgs; };
+      };
+    };
   };
 
   outputs = inputs@{ nixpkgs, ... }:
