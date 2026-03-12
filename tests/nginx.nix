@@ -20,6 +20,13 @@ pkgs.testers.runNixOSTest {
 #       port: 20031
 #       scheme: http
 
+# dummy certificate files
+  systemd.tmpfiles.rules = [
+    "d /etc/homelab/certs/live/wildcard_stanley_arpa 0755 root root -"
+    "f /etc/homelab/certs/live/wildcard_stanley_arpa/fullchain.pem 0644 root root -"
+    "f /etc/homelab/certs/live/wildcard_stanley_arpa/privkey.pem 0644 root root -"
+  ];
+
     _module.args.registry = {
       hosts = {
         adler = { ip = "10.66.6.6"; };
