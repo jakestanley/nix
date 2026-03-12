@@ -26,6 +26,11 @@
     };
   };
 
+  checks.x86_64-linux = {
+    dns = import ./tests/dns.nix { inherit pkgs; };
+    nginx = import ./tests/nginx.nix { inherit pkgs; };
+  };
+
   outputs = inputs@{ nixpkgs, ... }:
     let
       lib = nixpkgs.lib;
