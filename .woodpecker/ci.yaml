@@ -9,6 +9,8 @@ steps:
       - nix-cache:/nix
       - /home/jake/.ssh:/root/.ssh:ro 
     commands:
+      # check ssh is available first
+      - ssh -T git@github.com
       - nix --extra-experimental-features "nix-command flakes" flake check -L --show-trace --option sandbox false
   - name: enforce-main-pins
     image: alpine:3.20
