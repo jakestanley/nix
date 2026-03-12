@@ -84,13 +84,13 @@ def assert_service(service_name, proxy_pass, extra_config_check=None):
 # per-service assertions
 assert len(server_blocks) == 4, f"Expected 4 server blocks, got {len(server_blocks)}"
 
-assert_service("rtx", "http://shrike:20031")
+assert_service("rtx", "http://10.92.8.4:20031")
 
 def check_demucs_extra(port_443):
     extra = list(find_directive(port_443['block'], 'client_max_body_size'))
     assert any(d['args'][0] == '256m' for d in extra), "demucs: Expected client_max_body_size 256m"
 
-assert_service("demucs", "http://shrike:20032", extra_config_check=check_demucs_extra)
+assert_service("demucs", "http://10.92.8.6:20032", extra_config_check=check_demucs_extra)
 
 # no easy way to find it, it's not exposed. we can try the repl
 # nix --extra-experimental-features "flakes" repl

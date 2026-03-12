@@ -8,7 +8,6 @@ let
   '');
 in
 
-{
-  
+{ 
   _module.args.registry = registry;
 }

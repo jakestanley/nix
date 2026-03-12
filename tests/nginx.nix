@@ -29,8 +29,9 @@ pkgs.testers.runNixOSTest {
 
     _module.args.registry = {
       hosts = {
-        adler = { ip = "10.66.6.6"; };
-        shrike = { ip = "10.66.6.7"; };
+        adler = { ip = "10.92.8.6"; };
+        # real shrike for the curl test
+        shrike = { ip = "10.92.8.4"; };
       };
       services = {
         rtx = {
@@ -46,7 +47,7 @@ pkgs.testers.runNixOSTest {
           dns = "demucs.stanley.arpa";
           proxy_host = "adler";
           upstream = {
-            host = "shrike";
+            host = "adler";
             port = "20032";
             scheme = "http";
           };

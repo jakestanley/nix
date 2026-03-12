@@ -2,7 +2,7 @@
 
 {
     services.nginx.enable = true;
-    
+
 #   rtx:
 #     dns: rtx.stanley.arpa
 #     proxy_host: adler
@@ -17,7 +17,7 @@
         sslCertificate = "/etc/homelab/certs/live/wildcard_stanley_arpa/fullchain.pem";
         sslCertificateKey = "/etc/homelab/certs/live/wildcard_stanley_arpa/privkey.pem";
         locations."/" = {
-            proxyPass = "http://${cfg.upstream.host}:${toString cfg.upstream.port}";
+            proxyPass = "http://${registry.hosts.${cfg.upstream.host}.ip}:${toString cfg.upstream.port}";
             proxyWebsockets = true;
         };
         locations."= /healthz".return = "200";
