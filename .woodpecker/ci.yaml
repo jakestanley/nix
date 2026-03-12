@@ -7,9 +7,9 @@ steps:
     image: nixos/nix
     volumes:
       - nix-cache:/nix
-      - /home/jake/.ssh:/root/.ssh:ro
+      - /home/jake/.ssh:/root/.ssh:ro 
     commands:
-      - nix --extra-experimental-features "nix-command flakes" flake check -L --show-trace
+      - nix --extra-experimental-features "nix-command flakes" flake check -L --show-trace --option sandbox false
   - name: enforce-main-pins
     image: alpine:3.20
     when:
