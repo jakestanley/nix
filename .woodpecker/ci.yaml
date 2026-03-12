@@ -10,6 +10,7 @@ steps:
       - /home/jake/.ssh:/root/.ssh:ro 
     commands:
       # check ssh is available first
+      - chmod 600 /root/.ssh/config
       - ssh -T git@github.com
       - nix --extra-experimental-features "nix-command flakes" flake check -L --show-trace --option sandbox false
   - name: enforce-main-pins
