@@ -42,6 +42,15 @@ pkgs.testers.runNixOSTest {
             scheme = "http";
           };
         };
+        demucs = {
+          dns = "demucs.stanley.arpa";
+          proxy_host = "adler";
+          upstream = {
+            host = "shrike";
+            port = "20032";
+            scheme = "http";
+          };
+        };
       };
     };
 

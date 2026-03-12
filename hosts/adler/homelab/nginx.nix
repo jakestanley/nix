@@ -21,5 +21,13 @@
             proxyWebsockets = true;
         };
         locations."= /healthz".return = "200";
-    }) registry.services;
+        
+    } // lib.optionalAttrs (name == "demucs") {
+        extraConfig = ''
+            client_max_body_size 256m;
+            proxy_read_timeout 300s;
+            proxy_send_timeout 300s;
+            send_timeout 300s;
+            '';
+        }) registry.services;
 }
