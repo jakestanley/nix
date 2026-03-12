@@ -2,7 +2,7 @@
 
 {
   services.plex = {
-    enable = true;
+    enable = false;
     dataDir = "/var/lib/plexmediaserver";
     openFirewall = true;
   };
