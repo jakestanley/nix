@@ -12,6 +12,8 @@
 
 {   
     # Nix way is to let Nix handle the config, so unlike on Ubuntu we won't have many files
+    networking.firewall.allowedTCPPorts = [ 53 ];
+    networking.firewall.allowedUDPPorts = [ 53 ];
     services.dnsmasq = {
         enable = true;
         settings = {
