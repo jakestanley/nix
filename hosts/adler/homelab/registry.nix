@@ -2,7 +2,7 @@
 
 let
   registry = lib.importJSON (pkgs.runCommandLocal "registry-json" {
-    nativeBuildInputs = [ pkgs.yq ];
+    nativeBuildInputs = [ pkgs.yq-go ];
   } ''
     yq -o=json ${inputs.homelab-infra}/registry.yaml > $out
   '');
