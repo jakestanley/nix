@@ -84,6 +84,19 @@ sudo chmod 600 /etc/openvpn/tls-crypt.key
 
 The client configs and CCD directory are included in the copy. The `ipp.txt` lease file will be created automatically by OpenVPN on first run if it does not exist.
 
+### Plex Media Server
+
+Plex metadata and database are managed outside of Nix. Copy from the Ubuntu box before first activation:
+```bash
+sudo systemctl stop plexmediaserver
+sudo scp -r user@ubuntu:/var/lib/plexmediaserver /var/lib/plexmediaserver
+```
+
+Ensure correct ownership:
+```bash
+sudo chown -R plex:plex /var/lib/plexmediaserver
+```
+
 ## turing
 - No required manual post-deploy steps currently.
 
