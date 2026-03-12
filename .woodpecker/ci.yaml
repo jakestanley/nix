@@ -5,6 +5,8 @@ when:
 steps:
   - name: validate
     image: nixos/nix
+    environment:
+      GIT_SSH_COMMAND: ssh -F /tmp/ssh/config -i /tmp/ssh/id_ed25519
     volumes:
       - nix-cache:/nix
       - /home/jake/.ssh:/root/.ssh:ro 
@@ -13,8 +15,6 @@ steps:
       - cp -r /root/.ssh /tmp/ssh
       - chmod 700 /tmp/ssh
       - chmod 600 /tmp/ssh/*
-      - export GIT_SSH_COMMAND="ssh -F /tmp/ssh/config -i /tmp/ssh/id_ed25519"
-      - ssh -F /tmp/ssh/config -T git@github.com || true
       - nix --extra-experimental-features "nix-command flakes" flake check -L --show-trace --option sandbox false
   - name: enforce-main-pins
     image: alpine:3.20
