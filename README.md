@@ -44,6 +44,8 @@ kscreen-doctor -o
 - No required manual post-deploy steps currently.
 
 ## adler
+
+### tailscale
 - After first deploy that enables Tailscale, authenticate the node into your tailnet:
 
 ```sh
@@ -51,6 +53,20 @@ sudo tailscale up
 ```
 
 - Verify with `tailscale status` and `systemctl status tailscaled docker`.
+
+### TLS certificates
+Copy the wildcard cert and CA from the Ubuntu box before first activation:
+```bash
+# or from wherever they are
+scp -r user@ubuntu:/etc/homelab/certs /tmp/certs
+sudo mkdir -p /etc/homelab/certs
+sudo cp -r /tmp/certs/* /etc/homelab/certs/
+sudo chmod 600 /etc/homelab/certs/live/wildcard_stanley_arpa/privkey.pem
+```
+
+Alternatively, generate certs using the scripts in [homelab-edge](https://github.com/jakestanley/homelab-edge)
+
+As you should know, if you generate new certs as you'll need to re-add them to client trust stores.
 
 ## turing
 - No required manual post-deploy steps currently.
