@@ -10,7 +10,10 @@ steps:
       - /home/jake/.ssh:/root/.ssh:ro 
     commands:
       # check ssh is available first
-      - chmod 600 /root/.ssh/config
+      - cp -r /root/.ssh /tmp/ssh
+      - chmod 700 /tmp/ssh
+      - chmod 600 /tmp/ssh/*
+      - export GIT_SSH_COMMAND="ssh -F /tmp/ssh/config -i /tmp/ssh/id_ed25519"
       - ssh -T git@github.com
       - nix --extra-experimental-features "nix-command flakes" flake check -L --show-trace --option sandbox false
   - name: enforce-main-pins
