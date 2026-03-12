@@ -7,6 +7,7 @@ steps:
     image: nixos/nix
     volumes:
       - nix-cache:/nix
+      - /home/jake/.ssh:/root/.ssh:ro
     commands:
       - nix --extra-experimental-features "nix-command flakes" flake check -L --show-trace
   - name: enforce-main-pins
