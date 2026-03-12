@@ -1,4 +1,4 @@
-{ ... }:
+{ registry, ... }:
 
 {
     # services.nginx.virtualHosts = lib.mapAttrs (name: cfg: {
