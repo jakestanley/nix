@@ -2,7 +2,7 @@
 set -euo pipefail
 
 BACKUP_DEST="$HOME/Dropbox/backups/adler"
-TIMESTAMP=$(date +%Y%m%d)
+TIMESTAMP=$(date +%F_%H-%I)
 BACKUP_FILE="$BACKUP_DEST/adler-$TIMESTAMP.tar.gz"
 
 mkdir -p "$BACKUP_DEST"
