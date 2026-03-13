@@ -1,6 +1,21 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+cleanup() {
+    echo "Restarted docker and plex"
+    sudo systemctl start docker
+    sudo systemctl start plexmediaserver
+}
+
+trap cleanup EXIT
+
+echo "Stopping docker and plex"
+
+sudo systemctl stop docker
+sudo systemctl stop plexmediaserver
+
+echo "Stopped docker and plex. Beginning backup"
+
 BACKUP_DEST="$HOME/Dropbox/backups/adler"
 TIMESTAMP=$(date +%F_%H-%I)
 BACKUP_FILE="$BACKUP_DEST/adler-$TIMESTAMP.tar.gz"
@@ -36,7 +51,10 @@ sudo tar -czf "$BACKUP_FILE" \
     /var/lib/plexmediaserver
 
 # keep last 7 backups
-# ls -t "$BACKUP_DEST"/adler-*.tar.gz | tail -n +8 | xargs -r rm
+ls -t "$BACKUP_DEST"/adler-*.tar.gz | tail -n +8 | xargs -r rm
 
 sudo chown jake:jake "$BACKUP_FILE"
 echo "Backup complete: $BACKUP_FILE"
+
+sudo systemctl start docker
+sudo systemctl start plexmediaserver

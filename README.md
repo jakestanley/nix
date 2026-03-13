@@ -95,18 +95,20 @@ The client configs and CCD directory are included in the copy. The `ipp.txt` lea
 
 ### Plex Media Server
 
-Plex metadata and database are managed outside of Nix. Copy from the Ubuntu box before first activation:
+Stop Plex before copying to avoid in-use file issues:
 ```bash
 sudo systemctl stop plexmediaserver
-sudo scp -r user@ubuntu:/var/lib/plexmediaserver /var/lib/plexmediaserver
+nohup sudo rsync -av --progress /var/lib/plexmediaserver/ /mnt/nixos-var-lib/plexmediaserver/ > /tmp/rsync-plex.log 2>&1 &
 ```
 
-Ensure correct ownership:
+Ensure correct ownership after copy:
 ```bash
-sudo chown -R plex:plex /var/lib/plexmediaserver
+sudo chown -R plex:plex /mnt/nixos-var-lib/plexmediaserver
 ```
 
-## Docker
+Note: media files are on ZFS volumes (`/var/media`, `/var/archive`) and do not need to be copied.
+
+### Docker
 
 Stop all containers before copying:
 ```bash
@@ -124,20 +126,13 @@ sudo systemctl stop docker
 nohup sudo rsync -av --progress /var/lib/docker/ /mnt/nixos-var-lib/docker/ > /tmp/rsync-docker.log 2>&1 &
 ```
 
-## Plex Media Server
+### Backup script
 
-Stop Plex before copying to avoid in-use file issues:
-```bash
-sudo systemctl stop plexmediaserver
-nohup sudo rsync -av --progress /var/lib/plexmediaserver/ /mnt/nixos-var-lib/plexmediaserver/ > /tmp/rsync-plex.log 2>&1 &
+The script `./scripts/backup-adler.sh` needs to be run as root, add this using `sudo crontab -e`
+
 ```
-
-Ensure correct ownership after copy:
-```bash
-sudo chown -R plex:plex /mnt/nixos-var-lib/plexmediaserver
+0 2 * * * /home/jake/git/github.com/jakestanley/nix/scripts/backup-adler.sh >> /var/log/backup-adler.log 2>&1
 ```
-
-Note: media files are on ZFS volumes (`/var/media`, `/var/archive`) and do not need to be copied.
 
 ## turing
 - No required manual post-deploy steps currently.
