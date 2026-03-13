@@ -68,6 +68,15 @@ Alternatively, generate certs using the scripts in [homelab-edge](https://github
 
 As you should know, if you generate new certs as you'll need to re-add them to client trust stores.
 
+Still having permissions issues? Try checking and fixing them
+
+```
+ls -la /etc/homelab/certs/live/wildcard_stanley_arpa/
+sudo chmod 640 /etc/homelab/certs/live/wildcard_stanley_arpa/privkey.pem
+sudo chown root:nginx /etc/homelab/certs/live/wildcard_stanley_arpa/privkey.pem
+sudo systemctl restart nginx
+```
+
 ### OpenVPN
 
 The PKI files are managed outside of Nix. Copy them from the Ubuntu box before first activation:
