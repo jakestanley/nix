@@ -7,7 +7,8 @@ BACKUP_FILE="$BACKUP_DEST/adler-$TIMESTAMP.tar.gz"
 
 mkdir -p "$BACKUP_DEST"
 
-tar -czf "$BACKUP_FILE" \
+sudo tar -czf "$BACKUP_FILE" \
+    --warning=no-file-ignored \
     --exclude="$HOME/.cache" \
     --exclude="$HOME/.local/share/Trash" \
     --exclude="$HOME/.local/pipx" \
@@ -28,6 +29,7 @@ tar -czf "$BACKUP_FILE" \
     --exclude="$HOME/Music/Playlists" \
     --exclude="*/.venv" \
     --exclude="*/venv" \
+    --exclude="*/ipc-socket" \
     /home/jake \
     /etc/openvpn \
     /etc/homelab/certs \
@@ -36,4 +38,5 @@ tar -czf "$BACKUP_FILE" \
 # keep last 7 backups
 # ls -t "$BACKUP_DEST"/adler-*.tar.gz | tail -n +8 | xargs -r rm
 
+sudo chown jake:jake "$BACKUP_FILE"
 echo "Backup complete: $BACKUP_FILE"
