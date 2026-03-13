@@ -106,6 +106,39 @@ Ensure correct ownership:
 sudo chown -R plex:plex /var/lib/plexmediaserver
 ```
 
+## Docker
+
+Stop all containers before copying:
+```bash
+sudo docker stop $(sudo docker ps -q)
+```
+
+Clean up unused images, containers and volumes to reduce copy size:
+```bash
+sudo docker system prune -a --volumes
+```
+
+Copy Docker data to NixOS partition:
+```bash
+sudo systemctl stop docker
+nohup sudo rsync -av --progress /var/lib/docker/ /mnt/nixos-var-lib/docker/ > /tmp/rsync-docker.log 2>&1 &
+```
+
+## Plex Media Server
+
+Stop Plex before copying to avoid in-use file issues:
+```bash
+sudo systemctl stop plexmediaserver
+nohup sudo rsync -av --progress /var/lib/plexmediaserver/ /mnt/nixos-var-lib/plexmediaserver/ > /tmp/rsync-plex.log 2>&1 &
+```
+
+Ensure correct ownership after copy:
+```bash
+sudo chown -R plex:plex /mnt/nixos-var-lib/plexmediaserver
+```
+
+Note: media files are on ZFS volumes (`/var/media`, `/var/archive`) and do not need to be copied.
+
 ## turing
 - No required manual post-deploy steps currently.
 
