@@ -134,6 +134,30 @@ sudo tailscale up
 }
 ```
 
+# cs2-dedicated
+- The reusable NixOS module lives at `modules/nixos/cs2-dedicated.nix`.
+- Generate and set an RCON password file (default path in `hosts/shrike/default.nix`) before starting the service:
+
+```sh
+sudo install -d -m 750 -o root -g users /etc/arcade
+openssl rand -base64 24 | tr -d '\n' | sudo tee /etc/arcade/rcon_password >/dev/null
+sudo chmod 640 /etc/arcade/rcon_password
+sudo chown root:users /etc/arcade/rcon_password
+```
+
+- By default the service is installed but does not auto-start on boot. Start it manually:
+
+```sh
+sudo systemctl start cs2-dedicated
+```
+
+- Submit RCON commands:
+
+```sh
+cs2-rcon "status"
+cs2-rcon "changelevel de_mirage"
+```
+
 # Systemd units and specialisations
 - Package long-lived services into the Nix store and declare them with `systemd.services.<name>`, rather than copying unit files into `/etc/systemd/system`.
 - Keep mutable runtime state under a managed path such as `/var/lib/<name>` with `StateDirectory=`.

@@ -13,6 +13,7 @@ in
     ../../modules/nixos/ssh.nix
     ../../modules/nixos/plasma.nix
     ../../modules/nixos/greetd-autologin.nix
+    ../../modules/nixos/cs2-dedicated.nix
     ../../modules/nixos/homelab-demucs.nix
     ../../modules/nixos/homelab-ollama.nix
     ../../modules/nixos/nvidia.nix
@@ -71,6 +72,25 @@ in
 
   services.homelabDemucs.enable = demucsServiceEnabled;
   services.homelabDemucs.openFirewall = demucsServiceEnabled;
+
+  services.cs2Dedicated = {
+    enable = true;
+    openFirewall = true;
+    user = "jake";
+    group = "users";
+    bindIp = "10.92.8.4";
+    port = 27015;
+    maxPlayers = 64;
+    steamRoot = "/home/jake/.local/share/Steam";
+    cs2Path = "/home/jake/.local/share/Steam/steamapps/common/Counter-Strike Global Offensive";
+    rconPasswordFile = "/etc/arcade/rcon_password";
+    gsltTokenFile = "/etc/arcade/gslt_token";
+    extraLibraryPaths = [ "/home/jake/.steam/sdk64" ];
+    startupCvars = {
+      game_alias = "competitive";
+      map = "de_dust2";
+    };
+  };
 
   services.homelabOllama.enable = true;
   services.homelabOllama.openFirewall = true;

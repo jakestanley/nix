@@ -90,6 +90,7 @@
     in {
       overlays.default = overlay;
 
+      nixosModules.cs2Dedicated = ./modules/nixos/cs2-dedicated.nix;
       nixosModules.homelabDemucs = ./modules/nixos/homelab-demucs.nix;
       nixosModules.homelabOllama = ./modules/nixos/homelab-ollama.nix;
       nixosModules.rtx = ./modules/nixos/rtx.nix;
