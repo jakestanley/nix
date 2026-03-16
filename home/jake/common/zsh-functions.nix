@@ -147,7 +147,7 @@
       --include='/Playlists/**/' \
       --include='/Playlists/**/unprocessed/***' \
       --exclude='*' \
-      jake@adler:~/Music/ \
+      jake@adler.stanley.arpa:~/Music/ \
       ~/Music/
   '';
 }
