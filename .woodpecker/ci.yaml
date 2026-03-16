@@ -5,10 +5,26 @@ when:
 steps:
   - name: validate
     image: nixos/nix
+    environment:
+      GIT_SSH_COMMAND: ssh -F /tmp/ssh/config -i /tmp/ssh/id_ed25519
+      NIX_CONFIG: |
+        system-features = kvm nixos-test
+        build-users-group =
     volumes:
       - nix-cache:/nix
+      - /home/jake/.ssh:/root/.ssh:ro 
     commands:
-      - nix --extra-experimental-features "nix-command flakes" flake check -L --show-trace
+      - cp -r /root/.ssh /tmp/ssh
+      - chmod 700 /tmp/ssh
+      - chmod 600 /tmp/ssh/*
+      - >-
+        nix
+        --extra-experimental-features "nix-command flakes"
+        flake check
+        -L
+        --show-trace
+        --no-eval-cache
+        --option sandbox false
   - name: enforce-main-pins
     image: alpine:3.20
     when:

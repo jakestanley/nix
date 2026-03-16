@@ -18,10 +18,10 @@
       fsType = "ext4";
     };
 
-  # fileSystems."/var/lib" =
-  #   { device = "/dev/disk/by-uuid/82467efe-b39d-414b-82ec-f33f8c23020f";
-  #     fsType = "ext4";
-  #   };
+  fileSystems."/var/lib" =
+    { device = "/dev/disk/by-uuid/f945fdb1-78fe-4443-a4bd-3456f955cd38";
+      fsType = "ext4";
+    };
 
   fileSystems."/boot/efi" =
     { device = "/dev/disk/by-uuid/7CB3-D62D";
@@ -29,10 +29,10 @@
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  # fileSystems."/home" =
-  #   { device = "/dev/disk/by-uuid/1567721f-fee5-4f77-a0cb-19901910d943";
-  #     fsType = "ext4";
-  #   };
+  fileSystems."/home" =
+    { device = "/dev/disk/by-uuid/981b71d0-5224-4965-bba3-43105ab60040";
+      fsType = "ext4";
+    };
 
   fileSystems."/var/media" = {
     device = "data/media";

@@ -59,6 +59,7 @@ in
     ethtool
     fastfetch
     efibootmgr
+    dig
   ];
 
   environment.variables = editorEnv;
