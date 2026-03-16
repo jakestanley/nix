@@ -2,7 +2,7 @@
 
 let
   demucsServiceEnabled = true;
-  publicKeys = (import ../../modules/nixos/public-keys.nix {}).publicKeys;
+  publicKeys = (import ../../modules/nixos/identities.nix {}).publicKeys;
 in
 {
   imports = [

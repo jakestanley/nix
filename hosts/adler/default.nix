@@ -1,7 +1,8 @@
 { ... }:
 
 let 
-  publicKeys = (import ../../modules/nixos/public-keys.nix {}).publicKeys;
+  publicKeys = (import ../../modules/nixos/identities.nix {}).publicKeys;
+  lanInterface = "eno1";
 in
 {
   imports = [
@@ -12,6 +13,7 @@ in
     ../../modules/nixos/ssh.nix
     ./homelab
   ];
+  _module.args.lanInterface = lanInterface;
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.consoleMode = "max";

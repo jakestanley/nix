@@ -6,4 +6,11 @@
         shrike = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMiydmkWP+geDEY0d5GxIzXfo56qpozxG9MSCJK9cWas jake@nixos-shrike";
         adler  = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMpAI5WnOeOfzd2kug6CrjvzRoCG0QA+wlDkLpn26H1f jake@adler";
     };
+
+    wireguardPeers = {
+        turing = {
+            publicKey = "EjFLx48Wdx3HIun5f3lRZXJvSEJzU4B9zl8ydLVDxww=";
+            ip = "10.9.0.2";
+        };
+    };
 }

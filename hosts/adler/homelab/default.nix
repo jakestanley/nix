@@ -9,5 +9,6 @@
         ./plex.nix
         ./samba.nix
         ./tls.nix
+        ./wireguard.nix
     ];
 }

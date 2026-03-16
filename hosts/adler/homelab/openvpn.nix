@@ -1,4 +1,4 @@
-{ ... }:
+{ lanInterface, ... }:
 
 let
   ovpnDir = "/etc/openvpn";
@@ -11,7 +11,7 @@ in
     networking.nat = {
         enable = true;
         internalInterfaces = [ "tun0" ];
-        externalInterface = "eno1";
+        externalInterface = lanInterface;
     };
 
   services.openvpn.servers.stanley = {
