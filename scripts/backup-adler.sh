@@ -48,6 +48,7 @@ sudo tar -czf "$BACKUP_FILE" \
     --exclude="*/ipc-socket" \
     $BACKUP_TARGET_HOME \
     /etc/openvpn \
+    /etc/wireguard \
     /etc/homelab/certs \
     /var/lib/plexmediaserver
 
