@@ -7,10 +7,19 @@
         adler  = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMpAI5WnOeOfzd2kug6CrjvzRoCG0QA+wlDkLpn26H1f jake@adler";
     };
 
+    # NOTE: peers must have this port set in their client wg0.conf under [Interface]
     wireguardPeers = {
         turing = {
             publicKey = "EjFLx48Wdx3HIun5f3lRZXJvSEJzU4B9zl8ydLVDxww=";
             ip = "10.9.0.2";
+        };
+        vega = {
+            publicKey = "y3TyMBP8ogVt61NRLUy/EivrsOPkjS27LxDJ8zrMzlw=";
+            ip = "10.9.0.3";
+        };
+        lstr = {
+            publicKey = "DtZunhndCWtdJHwxujKzzJjE1ey/HmVY2AJzPjzWXww=";
+            ip = "10.9.0.4";
         };
     };
 }
