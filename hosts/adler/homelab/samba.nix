@@ -45,7 +45,7 @@
         "guest ok" = "yes";
         "browseable" = "yes";
         "hide unreadable" = "yes";
-      }
+      };
 
       "print$" = {
         "comment" = "Printer Drivers";
@@ -53,7 +53,7 @@
         "browseable" = "yes";
         "read only" = "yes";
         "guest ok" = "no";
-      }
+      };
     };
   };
 }
