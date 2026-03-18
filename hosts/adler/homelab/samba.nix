@@ -36,120 +36,16 @@
         "usershare allow guests" = "yes";
       };
 
-      Books = {
-        "path" = "/var/media/Books";
-        "read only" = "yes";
-        "write list" = "jake";
+      # To hide directories from the guest samba share, ensure you apply the following:
+      #   sudo chown jake:jake  /var/media/directory-to-hide
+      #   sudo chmod 750        /var/media/directory-to-hide
+      media = {
+        "path" = "/var/media";
+        "read only" = "no";
+        "guest ok" = "yes";
         "browseable" = "yes";
-      };
-
-      Downloads = {
-        "path" = "/var/media/Downloads";
-        "read only" = "yes";
-        "write list" = "jake";
-        "browseable" = "yes";
-      };
-
-      Games = {
-        "path" = "/var/media/Games";
-        "read only" = "yes";
-        "write list" = "jake";
-        "browseable" = "yes";
-      };
-
-      Movies = {
-        "path" = "/var/media/Movies";
-        "read only" = "yes";
-        "write list" = "jake";
-        "browseable" = "yes";
-      };
-
-      "Movies (Rare)" = {
-        "path" = "/var/media/Movies (Rare)";
-        "read only" = "yes";
-        "write list" = "jake";
-        "browseable" = "yes";
-      };
-
-      Music = {
-        "path" = "/var/media/Music";
-        "read only" = "yes";
-        "write list" = "jake";
-        "browseable" = "yes";
-      };
-
-      "Operating Systems" = {
-        "path" = "/var/media/Operating Systems";
-        "read only" = "yes";
-        "write list" = "jake";
-        "browseable" = "yes";
-      };
-
-      Other = {
-        "path" = "/var/media/Other";
-        "read only" = "yes";
-        "write list" = "jake";
-        "browseable" = "yes";
-      };
-
-      PC = {
-        "path" = "/var/media/PC";
-        "read only" = "yes";
-        "write list" = "jake";
-        "browseable" = "yes";
-      };
-
-      ROMs = {
-        "path" = "/var/media/ROMs";
-        "read only" = "yes";
-        "write list" = "jake";
-        "browseable" = "yes";
-      };
-
-      Software = {
-        "path" = "/var/media/Software";
-        "read only" = "yes";
-        "write list" = "jake";
-        "browseable" = "yes";
-      };
-
-      "Steam Deck" = {
-        "path" = "/var/media/Steam Deck";
-        "read only" = "yes";
-        "write list" = "jake";
-        "browseable" = "yes";
-      };
-
-      TV = {
-        "path" = "/var/media/TV";
-        "read only" = "yes";
-        "write list" = "jake";
-        "browseable" = "yes";
-      };
-
-      "TV (Rare)" = {
-        "path" = "/var/media/TV (Rare)";
-        "read only" = "yes";
-        "write list" = "jake";
-        "browseable" = "yes";
-      };
-
-      homes = {
-        "comment" = "Home Directories";
-        "browseable" = "no";
-        "valid users" = "%S";
-        "writable" = "yes";
-      };
-
-      printers = {
-        "comment" = "All Printers";
-        "browseable" = "no";
-        "path" = "/var/spool/samba";
-        "printable" = "yes";
-        "guest ok" = "no";
-        "read only" = "yes";
-        "create mask" = "0700";
-      };
+        "hide unreadable" = "yes";
+      }
 
       "print$" = {
         "comment" = "Printer Drivers";
