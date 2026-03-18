@@ -53,7 +53,7 @@
         "browseable" = "yes";
         "read only" = "yes";
         "guest ok" = "no";
-      };
+      }
     };
   };
 }
