@@ -70,6 +70,12 @@ in
 
   hardware.graphics.enable32Bit = true;
 
+  # enable controllers with udev rules
+  hardware.steam-hardware.enable = true;
+  
+  # xbox controller driver?
+  hardware.xpadneo.enable = true;
+
   environment.systemPackages = [ 
     pkgs.mangohud 
     # some actual games
