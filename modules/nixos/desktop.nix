@@ -5,6 +5,8 @@
     ./base.nix
   ];
 
+  hardware.bluetooth.enable = true;
+
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
