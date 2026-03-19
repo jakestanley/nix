@@ -167,6 +167,7 @@ in
 
   programs.plasma = {
     enable = true;
+    session.sessionRestore.restoreOpenApplicationsOnLogin = "startWithEmptySession";
     configFile = {
       "kscreenlockerrc"."Daemon"."LockOnResume" = false;
       "katerc"."KTextEditor Renderer"."Text Font" = kateHack10;
