@@ -41,7 +41,16 @@ kscreen-doctor -o
 # Host manual steps
 
 ## shrike
-- No required manual post-deploy steps currently.
+
+### Filesystems
+
+`sudo chown jake:users /mnt/games and /mnt/data`
+
+### Steam
+
+Make sure this setting is ENABLED
+
+Steam Settings -> Interface -> Enable GPU accelerated rendering in web views
 
 ## adler
 
