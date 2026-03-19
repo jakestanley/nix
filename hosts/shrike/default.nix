@@ -30,9 +30,6 @@ in
 
   networking.hostName = "shrike";
 
-  networking.firewall.allowedTCPPorts = [ 27036 27037 ];
-  networking.firewall.allowedUDPPorts = [ 27031 27036 ];
-
   users.users.jake.openssh.authorizedKeys.keys = [
     publicKeys.turing
     publicKeys.adler

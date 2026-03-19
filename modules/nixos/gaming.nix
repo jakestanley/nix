@@ -53,6 +53,8 @@ in
       pkgs.mangohud
     ];
 
+    remotePlay.openFirewall = true;
+
     package = pkgs.steam.override {
       extraEnv = {
         MANGOHUD= "1";
