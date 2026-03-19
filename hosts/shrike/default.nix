@@ -68,6 +68,7 @@ in
     ++ [
       pkgs.ollama-cuda
       pkgs.vscode
+      pkgs.gparted
       # TODO make this a common package
       pkgs.duf
     ];
