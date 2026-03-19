@@ -168,6 +168,7 @@ in
   programs.plasma = {
     enable = true;
     session.sessionRestore.restoreOpenApplicationsOnLogin = "startWithEmptySession";
+    workspace.colorScheme = "BreezeDark";
     configFile = {
       "kscreenlockerrc"."Daemon"."LockOnResume" = false;
       "katerc"."KTextEditor Renderer"."Text Font" = kateHack10;
