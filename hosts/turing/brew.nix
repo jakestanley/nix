@@ -26,7 +26,6 @@
       "claude"
       "gog-galaxy"
       "powershell"
-      "diffmerge"
       "google-chrome"
       "microsoft-teams"
       "prismlauncher"
@@ -52,7 +51,8 @@
       "ableton-live-standard@11"
       "mixed-in-key"
       "discord"
-      "wireguard"
+      "font-ubuntu-mono-nerd-font"
+      # "wireguard"
       # guitar pro is currently broken via brew, requires manual download
       # "guitar-pro"
     ];
