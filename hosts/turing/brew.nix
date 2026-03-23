@@ -16,6 +16,8 @@
       "bash"
       "docker"
       "wireguard-tools"
+      "ncdu"
+      "awscli"
     ];
 
     casks = [
@@ -25,7 +27,6 @@
       "postman"
       "claude"
       "gog-galaxy"
-      "powershell"
       "google-chrome"
       "microsoft-teams"
       "prismlauncher"
@@ -52,6 +53,8 @@
       "mixed-in-key"
       "discord"
       "font-ubuntu-mono-nerd-font"
+      "omnidisksweeper"
+      "steam"
       # "wireguard"
       # guitar pro is currently broken via brew, requires manual download
       # "guitar-pro"
