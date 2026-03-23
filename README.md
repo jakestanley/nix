@@ -144,7 +144,10 @@ The script `./scripts/backup-adler.sh` needs to be run as root, add this using `
 ```
 
 ## turing
-- No required manual post-deploy steps currently.
+
+### Manual installation
+- Wireguard (App Store)
+- Guitar Pro 8 (their website)
 
 # Service development flow
 - Make app changes in the upstream service repo first, for example `homelab-ollama` or `homelab-rtx`.
