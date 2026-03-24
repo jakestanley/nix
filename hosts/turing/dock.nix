@@ -56,7 +56,7 @@ let
       { app = "/Applications/Flight Deck.app"; }
       { app = "/System/Applications/Music.app"; }
       { app = "/Applications/Discord.app"; }
-      { app = "/Applications/Windows App.app"; }
+      # { app = "/Applications/Windows App.app"; }
       { app = "/System/Applications/iPhone Mirroring.app"; }
     ]
     ++ dockCommonAppsTail;
