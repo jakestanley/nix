@@ -150,12 +150,10 @@ The script `./scripts/backup-adler.sh` needs to be run as root, add this using `
 - Guitar Pro 8 (their website)
 
 #### openconnect-sso
-Doesn't build cleanly with nix
+Doesn't build cleanly with nix. or pipx. or brew. install fucking macports.
 
 ```
-brew install python@3.12
-pipx install openconnect-sso --python /opt/homebrew/opt/python@3.12/bin/python3.12
-pipx inject openconnect-sso setuptools
+sudo port install openconnect-sso
 ```
 
 # Service development flow
