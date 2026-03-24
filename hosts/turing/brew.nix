@@ -18,6 +18,8 @@
       "wireguard-tools"
       "ncdu"
       "awscli"
+      "openconnect"
+      "pipx"
     ];
 
     casks = [
