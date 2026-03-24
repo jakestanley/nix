@@ -7,7 +7,10 @@
     onActivation = {
       autoUpdate = true;
       upgrade = true;
-      cleanup = "zap";
+      # Choosing uninstall over zap, as I need to do awkward shit like install python@3.12, which 
+      #   doesn't work with brews. Using uninstall will prevent nix from deleting ad-hoc installed 
+      #   packages, whereas zap keeps it clean and declarative. compromises
+      cleanup = "uninstall";
     };
 
     # use `brew leaves --installed-on-request` to compile these lists in future
@@ -57,9 +60,6 @@
       "font-ubuntu-mono-nerd-font"
       "omnidisksweeper"
       "steam"
-      # "wireguard"
-      # guitar pro is currently broken via brew, requires manual download
-      # "guitar-pro"
     ];
   };
 }

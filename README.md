@@ -149,6 +149,15 @@ The script `./scripts/backup-adler.sh` needs to be run as root, add this using `
 - Wireguard (App Store)
 - Guitar Pro 8 (their website)
 
+#### openconnect-sso
+Doesn't build cleanly with nix
+
+```
+brew install python@3.12
+pipx install openconnect-sso --python /opt/homebrew/opt/python@3.12/bin/python3.12
+pipx inject openconnect-sso setuptools
+```
+
 # Service development flow
 - Make app changes in the upstream service repo first, for example `homelab-ollama` or `homelab-rtx`.
 - Create a dedicated branch in this Nix repo for the service change instead of iterating directly on `main`.
