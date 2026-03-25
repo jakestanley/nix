@@ -26,6 +26,7 @@
     ];
 
     casks = [
+      "moonlight"
       "vlc"
       "chatgpt"
       "godot"
