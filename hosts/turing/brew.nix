@@ -61,6 +61,8 @@
       "font-ubuntu-mono-nerd-font"
       "omnidisksweeper"
       "steam"
+      "blender"
+      "gimp"
     ];
   };
 }
