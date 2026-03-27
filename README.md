@@ -168,38 +168,12 @@ sudo port install openconnect-sso
 - Only run `./scripts/sync-service-port.sh <service>` when the upstream port mapping in `homelab-infra/registry.yaml` changes.
 
 # homelab-rtx
-- The reusable NixOS module lives at `modules/nixos/rtx.nix`.
-- The canonical local listen port lives at `sources/service-ports/rtx.nix`.
-- To sync that value from `homelab-infra/registry.yaml`, run `./scripts/sync-service-port.sh rtx`.
-- This sync is explicit only; normal Nix evaluation and deploys do not read `homelab-infra`.
-- Host enablement example:
-
-```nix
-{
-  imports = [ ../../modules/nixos/rtx.nix ];
-
-  services.rtx.enable = true;
-
-  specialisation.gaming.configuration.services.rtx.enable = lib.mkForce false;
-}
-```
+- Runs as a Docker Compose service on shrike, not via NixOS.
+- Source: `git clone git@github.com:jakestanley/homelab-rtx.git`
 
 # homelab-ollama
-- The reusable NixOS module lives at `modules/nixos/homelab-ollama.nix`.
-- The canonical local listen port lives at `sources/service-ports/ollama.nix`.
-- To sync that value from `homelab-infra/registry.yaml`, run `./scripts/sync-service-port.sh ollama`.
-- This sync is explicit only; normal Nix evaluation and deploys do not read `homelab-infra`.
-- Host enablement example:
-
-```nix
-{
-  imports = [ ../../modules/nixos/homelab-ollama.nix ];
-
-  services.homelabOllama.enable = true;
-
-  specialisation.gaming.configuration.services.homelabOllama.enable = lib.mkForce false;
-}
-```
+- Runs as a Docker Compose service on shrike, not via NixOS.
+- Source: `git clone git@github.com:jakestanley/homelab-ollama.git`
 
 # sleep-on-lan
 - The reusable NixOS module lives at `modules/nixos/sleep-on-lan.nix`.
