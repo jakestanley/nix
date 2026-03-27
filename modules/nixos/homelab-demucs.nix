@@ -88,9 +88,9 @@ in
         environment = {
           HOST = cfg.bindHost;
           PORT = toString cfg.port;
-          STORAGE_ROOT = "/mnt/data/demucs";
-          HOME = "/mnt/data/demucs";
-          XDG_CACHE_HOME = "/mnt/data/demucs/.cache";
+          STORAGE_ROOT = "/var/lib/demucs";
+          HOME = "/var/lib/demucs";
+          XDG_CACHE_HOME = "/var/lib/demucs/.cache";
           MAX_CONCURRENT_JOBS = "1";
           DEMUCS_DEFAULT_MODEL = "htdemucs";
           DEMUCS_MODELS = "htdemucs,htdemucs_ft,mdx,mdx_q";
@@ -113,7 +113,7 @@ in
             StandardOutput = "journal";
             StateDirectory = "demucs";
             TimeoutStopSec = "30s";
-            WorkingDirectory = "/mnt/data/demucs";
+            WorkingDirectory = "/var/lib/demucs";
           }
           // lib.optionalAttrs (cfg.environmentFile != null) {
             EnvironmentFile = cfg.environmentFile;
