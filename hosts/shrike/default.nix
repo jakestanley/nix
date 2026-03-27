@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 let
-  demucsServiceEnabled = true;
   publicKeys = (import ../../modules/nixos/identities.nix {}).publicKeys;
 in
 {
@@ -13,7 +12,6 @@ in
     ../../modules/nixos/ssh.nix
     ../../modules/nixos/plasma.nix
     ../../modules/nixos/greetd-autologin.nix
-    ../../modules/nixos/homelab-demucs.nix
     ../../modules/nixos/homelab-ollama.nix
     ../../modules/nixos/nvidia.nix
     ../../modules/nixos/sunshine.nix
@@ -60,18 +58,13 @@ in
   # homelab self signed cert
   security.pki.certificateFiles = [ ../../ca.crt ];
 
-  environment.systemPackages =
-    lib.optionals config.services.homelabDemucs.enable [ config.services.homelabDemucs.demucsPackage ]
-    ++ [
-      pkgs.ollama-cuda
-      pkgs.vscode
-      pkgs.gparted
-      # TODO make this a common package
-      pkgs.duf
-    ];
-
-  services.homelabDemucs.enable = demucsServiceEnabled;
-  services.homelabDemucs.openFirewall = demucsServiceEnabled;
+  environment.systemPackages = [
+    pkgs.ollama-cuda
+    pkgs.vscode
+    pkgs.gparted
+    # TODO make this a common package
+    pkgs.duf
+  ];
 
   services.homelabOllama.enable = true;
   services.homelabOllama.openFirewall = true;
@@ -90,7 +83,6 @@ in
   specialisation.gaming.configuration = {
     # Long-lived systemd units stay enabled in the default system and are
     # explicitly forced off here when the gaming boot entry must not run them.
-    services.homelabDemucs.enable = lib.mkForce false;
     services.homelabOllama.enable = lib.mkForce false;
     services.rtx.enable = lib.mkForce false;
     services.sunshine.enable = lib.mkForce false;
