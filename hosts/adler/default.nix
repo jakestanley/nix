@@ -26,6 +26,8 @@ in
   networking.hostName = "adler";
   networking.hostId = "2a0f5297";
 
+  virtualisation.docker.enable = false;
+
   users.users.jake.openssh.authorizedKeys.keys = [
     publicKeys.turing
     publicKeys.shrike
