@@ -122,6 +122,7 @@ in
           {
             User = "demucs";
             Group = "demucs";
+            RequiresMountsFor = cfg.dataDir;
             ExecStart = lib.getExe cfg.package;
             KillSignal = "SIGTERM";
             NoNewPrivileges = true;
