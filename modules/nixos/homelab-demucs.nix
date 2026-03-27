@@ -57,6 +57,12 @@ in
 
     openFirewall = lib.mkEnableOption "open the firewall for the homelab-demucs TCP port";
 
+    dataDir = lib.mkOption {
+      type = lib.types.str;
+      default = "/mnt/data/demucs";
+      description = "Directory for demucs storage, cache, and working files.";
+    };
+
     environmentFile = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
@@ -79,6 +85,17 @@ in
 
   config = lib.mkIf cfg.enable (lib.mkMerge [
     {
+      users.users.demucs = {
+        isSystemUser = true;
+        group = "demucs";
+        home = cfg.dataDir;
+      };
+      users.groups.demucs = { };
+
+      systemd.tmpfiles.rules = [
+        "d '${cfg.dataDir}' 0750 demucs demucs - -"
+      ];
+
       systemd.services.demucs = {
         description = "Demucs separation API service";
         after = [ "network-online.target" ];
@@ -88,9 +105,9 @@ in
         environment = {
           HOST = cfg.bindHost;
           PORT = toString cfg.port;
-          STORAGE_ROOT = "/var/lib/demucs";
-          HOME = "/var/lib/demucs";
-          XDG_CACHE_HOME = "/var/lib/demucs/.cache";
+          STORAGE_ROOT = cfg.dataDir;
+          HOME = cfg.dataDir;
+          XDG_CACHE_HOME = "${cfg.dataDir}/.cache";
           MAX_CONCURRENT_JOBS = "1";
           DEMUCS_DEFAULT_MODEL = "htdemucs";
           DEMUCS_MODELS = "htdemucs,htdemucs_ft,mdx,mdx_q";
@@ -103,7 +120,8 @@ in
         } // cfg.extraEnvironment;
         serviceConfig =
           {
-            DynamicUser = true;
+            User = "demucs";
+            Group = "demucs";
             ExecStart = lib.getExe cfg.package;
             KillSignal = "SIGTERM";
             NoNewPrivileges = true;
@@ -111,9 +129,8 @@ in
             RestartSec = "5s";
             StandardError = "journal";
             StandardOutput = "journal";
-            StateDirectory = "demucs";
             TimeoutStopSec = "30s";
-            WorkingDirectory = "/var/lib/demucs";
+            WorkingDirectory = cfg.dataDir;
           }
           // lib.optionalAttrs (cfg.environmentFile != null) {
             EnvironmentFile = cfg.environmentFile;
