@@ -60,6 +60,7 @@ in
     fastfetch
     efibootmgr
     dig
+    ncdu
   ];
 
   environment.variables = editorEnv;
