@@ -219,21 +219,10 @@ sudo port install openconnect-sso
 ```
 
 # homelab-demucs
-- The reusable NixOS module lives at `modules/nixos/homelab-demucs.nix`.
-- The canonical local listen port lives at `sources/service-ports/demucs.nix`.
-- To sync that value from `homelab-infra/registry.yaml`, run `./scripts/sync-service-port.sh demucs`.
-- This sync is explicit only; normal Nix evaluation and deploys do not read `homelab-infra`.
-- Host enablement example:
-
-```nix
-{
-  imports = [ ../../modules/nixos/homelab-demucs.nix ];
-
-  services.homelabDemucs.enable = true;
-
-  specialisation.gaming.configuration.services.homelabDemucs.enable = lib.mkForce false;
-}
-```
+- Runs as a Docker Compose service on shrike, not via NixOS.
+- Source: `git clone git@github.com:jakestanley/homelab-demucs.git`
+- Copy `.env.example` to `.env` and set `STORAGE_ROOT=/mnt/data/demucs`.
+- Start with `docker-compose up -d` (GPU access via CDI is configured at the host level).
 
 # Systemd units and specialisations
 - Package long-lived services into the Nix store and declare them with `systemd.services.<name>`, rather than copying unit files into `/etc/systemd/system`.
