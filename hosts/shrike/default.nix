@@ -81,6 +81,9 @@ in
   services.rtx.enable = true;
   services.rtx.openFirewall = true;
 
+  virtualisation.docker.enable = true;
+  hardware.nvidia-container-toolkit.enable = true;
+
   services.sleepOnLan.enable = true;
   services.sleepOnLan.openFirewall = true;
 
@@ -92,6 +95,7 @@ in
     services.rtx.enable = lib.mkForce false;
     services.sunshine.enable = lib.mkForce false;
     virtualisation.docker.enable = lib.mkForce false;
+    hardware.nvidia-container-toolkit.enable = lib.mkForce false;
   };
 
   system.stateVersion = "26.05";
