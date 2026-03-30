@@ -1,13 +1,8 @@
-{ pkgs, ... }:
+{ pkgs, activeProfile, ... }:
 
 {
-  services.xserver.enable = false;
-  services.desktopManager.plasma6.enable = true;
-
-  services.xserver.excludePackages = with pkgs; [
-    xterm
-  ];
-
+  services.desktopManager.plasma6.enable =
+    activeProfile == "desktop" || activeProfile == "gaming";
   services.xserver.xkb = {
     layout = "gb";
     variant = "";

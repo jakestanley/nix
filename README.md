@@ -1,212 +1,49 @@
-# Requirements
+# nixos-shrike
 
-- Secure boot
-- Rollback
+Multi-host NixOS and nix-darwin configuration.
 
-# Steps
+## Hosts
 
-- Download [nixOS Unstable Graphical ISO](https://channels.nixos.org/nixos-unstable/latest-nixos-graphical-x86_64-linux.iso)
-- Burn it to a USB
-- Remove dummy plug
-- Disable Secure Boot
-- Boot into installer
-- Select option `Installer Plasma (Linux 6.19.3)` (or whatever the non-LTS version is)
-- Log in to the installer with the password `nixos`
+- [shrike](hosts/shrike/README.md) — gaming/living room PC (x86_64-linux)
+- [adler](hosts/adler/README.md) — home server (x86_64-linux)
+- [turing](hosts/turing/README.md) — MacBook (aarch64-darwin)
 
-# Tips
-- Reload Plasma with `pkill plasmashell && kstart5 plasmashell`
+## Flake workflow
 
-# Display sync
-- Shrike runs a `systemd --user` `display-sync` service in Plasma that disables any `HDMI-*` outputs when any enabled `DP-*` output is present, and re-enables `HDMI-*` outputs when no `DP-*` output is enabled.
-- `kscreen-doctor` is installed via `pkgs.kdePackages.libkscreen`.
-- PowerDevil suspend settings are managed via a literal `powerdevilrc` file in Home Manager because Plasma Manager escaped nested section names incorrectly for this setup.
-- To test `kscreen-doctor -o` over SSH, export the Plasma session environment first:
-
-```sh
-export XDG_RUNTIME_DIR=/run/user/1000
-export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
-export WAYLAND_DISPLAY=wayland-0
-kscreen-doctor -o
-```
-
-- If your user is not UID `1000`, substitute the correct UID in the paths above.
-- If `wayland-0` does not exist, check available sockets with `ls /run/user/1000/wayland-*`.
-
-# Flake workflow
 - `shrike` deploy: `./scripts/deploy-shrike.sh` (or `--test`)
 - `adler` deploy: `./scripts/deploy-adler.sh` (or `--test`)
 - `turing` deploy: `./scripts/deploy-turing.sh`
-- Update inputs explicitly with `nix flake update`, then deploy the relevant host script above.
+- Update inputs: `nix flake update`, then deploy the relevant host.
 
-# Host manual steps
+## Installation
 
-## shrike
+- Download [nixOS Unstable Graphical ISO](https://channels.nixos.org/nixos-unstable/latest-nixos-graphical-x86_64-linux.iso)
+- Burn to USB, disable Secure Boot, boot the installer
+- Select the non-LTS kernel option
+- Log in with password `nixos`
 
-### Filesystems
+## Service development flow
 
-`sudo chown jake:users /mnt/games and /mnt/data`
-
-### Steam
-
-Make sure this setting is ENABLED
-
-Steam Settings -> Interface -> Enable GPU accelerated rendering in web views
-
-## adler
-
-### tailscale
-- After first deploy that enables Tailscale, authenticate the node into your tailnet:
-
-```sh
-sudo tailscale up
-```
-
-- Verify with `tailscale status` and `systemctl status tailscaled docker`.
-
-### TLS certificates
-Copy the wildcard cert and CA from the Ubuntu box before first activation:
-```bash
-# or from wherever they are
-scp -r user@ubuntu:/etc/homelab/certs /tmp/certs
-sudo mkdir -p /etc/homelab/certs
-sudo cp -r /tmp/certs/* /etc/homelab/certs/
-sudo chmod 600 /etc/homelab/certs/live/wildcard_stanley_arpa/privkey.pem
-```
-
-Alternatively, generate certs using the scripts in [homelab-edge](https://github.com/jakestanley/homelab-edge)
-
-As you should know, if you generate new certs as you'll need to re-add them to client trust stores.
-
-Still having permissions issues? Try checking and fixing them
-
-```
-ls -la /etc/homelab/certs/live/wildcard_stanley_arpa/
-sudo chmod 640 /etc/homelab/certs/live/wildcard_stanley_arpa/privkey.pem
-sudo chown root:nginx /etc/homelab/certs/live/wildcard_stanley_arpa/privkey.pem
-sudo systemctl restart nginx
-```
-
-### OpenVPN
-
-The PKI files are managed outside of Nix. Copy them from the Ubuntu box before first activation:
-```bash
-sudo scp -r user@ubuntu:/etc/openvpn /etc/openvpn
-```
-
-Ensure correct permissions:
-```bash
-sudo chmod 600 /etc/openvpn/ca.key
-sudo chmod 600 /etc/openvpn/server_YeWnWJLw5SiBcE91.key
-sudo chmod 600 /etc/openvpn/tls-crypt.key
-```
-
-The client configs and CCD directory are included in the copy. The `ipp.txt` lease file will be created automatically by OpenVPN on first run if it does not exist.
-
-### Plex Media Server
-
-Stop Plex before copying to avoid in-use file issues:
-```bash
-sudo systemctl stop plexmediaserver
-nohup sudo rsync -av --progress /var/lib/plexmediaserver/ /mnt/nixos-var-lib/plexmediaserver/ > /tmp/rsync-plex.log 2>&1 &
-```
-
-Ensure correct ownership after copy:
-```bash
-sudo chown -R plex:plex /mnt/nixos-var-lib/plexmediaserver
-```
-
-Note: media files are on ZFS volumes (`/var/media`, `/var/archive`) and do not need to be copied.
-
-### Docker
-
-Stop all containers before copying:
-```bash
-sudo docker stop $(sudo docker ps -q)
-```
-
-Clean up unused images, containers and volumes to reduce copy size:
-```bash
-sudo docker system prune -a --volumes
-```
-
-Copy Docker data to NixOS partition:
-```bash
-sudo systemctl stop docker
-nohup sudo rsync -av --progress /var/lib/docker/ /mnt/nixos-var-lib/docker/ > /tmp/rsync-docker.log 2>&1 &
-```
-
-### Backup script
-
-The script `./scripts/backup-adler.sh` needs to be run as root, add this using `sudo crontab -e`
-
-```
-0 2 * * * /home/jake/git/github.com/jakestanley/nix/scripts/backup-adler.sh >> /var/log/backup-adler.log 2>&1
-```
-
-## turing
-
-### Manual installation
-- Wireguard (App Store)
-- Guitar Pro 8 (their website)
-
-#### openconnect-sso
-Doesn't build cleanly with nix. or pipx. or brew. install fucking macports.
-
-```
-sudo port install openconnect-sso
-```
-
-# Service development flow
-- Make app changes in the upstream service repo first, for example `homelab-ollama` or `homelab-rtx`.
-- Create a dedicated branch in this Nix repo for the service change instead of iterating directly on `main`.
-- Push the upstream branch or commit you want to test.
-- Update the pinned commit in this repo's package definition.
-- Do not pin a non-`main` dependency head on this repo's `main` branch. Test branch heads from a branch in this repo, then move `main` here back to a pinned commit from dependency `main`.
-- Prefer squash merges in dependency repos so the commit pinned here represents one reviewed, merged change on dependency `main`.
-- Rebuild on `shrike` with `./scripts/deploy-shrike.sh --test` for a non-persistent test, then `./scripts/deploy-shrike.sh` once satisfied.
+- Make app changes in the upstream service repo first.
+- Create a dedicated branch in this repo for the service change.
+- Push the upstream branch or commit to test, then update the pinned commit here.
+- Do not pin a non-`main` dependency head on this repo's `main`. Test from a branch, then move `main` here back to a pinned commit from dependency `main`.
+- Prefer squash merges in dependency repos.
+- Rebuild on `shrike` with `./scripts/deploy-shrike.sh --test`, then `./scripts/deploy-shrike.sh` once satisfied.
 - Check the updated service with `systemctl status <unit>` and `journalctl -u <unit> -f`.
-- Only run `./scripts/sync-service-port.sh <service>` when the upstream port mapping in `homelab-infra/registry.yaml` changes.
 
-# homelab-rtx
-- Runs as a Docker Compose service on shrike, not via NixOS.
-- Source: `git clone git@github.com:jakestanley/homelab-rtx.git`
+## sleep-on-lan
 
-# homelab-ollama
-- Runs as a Docker Compose service on shrike, not via NixOS.
-- Source: `git clone git@github.com:jakestanley/homelab-ollama.git`
-
-# sleep-on-lan
-- The reusable NixOS module lives at `modules/nixos/sleep-on-lan.nix`.
-- It renders a JSON config from Nix by default and starts the upstream daemon as a root-owned system service so it can bind `UDP:9` and call `systemctl suspend`.
-- Host enablement example:
+Reusable NixOS module at `hosts/shrike/base/sleep-on-lan.nix`, also exported as `nixosModules.sleepOnLan`.
 
 ```nix
 {
-  imports = [ ../../modules/nixos/sleep-on-lan.nix ];
+  imports = [ inputs.nixos-shrike.nixosModules.sleepOnLan ];
 
   services.sleepOnLan = {
     enable = true;
     openFirewall = true;
     listeners = [ "UDP:9" "HTTP:8009" ];
   };
-}
-```
-
-# homelab-demucs
-- Runs as a Docker Compose service on shrike, not via NixOS.
-- Source: `git clone git@github.com:jakestanley/homelab-demucs.git`
-- Copy `.env.example` to `.env` and set `STORAGE_ROOT=/mnt/data/demucs`.
-- Start with `docker-compose up -d` (GPU access via CDI is configured at the host level).
-
-# Systemd units and specialisations
-- Package long-lived services into the Nix store and declare them with `systemd.services.<name>`, rather than copying unit files into `/etc/systemd/system`.
-- Keep mutable runtime state under a managed path such as `/var/lib/<name>` with `StateDirectory=`.
-- Enable the service in the default host configuration, then explicitly disable it inside any specialisation that must not run it:
-
-```nix
-{
-  services.example.enable = true;
-
-  specialisation.gaming.configuration.services.example.enable = lib.mkForce false;
 }
 ```

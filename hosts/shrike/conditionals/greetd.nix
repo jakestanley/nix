@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ pkgs, lib, activeProfile, ... }:
 
 let
   startPlasmaWayland = pkgs.writeShellScriptBin "startplasma-wayland-autologin" ''
@@ -9,15 +9,19 @@ let
     user = "jake";
     command = "${startPlasmaWayland}/bin/startplasma-wayland-autologin";
   };
+  gamescopeSession = {
+    user = "jake";
+    command = "steam-gamescope";
+  };
+  greetdSession = if activeProfile == "tenfoot" then gamescopeSession else plasmaSession;
 in
 {
   services.displayManager.sddm.enable = lib.mkForce false;
-
   services.greetd = {
     enable = true;
     settings = {
-      initial_session = plasmaSession;
-      default_session = plasmaSession;
+      initial_session = greetdSession;
+      default_session = greetdSession;
     };
   };
 }

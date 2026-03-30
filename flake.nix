@@ -80,10 +80,13 @@
         ];
       };
 
+      shrikeProfile = "tenfoot";
+
       mkNixosHost = hostname: nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = {
           inherit inputs;
+          profile = shrikeProfile;
         };
         modules = [
           { nixpkgs.overlays = [ overlay ]; }
@@ -93,7 +96,7 @@
     in {
       overlays.default = overlay;
 
-      nixosModules.sleepOnLan = ./modules/nixos/sleep-on-lan.nix;
+      nixosModules.sleepOnLan = ./hosts/shrike/base/sleep-on-lan.nix;
 
       packages = forAllSystems (system:
         let

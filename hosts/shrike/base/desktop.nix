@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./base.nix
+    ../../../modules/nixos/base.nix
   ];
 
   hardware.bluetooth.enable = true;
