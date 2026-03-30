@@ -73,6 +73,7 @@ in
     services.sunshine.enable = lib.mkForce false;
     virtualisation.docker.enable = lib.mkForce false;
     hardware.nvidia-container-toolkit.enable = lib.mkForce false;
+    home-manager.users.jake.systemd.user.services.steam-autostart.Service.ExecStart = lib.mkForce "${pkgs.steam}/bin/steam -silent";
   };
 
   system.stateVersion = "26.05";

@@ -263,7 +263,7 @@ in
     };
 
     Service = {
-      ExecStart = "${pkgs.steam}/bin/steam -silent";
+      ExecStart = "${pkgs.steam}/bin/steam -tenfoot";
     };
 
     Install = {
