@@ -80,10 +80,10 @@
         ];
       };
 
-      mkNixosHost = hostname: { defaultSpecialisation ? null }: nixpkgs.lib.nixosSystem {
+      mkNixosHost = hostname: nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = {
-          inherit inputs defaultSpecialisation;
+          inherit inputs;
         };
         modules = [
           { nixpkgs.overlays = [ overlay ]; }
@@ -93,7 +93,7 @@
     in {
       overlays.default = overlay;
 
-      nixosModules.sleepOnLan = ./modules/nixos/sleep-on-lan.nix;
+      nixosModules.sleepOnLan = ./hosts/shrike/base/sleep-on-lan.nix;
 
       packages = forAllSystems (system:
         let
@@ -127,10 +127,9 @@
       };
       homeConfigurations.adler = mkLinuxHome "adler" "x86_64-linux";
 
-      # Set the default configuration here
       nixosConfigurations = {
-        shrike = mkNixosHost "shrike" {};
-        adler = mkNixosHost "adler" {};
+        shrike = mkNixosHost "shrike";
+        adler = mkNixosHost "adler";
       };
 
       checks.x86_64-linux = {
