@@ -59,6 +59,11 @@ in
   virtualisation.docker.enable = true;
   hardware.nvidia-container-toolkit.enable = true;
 
+  systemd.services.docker = {
+    after = [ "mnt-data.mount" ];
+    requires = [ "mnt-data.mount" ];
+  };
+
   services.sleepOnLan.enable = true;
   services.sleepOnLan.openFirewall = true;
 
