@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, profile, ... }:
 
 {
   imports = [
@@ -12,12 +12,12 @@
     ../../modules/nixos/docker.nix
     ../../modules/nixos/home-manager.nix
     ../../modules/nixos/ssh.nix
+    (./profiles + "/${profile}.nix")
   ];
 
-  specialisation.gaming.configuration = {
-    virtualisation.docker.enable = lib.mkForce false;
-    hardware.nvidia-container-toolkit.enable = lib.mkForce false;
-  };
+  specialisation.tenfoot.configuration.imports  = [ ./profiles/tenfoot.nix ];
+  specialisation.desktop.configuration.imports  = [ ./profiles/desktop.nix ];
+  specialisation.gaming.configuration.imports   = [ ./profiles/gaming.nix ];
 
   system.stateVersion = "26.05";
 }

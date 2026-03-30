@@ -80,10 +80,13 @@
         ];
       };
 
+      shrikeProfile = "tenfoot";
+
       mkNixosHost = hostname: nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = {
           inherit inputs;
+          profile = shrikeProfile;
         };
         modules = [
           { nixpkgs.overlays = [ overlay ]; }
