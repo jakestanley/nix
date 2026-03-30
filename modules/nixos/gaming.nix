@@ -53,7 +53,7 @@ in
       pkgs.mangohud
     ];
   
-    gamescopeSession = true;
+    gamescopeSession.enable = true;
 
     dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server  
     remotePlay.openFirewall = true;
