@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 
 let
   publicKeys = (import ../../modules/nixos/identities.nix {}).publicKeys;
@@ -12,11 +12,9 @@ in
     ../../modules/nixos/ssh.nix
     ../../modules/nixos/plasma.nix
     ../../modules/nixos/greetd-autologin.nix
-    ../../modules/nixos/homelab-ollama.nix
     ../../modules/nixos/nvidia.nix
     ../../modules/nixos/sunshine.nix
     ../../modules/nixos/gaming.nix
-    ../../modules/nixos/rtx.nix
     ../../modules/nixos/sleep-on-lan.nix
     ../../modules/nixos/reboot-to-windows.nix
   ];
@@ -37,13 +35,6 @@ in
     hostname = "shrike";
   };
 
-  # Favor one large local build over many competing derivations when compiling
-  # heavy packages such as ollama-cuda.
-  nix.settings = {
-    max-jobs = 1;
-    cores = 0;
-  };
-
   systemd.services.wake-on-lan-enp4s0 = {
     description = "Enable wake-on-LAN on enp4s0";
     after = [ "NetworkManager.service" ];
@@ -59,23 +50,19 @@ in
   security.pki.certificateFiles = [ ../../ca.crt ];
 
   environment.systemPackages = [
-    pkgs.ollama-cuda
     pkgs.vscode
     pkgs.gparted
     # TODO make this a common package
     pkgs.duf
   ];
 
-  services.homelabOllama.enable = true;
-  services.homelabOllama.openFirewall = true;
-  services.homelabOllama.ollamaPackage = pkgs.ollama-cuda;
-
-  # Hosts opt into the reusable RTX module declaratively here.
-  services.rtx.enable = true;
-  services.rtx.openFirewall = true;
-
   virtualisation.docker.enable = true;
   hardware.nvidia-container-toolkit.enable = true;
+
+  systemd.services.docker = {
+    after = [ "mnt-data.mount" ];
+    requires = [ "mnt-data.mount" ];
+  };
 
   services.sleepOnLan.enable = true;
   services.sleepOnLan.openFirewall = true;
@@ -83,8 +70,6 @@ in
   specialisation.gaming.configuration = {
     # Long-lived systemd units stay enabled in the default system and are
     # explicitly forced off here when the gaming boot entry must not run them.
-    services.homelabOllama.enable = lib.mkForce false;
-    services.rtx.enable = lib.mkForce false;
     services.sunshine.enable = lib.mkForce false;
     virtualisation.docker.enable = lib.mkForce false;
     hardware.nvidia-container-toolkit.enable = lib.mkForce false;
