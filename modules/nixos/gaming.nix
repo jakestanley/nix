@@ -68,6 +68,8 @@ in
 
   programs.gamemode.enable = true;
 
+  boot.kernel.sysctl."vm.max_map_count" = 2147483642;
+
   hardware.graphics.enable32Bit = true;
 
   # enable controllers with udev rules
