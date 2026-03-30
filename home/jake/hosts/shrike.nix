@@ -255,19 +255,4 @@ in
     };
   };
 
-  systemd.user.services.steam-autostart = {
-    Unit = {
-      Description = "Start Steam when the graphical session starts";
-      After = [ "graphical-session.target" ];
-      PartOf = [ "graphical-session.target" ];
-    };
-
-    Service = {
-      ExecStart = "${pkgs.steam}/bin/steam -tenfoot";
-    };
-
-    Install = {
-      WantedBy = [ "graphical-session.target" ];
-    };
-  };
 }
