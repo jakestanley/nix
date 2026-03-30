@@ -85,10 +85,8 @@ in
     pkgs.dsda-launcher
   ];
 
-  hardware.uinput.enable = true;
-
   users.groups.jake = { };
-  users.users.jake.extraGroups = [ "jake" "gamemode" "input" ];
+  users.users.jake.extraGroups = [ "jake" "gamemode" ];
 
   systemd.tmpfiles.settings."10-gaming" = {
     "/home/jake/.steam".d = {
