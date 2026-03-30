@@ -80,10 +80,10 @@
         ];
       };
 
-      mkNixosHost = hostname: nixpkgs.lib.nixosSystem {
+      mkNixosHost = hostname: { defaultSpecialisation ? null }: nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = {
-          inherit inputs;
+          inherit inputs defaultSpecialisation;
         };
         modules = [
           { nixpkgs.overlays = [ overlay ]; }
@@ -127,9 +127,10 @@
       };
       homeConfigurations.adler = mkLinuxHome "adler" "x86_64-linux";
 
+      # Set the default configuration here
       nixosConfigurations = {
-        shrike = mkNixosHost "shrike";
-        adler = mkNixosHost "adler";
+        shrike = mkNixosHost "shrike" {};
+        adler = mkNixosHost "adler" {};
       };
 
       checks.x86_64-linux = {

@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, pkgs, defaultSpecialisation ? null, ... }:
 
 let
   publicKeys = (import ../../modules/nixos/identities.nix {}).publicKeys;
@@ -20,6 +20,8 @@ in
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.consoleMode = "max";
+  boot.loader.systemd-boot.default = lib.mkIf (defaultSpecialisation != null)
+    "nixos-generation-*-specialisation-${defaultSpecialisation}.conf";
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
