@@ -32,15 +32,9 @@ kscreen-doctor -o
 
 If your user is not UID `1000`, substitute the correct UID in the paths above. If `wayland-0` does not exist, check available sockets with `ls /run/user/1000/wayland-*`.
 
-## Known caveats
-
-### Gamescope resume with display off
-
-If the display is off when the PC resumes from sleep, the NVIDIA driver cannot read the display's EDID and gamescope renders with graphical artifacts. The display needs to be on at resume time for a clean recovery. Gamescope does not handle DRM hotplug events after the session has started, so there is no clean fix.
-
 ## Profiles
 
-The active boot profile is set via `shrikeProfile` in `flake.nix`. Three profiles are always available as specialisations in the boot menu regardless of the default.
+The active boot profile is set via `shrikeProfile` in `flake.nix`. Three profiles are always available as specialisations in the boot menu regardless of the default. **`desktop` is the current default.**
 
 | Feature                    | tenfoot | desktop | gaming |
 |----------------------------|:-------:|:-------:|:------:|
@@ -52,6 +46,20 @@ The active boot profile is set via `shrikeProfile` in `flake.nix`. Three profile
 | Steam autostart            |         | ✓       | ✓      |
 
 These conditions are evaluated at build time via `activeProfile` in `hosts/shrike/conditionals/`. Changing the default profile in `flake.nix` does not affect the specialisations.
+
+### desktop / gaming
+
+Sleep and wake work correctly. Big Picture mode and the virtual keyboard work when connected to the TV.
+
+**Caveat:** Plasma's RemoteDesktop security setting must be disabled for the Steam Big Picture virtual keyboard to function. This permission is session-scoped and cannot be persisted across boots via policy.
+
+### tenfoot
+
+Virtual keyboard works correctly within the gamescope session. No Plasma overhead.
+
+**Caveat:** Sleep/wake recovery is unreliable. If the display is off when the system resumes, the NVIDIA driver cannot read the EDID and gamescope renders with graphical artifacts. Gamescope does not handle DRM hotplug events after the session has started, so there is no clean fix.
+
+**Caveat:** headles in-home streaming doesn't function correctly in this profile.
 
 ### Booting into a specialisation remotely
 
