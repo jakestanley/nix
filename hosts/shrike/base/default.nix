@@ -2,21 +2,9 @@
 
 let
   publicKeys = (import ../../../modules/nixos/identities.nix {}).publicKeys;
-  startPlasmaWayland = pkgs.writeShellScriptBin "startplasma-wayland-autologin" ''
-    exec ${pkgs.kdePackages.plasma-workspace}/libexec/plasma-dbus-run-session-if-needed \
-      ${pkgs.kdePackages.plasma-workspace}/bin/startplasma-wayland
-  '';
-  plasmaSession = {
-    user = "jake";
-    command = "${startPlasmaWayland}/bin/startplasma-wayland-autologin";
-  };
-  gamescopeSession = {
-    user = "jake";
-    command = "steam-gamescope";
-  };
-  greetdSession = if activeProfile == "tenfoot" then gamescopeSession else plasmaSession;
 in
 {
+  imports = [ ./greetd.nix ./plasma.nix ./docker.nix ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.consoleMode = "max";
   boot.loader.efi.canTouchEfiVariables = true;
@@ -52,9 +40,6 @@ in
     pkgs.duf
   ];
 
-  virtualisation.docker.enable = true;
-  hardware.nvidia-container-toolkit.enable = true;
-
   systemd.services.docker = {
     after = [ "mnt-data.mount" ];
     requires = [ "mnt-data.mount" ];
@@ -63,12 +48,14 @@ in
   services.sleepOnLan.enable = true;
   services.sleepOnLan.openFirewall = true;
 
-  services.displayManager.sddm.enable = lib.mkForce false;
-  services.greetd = {
-    enable = true;
-    settings = {
-      initial_session = greetdSession;
-      default_session = greetdSession;
-    };
+  services.sunshine = {
+    enable = activeProfile == "desktop";
+    package = lib.mkIf (activeProfile == "desktop") (pkgs.sunshine.override {
+      cudaSupport = true;
+    });
+    autoStart = activeProfile == "desktop";
+    capSysAdmin = activeProfile == "desktop";
+    openFirewall = activeProfile == "desktop";
   };
+
 }

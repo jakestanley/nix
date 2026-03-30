@@ -1,20 +1,9 @@
-{ lib, pkgs, ... }:
+{ pkgs, ... }:
 
 let
-  startPlasmaWayland = pkgs.writeShellScriptBin "startplasma-wayland-autologin" ''
-    exec ${pkgs.kdePackages.plasma-workspace}/libexec/plasma-dbus-run-session-if-needed \
-      ${pkgs.kdePackages.plasma-workspace}/bin/startplasma-wayland
-  '';
-  plasmaSession = {
-    user = "jake";
-    command = "${startPlasmaWayland}/bin/startplasma-wayland-autologin";
-  };
   displaySync = pkgs.writers.writePython3Bin "display-sync" { } (builtins.readFile ../scripts/display-sync.py);
 in
 {
-  imports = [ ../base/plasma.nix ../base/sunshine.nix ];
-
-  services.desktopManager.plasma6.enable = true;
 
   systemd.user.services.steam-autostart = {
     description = "Start Steam when the graphical session starts";

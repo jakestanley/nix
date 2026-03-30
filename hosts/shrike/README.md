@@ -34,11 +34,18 @@ If your user is not UID `1000`, substitute the correct UID in the paths above. I
 
 ## Profiles
 
-The active boot profile is set via `shrikeProfile` in `flake.nix`. Three profiles are always available as specialisations in the boot menu:
+The active boot profile is set via `shrikeProfile` in `flake.nix`. Three profiles are always available as specialisations in the boot menu regardless of the default.
 
-- `tenfoot` — gamescope session, no Plasma, no Sunshine
-- `desktop` — Plasma, Sunshine, display-sync, Steam silent
-- `gaming` — Plasma, no Sunshine, no Docker, Steam silent
+| Feature                    | tenfoot | desktop | gaming |
+|----------------------------|:-------:|:-------:|:------:|
+| Plasma                     |         | ✓       | ✓      |
+| Gamescope session (greetd) | ✓       |         |        |
+| Sunshine                   |         | ✓       |        |
+| Docker                     | ✓       | ✓       |        |
+| display-sync               |         | ✓       |        |
+| Steam autostart            |         | ✓       | ✓      |
+
+These conditions are evaluated at build time via `activeProfile` in `hosts/shrike/base/`. Changing the default profile in `flake.nix` does not affect the specialisations.
 
 ## Docker services
 
