@@ -84,7 +84,7 @@ in
   ];
 
   users.groups.jake = { };
-  users.users.jake.extraGroups = [ "jake" ];
+  users.users.jake.extraGroups = [ "jake" "gamemode" ];
 
   systemd.tmpfiles.settings."10-gaming" = {
     "/home/jake/.steam".d = {
