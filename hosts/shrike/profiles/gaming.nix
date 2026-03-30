@@ -13,16 +13,7 @@ in
 {
   imports = [ ../base/plasma.nix ];
 
-  services.displayManager.sddm.enable = lib.mkForce false;
   services.desktopManager.plasma6.enable = true;
-
-  services.greetd = {
-    enable = lib.mkForce true;
-    settings = lib.mkForce {
-      initial_session = plasmaSession;
-      default_session = plasmaSession;
-    };
-  };
 
   virtualisation.docker.enable = lib.mkForce false;
   hardware.nvidia-container-toolkit.enable = lib.mkForce false;

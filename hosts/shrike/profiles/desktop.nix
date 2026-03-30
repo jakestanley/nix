@@ -14,16 +14,7 @@ in
 {
   imports = [ ../base/plasma.nix ../base/sunshine.nix ];
 
-  services.displayManager.sddm.enable = lib.mkForce false;
   services.desktopManager.plasma6.enable = true;
-
-  services.greetd = {
-    enable = lib.mkForce true;
-    settings = lib.mkForce {
-      initial_session = plasmaSession;
-      default_session = plasmaSession;
-    };
-  };
 
   systemd.user.services.steam-autostart = {
     description = "Start Steam when the graphical session starts";
