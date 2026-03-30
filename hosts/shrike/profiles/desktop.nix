@@ -15,7 +15,7 @@ in
   imports = [ ../base/plasma.nix ../base/sunshine.nix ];
 
   services.displayManager.sddm.enable = lib.mkForce false;
-  services.desktopManager.plasma6.enable = lib.mkForce true;
+  services.desktopManager.plasma6.enable = true;
 
   services.greetd = {
     enable = lib.mkForce true;
