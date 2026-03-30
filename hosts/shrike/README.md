@@ -32,6 +32,12 @@ kscreen-doctor -o
 
 If your user is not UID `1000`, substitute the correct UID in the paths above. If `wayland-0` does not exist, check available sockets with `ls /run/user/1000/wayland-*`.
 
+## Known caveats
+
+### Gamescope resume with display off
+
+If the display is off when the PC resumes from sleep, the NVIDIA driver cannot read the display's EDID and gamescope renders with graphical artifacts. The display needs to be on at resume time for a clean recovery. Gamescope does not handle DRM hotplug events after the session has started, so there is no clean fix.
+
 ## Profiles
 
 The active boot profile is set via `shrikeProfile` in `flake.nix`. Three profiles are always available as specialisations in the boot menu regardless of the default.
