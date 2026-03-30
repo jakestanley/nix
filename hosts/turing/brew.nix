@@ -63,6 +63,7 @@
       "steam"
       "blender"
       "gimp"
+      "bambu-studio"
     ];
   };
 }
