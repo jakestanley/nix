@@ -52,8 +52,10 @@ in
       pkgs.gamemode
       pkgs.mangohud
     ];
-
+  
+    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server  
     remotePlay.openFirewall = true;
+    localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
 
     package = pkgs.steam.override {
       extraEnv = {
