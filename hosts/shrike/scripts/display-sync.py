@@ -14,7 +14,11 @@ POLL_SECONDS = 3
 def log_debug(message: str) -> None:
     if DEBUG:
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        print(f"[display-sync] {timestamp} {message}", file=sys.stderr, flush=True)
+        print(
+            f"[display-sync] {timestamp} {message}",
+            file=sys.stderr,
+            flush=True,
+        )
 
 
 def parse_embedded_json(text: str):
@@ -33,7 +37,10 @@ def parse_embedded_json(text: str):
 
 
 def run_kscreen_json():
-    commands = (["kscreen-doctor", "--json", "-o"], ["kscreen-doctor", "-j", "-o"])
+    commands = (
+        ["kscreen-doctor", "--json", "-o"],
+        ["kscreen-doctor", "-j", "-o"],
+    )
     for command in commands:
         try:
             completed = subprocess.run(
@@ -60,7 +67,9 @@ def get_outputs():
     if payload is None:
         return []
 
-    outputs = payload.get("outputs", []) if isinstance(payload, dict) else payload
+    outputs = (
+        payload.get("outputs", []) if isinstance(payload, dict) else payload
+    )
     return outputs if isinstance(outputs, list) else []
 
 
@@ -69,7 +78,11 @@ def is_primary_enabled(outputs) -> bool:
         if not isinstance(output, dict):
             continue
         name = output.get("name")
-        if isinstance(name, str) and name.startswith("DP-") and output.get("enabled"):
+        if (
+            isinstance(name, str)
+            and name.startswith("DP-")
+            and output.get("enabled")
+        ):
             return True
     return False
 
