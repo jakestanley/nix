@@ -11,7 +11,7 @@ let
   };
 in
 {
-  imports = [ ../base/plasma.nix ];
+  imports = [ ../base/plasma.nix ../base/sunshine.nix ];
 
   services.displayManager.sddm.enable = lib.mkForce false;
   services.desktopManager.plasma6.enable = lib.mkForce true;
