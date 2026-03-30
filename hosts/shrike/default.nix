@@ -10,7 +10,6 @@ in
     ../../modules/nixos/docker.nix
     ../../modules/nixos/home-manager.nix
     ../../modules/nixos/ssh.nix
-    ../../modules/nixos/plasma.nix
     ../../modules/nixos/greetd-autologin.nix
     ../../modules/nixos/nvidia.nix
     ../../modules/nixos/sunshine.nix

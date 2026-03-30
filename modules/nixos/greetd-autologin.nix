@@ -1,13 +1,9 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 
 let
-  startPlasmaWayland = pkgs.writeShellScriptBin "startplasma-wayland-autologin" ''
-    exec ${pkgs.kdePackages.plasma-workspace}/libexec/plasma-dbus-run-session-if-needed \
-      ${pkgs.kdePackages.plasma-workspace}/bin/startplasma-wayland
-  '';
-  plasmaSession = {
+  gamescopeSession = {
     user = "jake";
-    command = "${startPlasmaWayland}/bin/startplasma-wayland-autologin";
+    command = "steam-gamescope";
   };
 in
 {
@@ -16,8 +12,8 @@ in
   services.greetd = {
     enable = true;
     settings = {
-      initial_session = plasmaSession;
-      default_session = plasmaSession;
+      initial_session = gamescopeSession;
+      default_session = gamescopeSession;
     };
   };
 }
