@@ -45,7 +45,21 @@ The active boot profile is set via `shrikeProfile` in `flake.nix`. Three profile
 | display-sync               |         | ✓       |        |
 | Steam autostart            |         | ✓       | ✓      |
 
-These conditions are evaluated at build time via `activeProfile` in `hosts/shrike/base/`. Changing the default profile in `flake.nix` does not affect the specialisations.
+These conditions are evaluated at build time via `activeProfile` in `hosts/shrike/conditionals/`. Changing the default profile in `flake.nix` does not affect the specialisations.
+
+### Booting into a specialisation remotely
+
+List available entries (note the generation number changes after each rebuild):
+
+```sh
+sudo bootctl list | grep -E " id:"
+```
+
+Reboot into a specific entry — the full `.conf` filename is required:
+
+```sh
+systemctl reboot --boot-loader-entry=nixos-generation-180-specialisation-desktop.conf
+```
 
 ## Docker services
 
