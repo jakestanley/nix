@@ -4,7 +4,7 @@ let
   publicKeys = (import ../../../modules/nixos/identities.nix {}).publicKeys;
 in
 {
-  imports = [ ./greetd.nix ./plasma.nix ./docker.nix ];
+  imports = [ ./docker.nix ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.consoleMode = "max";
   boot.loader.efi.canTouchEfiVariables = true;
@@ -47,15 +47,5 @@ in
 
   services.sleepOnLan.enable = true;
   services.sleepOnLan.openFirewall = true;
-
-  services.sunshine = {
-    enable = activeProfile == "desktop";
-    package = lib.mkIf (activeProfile == "desktop") (pkgs.sunshine.override {
-      cudaSupport = true;
-    });
-    autoStart = activeProfile == "desktop";
-    capSysAdmin = activeProfile == "desktop";
-    openFirewall = activeProfile == "desktop";
-  };
 
 }
