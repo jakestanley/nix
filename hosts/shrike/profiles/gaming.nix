@@ -23,4 +23,7 @@ in
       default_session = plasmaSession;
     };
   };
+
+  virtualisation.docker.enable = lib.mkForce false;
+  hardware.nvidia-container-toolkit.enable = lib.mkForce false;
 }
