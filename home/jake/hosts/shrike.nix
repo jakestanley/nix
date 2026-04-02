@@ -39,6 +39,7 @@ in
     session.sessionRestore.restoreOpenApplicationsOnLogin = "startWithEmptySession";
     workspace.colorScheme = "BreezeDark";
     configFile = {
+      "kscreenlockerrc"."Daemon"."Autolock" = false;
       "kscreenlockerrc"."Daemon"."LockOnResume" = false;
       "katerc"."KTextEditor Renderer"."Text Font" = kateHack10;
       "konsolerc"."Desktop Entry"."DefaultProfile" = "${konsoleProfileName}.profile";
