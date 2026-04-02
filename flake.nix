@@ -80,7 +80,7 @@
         ];
       };
 
-      shrikeProfile = "desktop";
+      shrikeProfile = "tenfoot";
 
       mkNixosHost = hostname: nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
