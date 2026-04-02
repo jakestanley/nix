@@ -5,6 +5,8 @@
     ./hardware-configuration.nix
     ./base
     ./base/desktop.nix
+    ./base/greetd.nix
+    ./base/plasma.nix
     ./base/nvidia.nix
     ./base/gaming.nix
     ./base/sleep-on-lan.nix
@@ -12,8 +14,6 @@
     ../../modules/nixos/docker.nix
     ../../modules/nixos/home-manager.nix
     ../../modules/nixos/ssh.nix
-    ./conditionals/greetd.nix
-    ./conditionals/plasma.nix
     ./conditionals/sunshine.nix
     ./conditionals/display-sync.nix
     ./conditionals/steam-autostart.nix
