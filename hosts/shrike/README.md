@@ -39,7 +39,6 @@ The active boot profile is set via `shrikeProfile` in `flake.nix`. Three profile
 | Feature                      | tenfoot  | desktop | gaming |
 |------------------------------|:--------:|:-------:|:------:|
 | Plasma                       | ✓        | ✓       | ✓      |
-| Nested gamescope (autostart) | ✓        |         |        |
 | Sunshine                     | manual   | ✓       |        |
 | Docker                       | ✓        | ✓       |        |
 | display-sync                 |          | ✓       |        |
@@ -55,7 +54,7 @@ Sleep and wake work correctly. Big Picture mode and the virtual keyboard work wh
 
 ### tenfoot
 
-Runs Plasma with Steam launched inside a nested fullscreen gamescope session. The intent is to get Big Picture mode with a working virtual keyboard (scoped to gamescope, bypassing the KDE RemoteDesktop portal) while retaining Plasma's sleep/wake and display handling.
+Runs Plasma with Steam autolaunching directly into Big Picture mode. Retains Plasma's sleep/wake and display handling while keeping a minimal environment with no desktop applications.
 
 **Note:** Sunshine is installed but does not autostart. Start it manually for remote debugging: `systemctl --user start sunshine`.
 

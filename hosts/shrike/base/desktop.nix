@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, activeProfile, ... }:
 
 {
   imports = [
@@ -16,14 +16,14 @@
     pulse.enable = true;
   };
 
-  programs.firefox.enable = true;
+  programs.firefox.enable = activeProfile != "tenfoot";
 
-  users.users.jake.packages = with pkgs; [
+  users.users.jake.packages = pkgs.lib.optionals (activeProfile != "tenfoot") (with pkgs; [
     kdePackages.kate
-  ];
+  ]);
 
-  environment.systemPackages = with pkgs; [
+  environment.systemPackages = pkgs.lib.optionals (activeProfile != "tenfoot") (with pkgs; [
     spotify
     kdePackages.kdialog
-  ];
+  ]);
 }

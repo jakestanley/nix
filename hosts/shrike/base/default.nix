@@ -35,9 +35,10 @@ in
   security.pki.certificateFiles = [ ../../../ca.crt ];
 
   environment.systemPackages = [
+    pkgs.duf
+  ] ++ pkgs.lib.optionals (activeProfile != "tenfoot") [
     pkgs.vscode
     pkgs.gparted
-    pkgs.duf
   ];
 
   systemd.services.docker = {
