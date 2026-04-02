@@ -34,7 +34,7 @@ If your user is not UID `1000`, substitute the correct UID in the paths above. I
 
 ## Profiles
 
-The active boot profile is set via `shrikeProfile` in `flake.nix`. Three profiles are always available as specialisations in the boot menu regardless of the default. **`desktop` is the current default.**
+The active boot profile is set via `shrikeProfile` in `flake.nix`, which is the canonical source of truth for the current default. Three profiles are always available as specialisations in the boot menu regardless of the default.
 
 | Feature                      | tenfoot  | desktop | gaming |
 |------------------------------|:--------:|:-------:|:------:|
