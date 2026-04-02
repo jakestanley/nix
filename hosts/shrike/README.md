@@ -40,7 +40,7 @@ The active boot profile is set via `shrikeProfile` in `flake.nix`. Three profile
 |------------------------------|:--------:|:-------:|:------:|
 | Plasma                       | ✓        | ✓       | ✓      |
 | Nested gamescope (autostart) | ✓        |         |        |
-| Sunshine                     |          | ✓       |        |
+| Sunshine                     | manual   | ✓       |        |
 | Docker                       | ✓        | ✓       |        |
 | display-sync                 |          | ✓       |        |
 | Steam autostart              | ✓        | ✓       | ✓      |
@@ -57,7 +57,7 @@ Sleep and wake work correctly. Big Picture mode and the virtual keyboard work wh
 
 Runs Plasma with Steam launched inside a nested fullscreen gamescope session. The intent is to get Big Picture mode with a working virtual keyboard (scoped to gamescope, bypassing the KDE RemoteDesktop portal) while retaining Plasma's sleep/wake and display handling.
 
-**Caveat:** In-home streaming (Sunshine) is not available in this profile.
+**Note:** Sunshine is installed but does not autostart. Start it manually for remote debugging: `systemctl --user start sunshine`.
 
 ### Booting into a specialisation remotely
 
