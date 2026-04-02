@@ -1,10 +1,10 @@
 { pkgs, lib, activeProfile, ... }:
 
 {
-  hardware.uinput.enable = true;
-  users.users.jake.extraGroups = [ "input" ];
+  hardware.uinput.enable = activeProfile == "tenfoot";
+  users.users.jake.extraGroups = lib.optionals (activeProfile == "tenfoot") [ "input" ];
 
-  environment.systemPackages = lib.optionals (activeProfile == "tenfoot") (with pkgs; [
+  environment.systemPackages = with pkgs; [
     # tenfoot-specific packages
-  ]);
+  ];
 }
