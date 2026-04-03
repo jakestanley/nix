@@ -41,6 +41,9 @@ in
     configFile = {
       "kscreenlockerrc"."Daemon"."Autolock" = false;
       "kscreenlockerrc"."Daemon"."LockOnResume" = false;
+      # KDE saves Bluetooth powered state per-adapter MAC and restores it on login, overriding bluez AutoEnable.
+      # 40:74:E0:B2:7E:78 is shrike's onboard Bluetooth adapter (hci0).
+      "bluedevilglobalrc"."Adapters"."40:74:E0:B2:7E:78_powered" = true;
       "katerc"."KTextEditor Renderer"."Text Font" = kateHack10;
       "konsolerc"."Desktop Entry"."DefaultProfile" = "${konsoleProfileName}.profile";
     };
