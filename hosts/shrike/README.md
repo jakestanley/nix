@@ -72,6 +72,10 @@ Reboot into a specific entry — the full `.conf` filename is required:
 systemctl reboot --boot-loader-entry=nixos-generation-180-specialisation-desktop.conf
 ```
 
+## Troubleshooting
+
+See [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
+
 ## Docker services
 
 ### homelab-rtx
