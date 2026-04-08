@@ -87,6 +87,7 @@ in
     # some actual games
     pkgs.dsda-doom
     pkgs.dsda-launcher
+    pkgs.prismlauncher
   ];
 
   users.groups.jake = { };
