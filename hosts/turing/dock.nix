@@ -31,7 +31,6 @@ let
   dockCommonAppsCenter = [
     { app = "/Applications/Obsidian.app"; }
     { app = "/Applications/Visual Studio Code.app"; }
-    { app = "/Applications/ChatGPT.app"; }
     { app = "/Applications/Claude.app"; }
   ];
 

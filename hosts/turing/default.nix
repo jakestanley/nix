@@ -22,6 +22,17 @@
 
   environment.systemPackages = [
     pkgs.vim
+    pkgs.duf
+    pkgs.tree
+    pkgs.docker
+    pkgs.ncdu
+    pkgs.wireguard-tools
+    pkgs.bash
+    pkgs.readline
+    pkgs.awscli
+    pkgs.pipx
+    pkgs.spotdl
+    pkgs.ffmpeg
     inputs.cherri.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 

@@ -15,14 +15,7 @@
 
     # use `brew leaves --installed-on-request` to compile these lists in future
     brews = [
-      "readline"
-      "bash"
-      "docker"
-      "wireguard-tools"
-      "ncdu"
-      "awscli"
       "openconnect"
-      "pipx"
     ];
 
     casks = [
