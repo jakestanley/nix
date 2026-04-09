@@ -34,16 +34,15 @@ If your user is not UID `1000`, substitute the correct UID in the paths above. I
 
 ## Profiles
 
-The active boot profile is set via `shrikeProfile` in `flake.nix`. Three profiles are always available as specialisations in the boot menu regardless of the default. **`desktop` is the current default.**
+The active boot profile is set via `shrikeProfile` in `flake.nix`, which is the canonical source of truth for the current default. Three profiles are always available as specialisations in the boot menu regardless of the default.
 
-| Feature                    | tenfoot | desktop | gaming |
-|----------------------------|:-------:|:-------:|:------:|
-| Plasma                     |         | ✓       | ✓      |
-| Gamescope session (greetd) | ✓       |         |        |
-| Sunshine                   |         | ✓       |        |
-| Docker                     | ✓       | ✓       |        |
-| display-sync               |         | ✓       |        |
-| Steam autostart            |         | ✓       | ✓      |
+| Feature                      | tenfoot  | desktop | gaming |
+|------------------------------|:--------:|:-------:|:------:|
+| Plasma                       | ✓        | ✓       | ✓      |
+| Sunshine                     | manual   | ✓       |        |
+| Docker                       | ✓        | ✓       |        |
+| display-sync                 |          | ✓       |        |
+| Steam autostart              | ✓        | ✓       | ✓      |
 
 These conditions are evaluated at build time via `activeProfile` in `hosts/shrike/conditionals/`. Changing the default profile in `flake.nix` does not affect the specialisations.
 
@@ -55,11 +54,9 @@ Sleep and wake work correctly. Big Picture mode and the virtual keyboard work wh
 
 ### tenfoot
 
-Virtual keyboard works correctly within the gamescope session. No Plasma overhead.
+Runs Plasma with Steam autolaunching directly into Big Picture mode. Retains Plasma's sleep/wake and display handling while keeping a minimal environment with no desktop applications.
 
-**Caveat:** Sleep/wake recovery is unreliable. If the display is off when the system resumes, the NVIDIA driver cannot read the EDID and gamescope renders with graphical artifacts. Gamescope does not handle DRM hotplug events after the session has started, so there is no clean fix.
-
-**Caveat:** headles in-home streaming doesn't function correctly in this profile.
+**Note:** Sunshine is installed but does not autostart. Start it manually for remote debugging: `systemctl --user start sunshine`.
 
 ### Booting into a specialisation remotely
 
@@ -74,6 +71,10 @@ Reboot into a specific entry — the full `.conf` filename is required:
 ```sh
 systemctl reboot --boot-loader-entry=nixos-generation-180-specialisation-desktop.conf
 ```
+
+## Troubleshooting
+
+See [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
 
 ## Docker services
 

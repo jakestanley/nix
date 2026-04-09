@@ -1,13 +1,16 @@
 { pkgs, lib, activeProfile, ... }:
 
+let
+  sunshineEnabled = activeProfile == "desktop" || activeProfile == "tenfoot";
+in
 {
   services.sunshine = {
-    enable = activeProfile == "desktop";
-    package = lib.mkIf (activeProfile == "desktop") (pkgs.sunshine.override {
+    enable = sunshineEnabled;
+    package = lib.mkIf sunshineEnabled (pkgs.sunshine.override {
       cudaSupport = true;
     });
     autoStart = activeProfile == "desktop";
-    capSysAdmin = activeProfile == "desktop";
-    openFirewall = activeProfile == "desktop";
+    capSysAdmin = sunshineEnabled;
+    openFirewall = sunshineEnabled;
   };
 }
