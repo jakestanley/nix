@@ -38,8 +38,8 @@
 
   security.sudo.extraConfig = ''
     Cmnd_Alias TUNING_DOCK_SWITCH = \
-      /Users/jake/git/github.com/jakestanley/nixos-shrike/scripts/switch-turing-dock.sh work, \
-      /Users/jake/git/github.com/jakestanley/nixos-shrike/scripts/switch-turing-dock.sh personal
+      /Users/jake/git/github.com/jakestanley/nix/scripts/switch-turing-dock.sh work, \
+      /Users/jake/git/github.com/jakestanley/nix/scripts/switch-turing-dock.sh personal
     jake ALL=(root) NOPASSWD: TUNING_DOCK_SWITCH
   '';
 
