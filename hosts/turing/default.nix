@@ -33,6 +33,7 @@
     pkgs.pipx
     pkgs.spotdl
     pkgs.ffmpeg
+    pkgs.id3v2
     inputs.cherri.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
