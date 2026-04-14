@@ -11,6 +11,7 @@
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.hostPlatform = "aarch64-darwin";
+  nixpkgs.config.allowUnfree = true;
 
   users.users.jake = {
     home = "/Users/jake";
@@ -31,9 +32,26 @@
     pkgs.readline
     pkgs.awscli
     pkgs.pipx
-    pkgs.spotdl
     pkgs.ffmpeg
     pkgs.id3v2
+    pkgs.nerd-fonts.ubuntu-mono
+    pkgs.python312
+    # graphical. expand "platforms" when searching here: https://search.nixos.org/packages?channel=25.11
+    pkgs.prismlauncher
+    # pkgs.spotify (broken on mac?)
+    pkgs.vscode
+    pkgs.discord
+    # mac only (in case i merge later)
+    pkgs.zoom-us
+    # pkgs.blender (currently broken)
+    pkgs.cyberduck
+    pkgs.chatgpt
+    pkgs.postman
+    pkgs.teams
+    pkgs.google-chrome
+    pkgs.upscayl
+    # non-graphical, mac only
+    pkgs.openconnect
     inputs.cherri.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 

@@ -30,7 +30,7 @@ let
 
   dockCommonAppsCenter = [
     { app = "/Applications/Obsidian.app"; }
-    { app = "/Applications/Visual Studio Code.app"; }
+    { app = "/Applications/Nix Apps/Visual Studio Code.app"; }
     { app = "/Applications/Claude.app"; }
   ];
 
@@ -54,7 +54,7 @@ let
       { app = "/Applications/Guitar Pro 8.app"; }
       { app = "/Applications/Flight Deck.app"; }
       { app = "/System/Applications/Music.app"; }
-      { app = "/Applications/Discord.app"; }
+      { app = "/Applications/Nix Apps/Discord.app"; }
       # { app = "/Applications/Windows App.app"; }
       { app = "/System/Applications/iPhone Mirroring.app"; }
     ]
@@ -64,8 +64,8 @@ let
     dockCommonAppsHead
     ++ [
       { app = "/Applications/WorkSpaces.app"; }
-      { app = "/Applications/Google Chrome.app"; }
-      { app = "/Applications/Microsoft Teams.app"; }
+      { app = "/Applications/Nix Apps/Google Chrome.app"; }
+      { app = "/Applications/Nix Apps/Microsoft Teams.app"; }
       { app = "/Applications/Microsoft Outlook.app"; }
     ]
     ++ dockCommonAppsCenter
