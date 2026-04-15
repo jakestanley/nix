@@ -34,7 +34,6 @@
     pkgs.pipx
     pkgs.ffmpeg
     pkgs.id3v2
-    pkgs.nerd-fonts.ubuntu-mono
     pkgs.python312
     # graphical. expand "platforms" when searching here: https://search.nixos.org/packages?channel=25.11
     pkgs.prismlauncher

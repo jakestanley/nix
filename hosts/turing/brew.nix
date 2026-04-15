@@ -42,6 +42,7 @@
       "obsidian"
       "ableton-live-standard@11"
       "mixed-in-key"
+      "font-ubuntu-mono-nerd-font"
       "omnidisksweeper"
       "steam"
       "blender"
