@@ -46,7 +46,7 @@
     pkgs.cyberduck
     pkgs.chatgpt
     pkgs.postman
-    pkgs.teams
+    # pkgs.teams (login problems)
     pkgs.google-chrome
     pkgs.upscayl
     # non-graphical, mac only

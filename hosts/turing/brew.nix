@@ -24,6 +24,7 @@
       "godot"
       "claude"
       "gog-galaxy"
+      "microsoft-teams"
       "dropbox"
       "1password"
       "duplicate-file-finder"

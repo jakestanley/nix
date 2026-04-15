@@ -65,7 +65,7 @@ let
     ++ [
       { app = "/Applications/WorkSpaces.app"; }
       { app = "/Applications/Nix Apps/Google Chrome.app"; }
-      { app = "/Applications/Nix Apps/Microsoft Teams.app"; }
+      { app = "/Applications/Microsoft Teams.app"; }
       { app = "/Applications/Microsoft Outlook.app"; }
     ]
     ++ dockCommonAppsCenter
