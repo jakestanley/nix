@@ -35,6 +35,7 @@
     pkgs.ffmpeg
     pkgs.id3v2
     pkgs.python312
+    pkgs.htop
     # graphical. expand "platforms" when searching here: https://search.nixos.org/packages?channel=25.11
     pkgs.prismlauncher
     # pkgs.spotify (broken on mac?)
