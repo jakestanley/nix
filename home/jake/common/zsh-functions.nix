@@ -144,6 +144,7 @@
       --exclude='._*' \
       --include='/reports/***' \
       --include='/Playlists/' \
+      --include='/Playlists/state.json' \
       --include='/Playlists/**/' \
       --include='/Playlists/**/unprocessed/***' \
       --exclude='*' \
