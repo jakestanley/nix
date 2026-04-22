@@ -50,6 +50,7 @@
       "blender"
       "gimp"
       "bambu-studio"
+      "protonvpn"
     ];
   };
 }
