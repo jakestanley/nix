@@ -12,6 +12,9 @@ in
 
   networking.hostName = "shrike";
 
+  networking.bridges.br0.interfaces = [ "enp4s0" ];
+  networking.networkmanager.unmanaged = [ "interface-name:enp4s0" ];
+
   users.users.jake.openssh.authorizedKeys.keys = [
     publicKeys.turing
     publicKeys.adler
