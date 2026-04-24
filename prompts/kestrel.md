@@ -37,9 +37,11 @@ Import this module from `hosts/shrike/default.nix`.
 
 ### 3. Profile gating
 
-The VM and Cockpit services must not run when the gaming profile is active. Review how profile gating is currently implemented on shrike before deciding how to integrate. Do not invent a new pattern — follow what already exists.
+The libvirtd, QEMU, and Cockpit services must only be enabled when the desktop profile is active — they should not run in the gaming profile or any other profile.
 
-If the existing profile mechanism does not cleanly support conditional service enablement, stop and describe the options before implementing anything.
+Review how the desktop profile is currently declared and how other services are conditionally enabled within it before making any changes. Follow that exact pattern. Do not invent a new mechanism.
+
+If the existing desktop profile mechanism does not cleanly support enabling these services, stop and describe the options before implementing anything.
 
 ### 4. Managed save (suspend to disk)
 
