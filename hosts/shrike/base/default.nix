@@ -12,8 +12,36 @@ in
 
   networking.hostName = "shrike";
 
-  networking.bridges.br0.interfaces = [ "enp4s0" ];
-  networking.networkmanager.unmanaged = [ "interface-name:enp4s0" ];
+  environment.etc."NetworkManager/system-connections/br0.nmconnection" = {
+    mode = "0600";
+    text = ''
+      [connection]
+      id=br0
+      type=bridge
+      interface-name=br0
+
+      [bridge]
+      stp=false
+
+      [ipv4]
+      method=auto
+
+      [ipv6]
+      method=ignore
+    '';
+  };
+
+  environment.etc."NetworkManager/system-connections/enp4s0-bridge-slave.nmconnection" = {
+    mode = "0600";
+    text = ''
+      [connection]
+      id=enp4s0-bridge-slave
+      type=ethernet
+      interface-name=enp4s0
+      master=br0
+      slave-type=bridge
+    '';
+  };
 
   users.users.jake.openssh.authorizedKeys.keys = [
     publicKeys.turing
