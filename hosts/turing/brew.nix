@@ -51,6 +51,7 @@
       "gimp"
       "bambu-studio"
       "protonvpn"
+      "macs-fan-control"
     ];
   };
 }
