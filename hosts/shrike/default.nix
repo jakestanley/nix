@@ -17,6 +17,7 @@
     ./conditionals/sunshine.nix
     ./conditionals/display-sync.nix
     ./conditionals/steam-autostart.nix
+    ./conditionals/xwayland-video-bridge.nix
     (./profiles + "/${profile}.nix")
   ];
 
