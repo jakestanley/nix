@@ -10,6 +10,6 @@
     serviceConfig.Environment = "PATH=/run/current-system/sw/bin:/usr/bin:/bin";
     serviceConfig.ExecStart = if activeProfile == "tenfoot"
       then "${pkgs.gamescope}/bin/gamescope -W 3840 -H 2160 -w 3840 -h 2160 -f -e -r 120 -- ${pkgs.steam}/bin/steam -tenfoot"
-      else "${pkgs.steam}/bin/steam -silent";
+      else "${pkgs.steam}/bin/steam -silent -pipewire";
   };
 }
