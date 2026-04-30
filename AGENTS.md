@@ -43,6 +43,7 @@ If a change is not committed, it does not exist.
 4. No editing files in `/etc` directly.
 5. No imperative fixes.
 6. No ad-hoc hacks to “just make it work”.
+7. Never suggest `xdotool`, `ydotool`, or any input simulation tool to work around a UI dialog. Fix the root cause declaratively.
 
 If something requires a manual fix, it must be encoded declaratively.
 

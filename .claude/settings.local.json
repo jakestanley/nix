@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ssh jake@shrike.stanley.arpa \"which xwaylandvideobridge 2>/dev/null; systemctl --user status xwaylandvideobridge 2>&1 | head -20; grep -r xwaylandvideobridge ~/.config/ /etc/xdg/ 2>/dev/null | head -10\")",
+      "Bash(nix build *)"
+    ]
+  }
+}
