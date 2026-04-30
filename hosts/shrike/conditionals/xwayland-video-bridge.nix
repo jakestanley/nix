@@ -8,13 +8,13 @@
     partOf = [ "graphical-session.target" ];
     wantedBy = [ "graphical-session.target" ];
     serviceConfig = {
-      ExecStart = "${pkgs.kdePackages.xwaylandvideobridge}/bin/xwaylandvideobridge";
+      ExecStart = "${pkgs.xwaylandvideobridge}/bin/xwaylandvideobridge";
       Restart = "always";
       RestartSec = 3;
     };
   };
 
   environment.systemPackages = pkgs.lib.optionals (activeProfile == "desktop") [
-    pkgs.kdePackages.xwaylandvideobridge
+    pkgs.xwaylandvideobridge
   ];
 }
