@@ -41,6 +41,7 @@
     # non-graphical, work only
     pkgs.redis
     # graphical. expand "platforms" when searching here: https://search.nixos.org/packages?channel=25.11
+    pkgs.zed-editor
     pkgs.prismlauncher
     pkgs.telegram-desktop
     # pkgs.spotify (broken on mac?)
