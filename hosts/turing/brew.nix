@@ -52,6 +52,7 @@
       "bambu-studio"
       "protonvpn"
       "macs-fan-control"
+      "inkscape"
     ];
   };
 }
