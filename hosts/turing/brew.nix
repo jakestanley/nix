@@ -7,8 +7,8 @@
     onActivation = {
       autoUpdate = true;
       upgrade = true;
-      # Choosing uninstall over zap, as I need to do awkward shit like install python@3.12, which 
-      #   doesn't work with brews. Using uninstall will prevent nix from deleting ad-hoc installed 
+      # Choosing uninstall over zap, as I need to do awkward shit like install python@3.12, which
+      #   doesn't work with brews. Using uninstall will prevent nix from deleting ad-hoc installed
       #   packages, whereas zap keeps it clean and declarative. compromises
       cleanup = "uninstall";
     };
@@ -17,6 +17,7 @@
     brews = [
       "dsda-doom"
       "aubio"
+      "cassandra"
     ];
 
     casks = [
@@ -56,4 +57,3 @@
     ];
   };
 }
-
