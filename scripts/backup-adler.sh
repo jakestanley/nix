@@ -16,6 +16,7 @@ sudo systemctl stop plexmediaserver
 
 echo "Stopped docker and plex. Beginning backup"
 
+MAX_BACKUPS=60
 BACKUP_TARGET_HOME=/home/jake
 BACKUP_DEST="$BACKUP_TARGET_HOME/Dropbox/backups/adler"
 TIMESTAMP=$(date +%F_%H-%M)
@@ -52,9 +53,9 @@ sudo tar -czf "$BACKUP_FILE" \
     /etc/homelab/certs \
     /var/lib/plexmediaserver
 
-# keep last 7 backups
+# keep last $MAX_BACKUPS backups
 # shellcheck disable=SC2012
-ls -t "$BACKUP_DEST"/adler-*.tar.gz | tail -n +8 | xargs -r rm
+ls -t "$BACKUP_DEST"/adler-*.tar.gz | tail -n +$((MAX_BACKUPS + 1)) | xargs -r rm
 
 sudo chown jake:jake "$BACKUP_FILE"
 echo "Backup complete: $BACKUP_FILE"
