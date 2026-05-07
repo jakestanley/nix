@@ -20,6 +20,7 @@ in
     enable = enabled;
     openFirewall = enabled;
     port = 9090;
+    settings.WebService.Origins = "https://shrike.stanley.arpa:9090 https://shrike:9090";
   };
 
   systemd.services.libvirt-default-network = lib.mkIf enabled {
