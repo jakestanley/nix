@@ -88,12 +88,17 @@ virsh snapshot-revert <vm-name> <snapshot-name>
 
 ### SSH into VMs
 
-VMs use the libvirt default NAT network and get IPs in the `192.168.122.0/24` range. Find the IP:
+VMs use the libvirt default NAT network (`192.168.122.0/24`) and are only reachable from Shrike itself. Use Shrike as a jump host.
+
+Find the active DHCP lease (more reliable than `domifaddr`):
 ```sh
-virsh domifaddr <vm-name>
+virsh --connect qemu:///system net-dhcp-leases default
 ```
 
-Then SSH normally: `ssh user@192.168.122.x`
+Then SSH via jump host:
+```sh
+ssh -J jake@shrike.stanley.arpa <username>@192.168.122.x
+```
 
 ### Networking
 
