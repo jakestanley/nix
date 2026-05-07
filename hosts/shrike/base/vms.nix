@@ -22,4 +22,40 @@ in
     port = 9090;
   };
 
+  systemd.services.libvirt-default-network = lib.mkIf enabled {
+    description = "Define and autostart libvirt default NAT network";
+    after = [ "libvirtd.service" ];
+    requires = [ "libvirtd.service" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+    script =
+      let
+        networkXml = pkgs.writeText "libvirt-default-network.xml" ''
+          <network>
+            <name>default</name>
+            <bridge name="virbr0"/>
+            <forward/>
+            <ip address="192.168.122.1" netmask="255.255.255.0">
+              <dhcp>
+                <range start="192.168.122.2" end="192.168.122.254"/>
+              </dhcp>
+            </ip>
+          </network>
+        '';
+        virsh = "${pkgs.libvirt}/bin/virsh";
+      in
+      ''
+        if ! ${virsh} net-info default &>/dev/null; then
+          ${virsh} net-define ${networkXml}
+        fi
+        ${virsh} net-autostart default
+        if ! ${virsh} net-info default | grep -q "Active:.*yes"; then
+          ${virsh} net-start default
+        fi
+      '';
+  };
+
 }

@@ -40,13 +40,6 @@ libvirt and Cockpit are enabled in the desktop profile only.
 
 You may need to log out and back in (or run `newgrp libvirtd`) for the `libvirtd` group to take effect.
 
-If you want the NAT fallback network (virbr0) available, activate it once:
-
-```sh
-virsh net-autostart default
-virsh net-start default
-```
-
 ### Accessing Cockpit
 
 Cockpit is available at `https://shrike:9090` (or the host IP). The TLS certificate will be self-signed unless a cert is provisioned. Log in with your system credentials.
