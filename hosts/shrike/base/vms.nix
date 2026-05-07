@@ -29,9 +29,11 @@ in
   networking.bridges = lib.mkIf enabled {
     br0.interfaces = [ "enp4s0" ];
   };
-  networking.interfaces = lib.mkIf enabled {
-    br0.useDHCP = true;
-  };
+  # NM is disabled for these interfaces to avoid conflicting with the bridge.
+  # dhcpcd is re-enabled and restricted to br0 so it can acquire a lease;
+  # NM's default dhcpcd suppression only applies to NM-managed interfaces.
   networking.networkmanager.unmanaged =
     lib.optionals enabled [ "interface-name:enp4s0" "interface-name:br0" ];
+  networking.dhcpcd.enable = lib.mkIf enabled true;
+  networking.dhcpcd.allowInterfaces = lib.optionals enabled [ "br0" ];
 }
