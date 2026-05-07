@@ -20,7 +20,7 @@ in
     enable = enabled;
     openFirewall = enabled;
     port = 9090;
-    packages = lib.optionals enabled [ pkgs.cockpit-machines ];
+    plugins = lib.optionals enabled [ pkgs.cockpit-machines ];
     settings.WebService.Origins = lib.mkForce "https://shrike.stanley.arpa:9090 https://shrike:9090 https://cockpit.stanley.arpa";
   };
 
