@@ -16,6 +16,9 @@ in
   users.users.jake.extraGroups =
     lib.optionals enabled [ "libvirtd" ];
 
+  environment.systemPackages =
+    lib.optionals enabled [ pkgs.virt-manager ];
+
   services.cockpit = {
     enable = enabled;
     openFirewall = enabled;
