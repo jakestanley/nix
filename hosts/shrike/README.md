@@ -32,6 +32,82 @@ kscreen-doctor -o
 
 If your user is not UID `1000`, substitute the correct UID in the paths above. If `wayland-0` does not exist, check available sockets with `ls /run/user/1000/wayland-*`.
 
+## VM management (desktop profile only)
+
+libvirt and Cockpit are enabled in the desktop profile only.
+
+### First-time setup
+
+After deploying, the libvirt default NAT network needs to be activated once:
+
+```sh
+virsh net-autostart default
+virsh net-start default
+```
+
+You may need to log out and back in (or run `newgrp libvirtd`) for the `libvirtd` group to take effect.
+
+### Accessing Cockpit
+
+Cockpit is available at `https://shrike:9090` (or the host IP). The TLS certificate will be self-signed unless a cert is provisioned. Log in with your system credentials.
+
+The **Virtual Machines** section in Cockpit requires the `cockpit-machines` plugin, which is bundled with the `cockpit` package in nixpkgs.
+
+### Creating a Debian VM
+
+1. Open Cockpit → Virtual Machines → Create VM
+2. Select "Download an OS" and choose Debian
+3. Set disk size, RAM, and CPU count as needed
+4. Set network to bridge `br0` for a direct LAN IP (or `default` for NAT)
+5. Start the VM and open the console to complete installation
+
+Or via CLI:
+```sh
+virt-install \
+  --name debian-dev \
+  --ram 2048 \
+  --vcpus 2 \
+  --disk size=20,format=qcow2 \
+  --os-variant debian12 \
+  --network bridge=br0 \
+  --cdrom /path/to/debian.iso \
+  --graphics none \
+  --console pty,target_type=serial \
+  --extra-args 'console=ttyS0,115200n8'
+```
+
+### VM autostart
+
+```sh
+virsh autostart <vm-name>
+```
+
+### Snapshots
+
+```sh
+# Create
+virsh snapshot-create-as <vm-name> snap-$(date +%Y%m%d) --description "before changes"
+# List
+virsh snapshot-list <vm-name>
+# Revert
+virsh snapshot-revert <vm-name> <snapshot-name>
+```
+
+### SSH into VMs
+
+VMs using the `br0` bridge get a LAN IP via DHCP (same subnet as the host). Find the IP:
+```sh
+virsh domifaddr <vm-name>
+```
+
+Then SSH normally: `ssh user@<lan-ip>`
+
+### Networking
+
+`br0` bridges `enp4s0` and is configured declaratively in `base/vms.nix`. VMs should use `br0` as their network source to get direct LAN IPs. The `default` NAT network (virbr0) also remains available as a fallback.
+
+On the first `nixos-rebuild switch` that applies this config, Shrike will briefly lose connectivity while `enp4s0` is enslaved to `br0` and `br0` acquires its DHCP lease. Connectivity restores automatically.
+
 ## Profiles
 
 The active boot profile is set via `shrikeProfile` in `flake.nix`, which is the canonical source of truth for the current default. Three profiles are always available as specialisations in the boot menu regardless of the default.
@@ -43,6 +119,7 @@ The active boot profile is set via `shrikeProfile` in `flake.nix`, which is the 
 | Docker                       | ✓        | ✓       |        |
 | display-sync                 |          | ✓       |        |
 | Steam autostart              | ✓        | ✓       | ✓      |
+| libvirt / Cockpit            |          | ✓       |        |
 
 These conditions are evaluated at build time via `activeProfile` in `hosts/shrike/conditionals/`. Changing the default profile in `flake.nix` does not affect the specialisations.
 

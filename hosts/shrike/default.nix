@@ -11,6 +11,7 @@
     ./base/gaming.nix
     ./base/sleep-on-lan.nix
     ./base/reboot-to-windows.nix
+    ./base/vms.nix
     ../../modules/nixos/docker.nix
     ../../modules/nixos/home-manager.nix
     ../../modules/nixos/ssh.nix
