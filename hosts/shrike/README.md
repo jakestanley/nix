@@ -38,14 +38,14 @@ libvirt and Cockpit are enabled in the desktop profile only.
 
 ### First-time setup
 
-After deploying, the libvirt default NAT network needs to be activated once:
+You may need to log out and back in (or run `newgrp libvirtd`) for the `libvirtd` group to take effect.
+
+If you want the NAT fallback network (virbr0) available, activate it once:
 
 ```sh
 virsh net-autostart default
 virsh net-start default
 ```
-
-You may need to log out and back in (or run `newgrp libvirtd`) for the `libvirtd` group to take effect.
 
 ### Accessing Cockpit
 
