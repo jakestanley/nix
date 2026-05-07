@@ -58,7 +58,7 @@ The **Virtual Machines** section in Cockpit requires the `cockpit-machines` plug
 1. Open Cockpit → Virtual Machines → Create VM
 2. Select "Download an OS" and choose Debian
 3. Set disk size, RAM, and CPU count as needed
-4. Set network to bridge `br0` for a direct LAN IP (or `default` for NAT)
+4. Set network to `default` (NAT via virbr0)
 5. Start the VM and open the console to complete installation
 
 Or via CLI:
@@ -69,7 +69,7 @@ virt-install \
   --vcpus 2 \
   --disk size=20,format=qcow2 \
   --os-variant debian12 \
-  --network bridge=br0 \
+  --network network=default \
   --cdrom /path/to/debian.iso \
   --graphics none \
   --console pty,target_type=serial \
@@ -95,18 +95,16 @@ virsh snapshot-revert <vm-name> <snapshot-name>
 
 ### SSH into VMs
 
-VMs using the `br0` bridge get a LAN IP via DHCP (same subnet as the host). Find the IP:
+VMs use the libvirt default NAT network and get IPs in the `192.168.122.0/24` range. Find the IP:
 ```sh
 virsh domifaddr <vm-name>
 ```
 
-Then SSH normally: `ssh user@<lan-ip>`
+Then SSH normally: `ssh user@192.168.122.x`
 
 ### Networking
 
-`br0` bridges `enp4s0` and is configured declaratively in `base/vms.nix`. VMs should use `br0` as their network source to get direct LAN IPs. The `default` NAT network (virbr0) also remains available as a fallback.
-
-On the first `nixos-rebuild switch` that applies this config, Shrike will briefly lose connectivity while `enp4s0` is enslaved to `br0` and `br0` acquires its DHCP lease. Connectivity restores automatically.
+VMs use libvirt's default NAT network (`virbr0`). Host networking is not modified. VMs have internet access via NAT but are not directly reachable from the LAN — only from the host itself.
 
 ## Profiles
 
