@@ -10,6 +10,14 @@ let
 in
 
 {
+  # CVE dirtyfrag mitigation: prevent loading of vulnerable esp4/esp6/rxrpc modules.
+  # This breaks IPsec VPNs and AFS — not used in this homelab.
+  boot.extraModprobeConfig = ''
+    install esp4 /bin/false
+    install esp6 /bin/false
+    install rxrpc /bin/false
+  '';
+
   networking.networkmanager.enable = true;
 
   time.timeZone = "Europe/London";
