@@ -1,4 +1,4 @@
-{ pkgs, lib, activeProfile, ... }:
+{ pkgs, lib, ... }:
 
 let
   publicKeys = (import ../../../modules/nixos/identities.nix {}).publicKeys;
@@ -37,7 +37,6 @@ in
   environment.systemPackages = [
     pkgs.duf
     pkgs.python3
-  ] ++ pkgs.lib.optionals (activeProfile != "tenfoot") [
     pkgs.vscode
     pkgs.gparted
   ];

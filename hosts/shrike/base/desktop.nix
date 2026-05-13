@@ -1,5 +1,10 @@
-{ pkgs, activeProfile, ... }:
+{ pkgs, ... }:
 
+let
+  displaySync = pkgs.writers.writePython3Bin "display-sync" { } (
+    builtins.readFile ../scripts/display-sync.py
+  );
+in
 {
   imports = [
     ../../../modules/nixos/base.nix
@@ -27,14 +32,39 @@
     };
   };
 
-  programs.firefox.enable = activeProfile != "tenfoot";
+  programs.firefox.enable = true;
 
-  users.users.jake.packages = pkgs.lib.optionals (activeProfile != "tenfoot") (with pkgs; [
+  users.users.jake.packages = with pkgs; [
     kdePackages.kate
-  ]);
+  ];
 
-  environment.systemPackages = pkgs.lib.optionals (activeProfile != "tenfoot") (with pkgs; [
+  environment.systemPackages = with pkgs; [
     spotify
     kdePackages.kdialog
-  ]);
+    displaySync
+    kdePackages.libkscreen
+  ];
+
+  systemd.user.services.display-sync = {
+    enable = true;
+    description = "Auto toggle HDMI outputs based on DisplayPort state";
+    after = [ "graphical-session.target" ];
+    partOf = [ "graphical-session.target" ];
+    wantedBy = [ "graphical-session.target" ];
+    serviceConfig = {
+      ExecStart = "${displaySync}/bin/display-sync";
+      Restart = "always";
+      RestartSec = 3;
+    };
+  };
+
+  services.sunshine = {
+    enable = true;
+    package = pkgs.sunshine.override {
+      cudaSupport = true;
+    };
+    autoStart = true;
+    capSysAdmin = true;
+    openFirewall = true;
+  };
 }
