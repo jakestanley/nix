@@ -4,7 +4,16 @@ let
   publicKeys = (import ../../../modules/nixos/identities.nix {}).publicKeys;
 in
 {
-  imports = [ ./docker.nix ];
+  imports = [
+    ./docker.nix
+    ./desktop.nix
+    ./greetd.nix
+    ./plasma.nix
+    ./nvidia.nix
+    ./gaming.nix
+    ./sleep-on-lan.nix
+    ./reboot-to-windows.nix
+  ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.consoleMode = "max";
   boot.loader.efi.canTouchEfiVariables = true;
