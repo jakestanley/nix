@@ -1,6 +1,6 @@
-{ activeProfile, ... }:
+{ ... }:
 
 {
-  virtualisation.docker.enable = activeProfile != "gaming";
-  hardware.nvidia-container-toolkit.enable = activeProfile != "gaming";
+  virtualisation.docker.enable = true;
+  hardware.nvidia-container-toolkit.enable = true;
 }
