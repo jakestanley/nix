@@ -21,6 +21,9 @@ Update inputs: `nix flake update`, then deploy the relevant host.
 
 Both configurations share `/boot` and coexist as separate boot entries. Deploying one does not affect the other's boot entry.
 
+> **Always deploy kestrel before shrike.** systemd-boot defaults to the highest generation number.
+> Deploying shrike last ensures it remains the default boot entry.
+
 ```bash
 # Rebuild and switch locally (run on shrike)
 sudo nixos-rebuild switch --flake .#shrike
