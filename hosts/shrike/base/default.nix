@@ -11,6 +11,7 @@ in
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   networking.hostName = "shrike";
+  system.nixos.tags = [ "shrike" ];
 
   users.users.jake.openssh.authorizedKeys.keys = [
     publicKeys.turing

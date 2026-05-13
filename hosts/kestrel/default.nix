@@ -16,6 +16,7 @@ in
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   networking.hostName = "kestrel";
+  system.nixos.tags = [ "kestrel" ];
 
   users.users.jake.openssh.authorizedKeys.keys = [
     publicKeys.turing
