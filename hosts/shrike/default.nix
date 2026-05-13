@@ -15,6 +15,7 @@
     ../../modules/nixos/home-manager.nix
     ../../modules/nixos/ssh.nix
     ./conditionals/sunshine.nix
+    ./conditionals/virtualisation.nix
     ./conditionals/display-sync.nix
     ./conditionals/steam-autostart.nix
     (./profiles + "/${profile}.nix")
