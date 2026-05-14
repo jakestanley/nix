@@ -8,22 +8,14 @@
   programs.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
-    # Proprietary NVIDIA driver is unsupported by sway upstream; flag required to proceed.
-    package = pkgs.symlinkJoin {
-      name = "sway";
-      paths = [ pkgs.sway ];
-      buildInputs = [ pkgs.makeWrapper ];
-      postBuild = ''
-        wrapProgram $out/bin/sway --add-flags "--unsupported-gpu"
-      '';
-    };
   };
 
   services.greetd = {
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd sway";
+        # --unsupported-gpu required for proprietary NVIDIA driver
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd 'sway --unsupported-gpu'";
         user = "greeter";
       };
     };
