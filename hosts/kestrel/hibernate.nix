@@ -25,8 +25,12 @@
   # TODO: set resume_offset after first deploy
   boot.kernelParams = [ "resume_offset=18429952" ];
 
+  # Use shutdown hibernate mode — writes image to swap and powers off directly.
+  # Avoids the EFI variable approach which fails with "Stale file handle" on
+  # this configuration. Resume is handled by the kernel resume= params.
   # Suspend to RAM first; hibernate after 30 minutes of inactivity.
   systemd.sleep.settings.Sleep = {
+    HibernateMode = "shutdown";
     HibernateDelaySec = "30m";
     SuspendEstimationSec = "30m";
   };
