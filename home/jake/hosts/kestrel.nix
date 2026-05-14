@@ -3,6 +3,16 @@
 {
   home.homeDirectory = "/home/work";
 
+  # Lock screen before sleep using swayidle's logind inhibitor mechanism.
+  # Replaces the broken swaylock-on-sleep system service which couldn't
+  # reliably connect to the user's Wayland socket.
+  services.swayidle = {
+    enable = true;
+    events = [
+      { event = "before-sleep"; command = "${pkgs.swaylock}/bin/swaylock -f -c 000000"; }
+    ];
+  };
+
   wayland.windowManager.sway = {
     enable = true;
     config = {

@@ -14,8 +14,15 @@
     enable = true;
     settings = {
       default_session = {
-        # --unsupported-gpu required for proprietary NVIDIA driver
-        command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd 'sway --unsupported-gpu'";
+        command =
+          let
+            # --unsupported-gpu required for proprietary NVIDIA driver.
+            # Wrapped in a script so greetd execs a single binary, not a string with args.
+            startSway = pkgs.writeShellScript "start-sway" ''
+              exec sway --unsupported-gpu
+            '';
+          in
+          "${pkgs.tuigreet}/bin/tuigreet --time --cmd ${startSway}";
         user = "greeter";
       };
     };

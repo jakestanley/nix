@@ -33,19 +33,15 @@
 
   powerManagement.enable = true;
 
-  # Lock the screen before suspend or hibernate so the session is protected on wake.
-  systemd.services.swaylock-on-sleep = {
-    description = "Lock Sway screen before sleep or hibernate";
-    before = [ "sleep.target" "suspend.target" "hibernate.target" ];
-    wantedBy = [ "sleep.target" "suspend.target" "hibernate.target" ];
-    environment = {
-      XDG_RUNTIME_DIR = "/run/user/1000";
-      WAYLAND_DISPLAY = "wayland-1";
-    };
-    serviceConfig = {
-      Type = "forking";
-      User = "jake";
-      ExecStart = "${pkgs.swaylock}/bin/swaylock -c 000000";
-    };
-  };
+  # After hibernate resume, NVIDIA needs a moment to reinitialise before Sway
+  # can render correctly. Cycle DPMS off/on to force the display to resync.
+  powerManagement.resumeCommands = ''
+    sleep 3
+    sock=$(ls /run/user/1000/sway-ipc.* 2>/dev/null | head -1)
+    if [ -n "$sock" ]; then
+      su jake -c "SWAYSOCK=$sock XDG_RUNTIME_DIR=/run/user/1000 ${pkgs.sway}/bin/swaymsg output '*' dpms off"
+      sleep 1
+      su jake -c "SWAYSOCK=$sock XDG_RUNTIME_DIR=/run/user/1000 ${pkgs.sway}/bin/swaymsg output '*' dpms on"
+    fi
+  '';
 }
