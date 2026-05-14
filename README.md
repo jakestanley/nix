@@ -9,6 +9,10 @@ Multi-host NixOS and nix-darwin configuration.
 - [adler](hosts/adler/README.md) — home server (x86_64-linux)
 - [turing](hosts/turing/README.md) — MacBook (aarch64-darwin)
 
+## Installation
+
+See [hosts/INSTALL.md](hosts/INSTALL.md).
+
 ## Deployment
 
 Update inputs: `nix flake update`, then deploy the relevant host.

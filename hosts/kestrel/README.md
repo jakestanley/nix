@@ -8,6 +8,15 @@ See the root README for deployment order. Always deploy kestrel before shrike so
 
 ## Post-deploy steps
 
+### First boot after reinstall
+
+```sh
+sudo mkdir -p /nix/var/nix/profiles/per-user/jake
+sudo chown jake:jake /nix/var/nix/profiles/per-user/jake
+sudo chown -R jake:jake /home/work
+home-manager switch --flake .#jake@kestrel
+```
+
 ### Home directory encryption (LUKS)
 
 `/home/work` is on a LUKS-encrypted partition. The passphrase is prompted at boot by the initrd. No manual setup is required after first deploy.

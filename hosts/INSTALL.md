@@ -29,6 +29,14 @@ Never reference partitions by UUID (changes on reformat) or device path (NVMe en
 - Select the non-LTS kernel option
 - Log in with password `nixos`
 
+Mount the partitions, then install:
+
+```bash
+nixos-install --flake github:jakestanley/nix#<host> --no-root-passwd
+```
+
+> **Branches:** To install from a branch other than `main`, use `github:jakestanley/nix/<branch>#<host>`. The branch must be pushed to GitHub before it can be used here.
+
 # After nixos-install
 
 `nixos-install` does not set passwords. Before rebooting, set them:
