@@ -5,7 +5,7 @@ Multi-host NixOS and nix-darwin configuration.
 ## Hosts
 
 - [shrike](hosts/shrike/README.md) — gaming/living room PC (x86_64-linux)
-- [kestrel](hosts/kestrel) — work PC (x86_64-linux)
+- [kestrel](hosts/kestrel/README.md) — work PC (x86_64-linux)
 - [adler](hosts/adler/README.md) — home server (x86_64-linux)
 - [turing](hosts/turing/README.md) — MacBook (aarch64-darwin)
 
@@ -47,56 +47,7 @@ screen -S deploy-adler bash -lc 'sudo nixos-rebuild switch --flake .#adler -L'
 
 ### turing
 
-nix-darwin uses `darwin-rebuild` (exported as a flake package) rather than `nixos-rebuild`.
-Select `personal` or `work` to control the Dock profile.
-
-```bash
-# personal profile
-sudo -H nix --extra-experimental-features "nix-command flakes" \
-  run ".#darwin-rebuild" -- switch --flake ".#turing-personal"
-
-# work profile
-sudo -H nix --extra-experimental-features "nix-command flakes" \
-  run ".#darwin-rebuild" -- switch --flake ".#turing-work"
-```
-
-> **Note:** `scripts/switch-turing-dock.sh` previously handled this with a sudoers entry
-> allowing passwordless execution of that exact script path. If you restore that workflow,
-> add the equivalent sudoers rule for the new command path.
-
-## Installation
-
-- Download [nixOS Unstable Graphical ISO](https://channels.nixos.org/nixos-unstable/latest-nixos-graphical-x86_64-linux.iso)
-- Burn to USB, disable Secure Boot, boot the installer
-- Select the non-LTS kernel option
-- Log in with password `nixos`
-
-### Partition labelling
-
-`hardware-configuration.nix` uses `/dev/disk/by-label/` for all mounts. When formatting partitions, use the correct labels or the system will not boot:
-
-| Mount | Label |
-|-------|-------|
-| `/` | `nixos-root` |
-| `/boot` | `LINUXBOOT` |
-
-Example:
-```bash
-mkfs.ext4 -L nixos-root /dev/nvme?n1p3
-```
-
-Never reference partitions by UUID (changes on reformat) or device path (NVMe enumeration is unstable).
-
-### After nixos-install
-
-`nixos-install` does not set passwords. Before rebooting, set them:
-
-```bash
-nixos-enter --root /mnt
-passwd          # root
-passwd jake     # user
-exit
-```
+See [hosts/turing/README.md](hosts/turing/README.md)
 
 ## Service development flow
 

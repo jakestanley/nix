@@ -6,18 +6,7 @@
 
 After a fresh `nixos-install`, run these steps before considering the system ready:
 
-1. **Profile directory** — home-manager will fail if this doesn't exist:
-   ```sh
-   sudo mkdir -p /nix/var/nix/profiles/per-user/jake
-   sudo chown jake:jake /nix/var/nix/profiles/per-user/jake
-   ```
-
-2. **Home directory ownership** — may be root-owned after install:
-   ```sh
-   sudo chown -R jake:jake /home/jake
-   ```
-
-3. **Activate home-manager** as the user:
+1. **Activate home-manager** as the user:
    ```sh
    home-manager switch --flake .#jake@shrike
    ```
