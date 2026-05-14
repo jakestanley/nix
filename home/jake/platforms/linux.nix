@@ -1,7 +1,7 @@
 { lib, pkgs, ... }:
 
 lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
-  home.homeDirectory = "/home/jake";
+  home.homeDirectory = lib.mkDefault "/home/jake";
 
   programs.git.settings = {
     diff.tool = "meld";

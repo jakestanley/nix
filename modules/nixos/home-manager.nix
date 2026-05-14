@@ -12,9 +12,6 @@
     extraSpecialArgs = {
       inherit inputs;
     };
-    sharedModules = [
-      inputs.plasma-manager.homeModules.plasma-manager
-    ];
     users.jake = import ../../home/jake/home.nix;
   };
 }

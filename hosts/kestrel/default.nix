@@ -8,6 +8,7 @@ in
     ./hardware-configuration.nix
     ../../modules/nixos/base.nix
     ../../modules/nixos/ssh.nix
+    ../../modules/nixos/home-manager.nix
     ./encryption.nix
     ./hibernate.nix
     ./desktop.nix
@@ -19,6 +20,10 @@ in
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   networking.hostName = "kestrel";
+
+  home-manager.extraSpecialArgs = {
+    hostname = "kestrel";
+  };
   system.nixos.tags = [ "kestrel" ];
 
   users.users.jake = {
