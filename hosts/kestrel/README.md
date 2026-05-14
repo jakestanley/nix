@@ -10,11 +10,20 @@ See the root README for deployment order. Always deploy kestrel before shrike so
 
 ### Home directory encryption (fscrypt)
 
-fscrypt is enabled via `encryption.nix`. After first boot into kestrel, initialise encryption on the filesystem and encrypt the home directory:
+fscrypt is enabled via `encryption.nix`. After first boot into kestrel:
+
+1. Enable the encrypt feature on the root filesystem (one-time, permanent):
 
 ```sh
+sudo tune2fs -O encrypt /dev/nvme0n1p3
+```
+
+2. Initialise fscrypt and encrypt the home directory. Clear any existing files first (zsh creates a few on first login), then encrypt using the login passphrase when prompted:
+
+```sh
+unset HISTFILE
+rm -f ~/.lesshst ~/.zcompdump ~/.zsh_history
 sudo fscrypt setup
-sudo fscrypt setup /home
 sudo fscrypt encrypt /home/work --user=jake
 ```
 
