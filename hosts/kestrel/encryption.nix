@@ -1,25 +1,9 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
-  # fscrypt filesystem-level home directory encryption.
-  # Enables the pam_fscrypt PAM module across login services so that
-  # /home/work is unlocked transparently when jake logs in — no second
-  # password prompt.
+  # /home/work is on a LUKS-encrypted partition (UUID 817ea6d0-01f1-4e25-907d-bba18fd4988d).
+  # The passphrase is prompted at boot by the initrd.
+  # The decrypted device is mapped to /dev/mapper/work and mounted at /home/work.
   #
-  # NOTE: TPM2 binding is deferred to Phase 4. Until then, the user's
-  # login passphrase is the only unlock method.
-  #
-  # Before first use, the ext4 encrypt feature must be enabled manually
-  # on the nixos-kestrel partition (unmounted):
-  #   tune2fs -O encrypt /dev/disk/by-label/nixos-kestrel
-  # Then on first boot, run:
-  #   sudo fscrypt setup
-  #   sudo fscrypt encrypt /home/work --user=jake
-  security.pam.enableFscrypt = true;
-
-  # Block home-manager from running until /home/work is fscrypt-encrypted.
-  # fscrypt status exits non-zero if the directory is not encrypted, which
-  # prevents the service from populating an unencrypted home directory.
-  systemd.services.home-manager-jake.serviceConfig.ExecCondition =
-    "${pkgs.fscrypt-experimental}/bin/fscrypt status /home/work";
+  # To reformat or re-encrypt, boot into shrike and run cryptsetup against the raw device.
 }

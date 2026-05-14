@@ -8,22 +8,19 @@ See the root README for deployment order. Always deploy kestrel before shrike so
 
 ## Post-deploy steps
 
-### Home directory encryption (fscrypt)
+### Home directory encryption (LUKS)
 
-`/home/work` lives on a dedicated partition (`/dev/disk/by-label/nixos-kestrel`). Before first boot into kestrel, enable the ext4 encrypt feature on that partition while it is unmounted (e.g. from the live USB or from shrike):
+`/home/work` is on a LUKS-encrypted partition. The passphrase is prompted at boot by the initrd. No manual setup is required after first deploy.
 
-```sh
-sudo tune2fs -O encrypt /dev/disk/by-label/nixos-kestrel
-```
-
-This only needs to be done once. After first boot into kestrel, initialise fscrypt and encrypt the home directory:
+To reformat or re-encrypt (e.g. after reinstall), boot into shrike and run:
 
 ```sh
-sudo fscrypt setup
-sudo fscrypt encrypt /home/work --user=jake
+cryptsetup luksFormat /dev/nvme?n1p?   # find the right device with lsblk first
+cryptsetup open /dev/nvme?n1p? work
+mkfs.ext4 -L nixos-kestrel /dev/mapper/work
+cryptsetup luksUUID /dev/nvme?n1p?     # update hardware-configuration.nix with new UUID
+cryptsetup close work
 ```
-
-The user's login passphrase is the unlock key. TPM2 binding is deferred to a later phase.
 
 ### Hibernate resume offset
 
@@ -41,13 +38,6 @@ boot.kernelParams = [ "resume_offset=<value>" ];
 
 Then redeploy.
 
-### Home Manager
-
-`home-manager-jake.service` runs at boot before fscrypt unlocks `/home/work` and will fail. Once the graphical session is running, sway's startup config restarts it automatically. For SSH-only access, restart it manually:
-
-```sh
-sudo systemctl restart home-manager-jake.service
-```
 
 ## Switching to shrike
 
