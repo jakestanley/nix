@@ -53,6 +53,9 @@
       terminal = "${pkgs.alacritty}/bin/alacritty";
       menu = "${pkgs.wofi}/bin/wofi --show run";
       modifier = "Mod4";
+      gaps = {
+        inner = 10;
+      };
       bars = [{
         command = "${pkgs.waybar}/bin/waybar";
       }];
