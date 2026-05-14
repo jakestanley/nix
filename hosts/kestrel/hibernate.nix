@@ -13,7 +13,7 @@
   system.activationScripts.createSwapDir = "mkdir -p /var/swap";
 
   # Root partition containing the swap file.
-  boot.resumeDevice = "/dev/disk/by-uuid/30518ca7-a203-49cb-9a34-66f31c5f04c4";
+  boot.resumeDevice = "/dev/disk/by-label/nixos-root";
 
   # resume_offset: physical block offset of the swap file within the partition.
   # This cannot be determined until the swap file exists on disk.
