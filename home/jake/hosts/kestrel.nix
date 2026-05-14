@@ -12,7 +12,7 @@
   };
 
   # Dummy plug — disable so it doesn't consume a workspace
-  wayland.windowManager.sway.config.extraConfig = ''
+  wayland.windowManager.sway.extraConfig = ''
     output "HDMI-A-1" disable
   '';
 
