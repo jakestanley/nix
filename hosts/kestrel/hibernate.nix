@@ -9,7 +9,8 @@
   }];
 
   # Create the directory for the swap file before systemd tries to activate it.
-  systemd.tmpfiles.rules = [ "d /var/swap 0700 root root -" ];
+  # tmpfiles runs too late; activation scripts run before any systemd services.
+  system.activationScripts.createSwapDir = "mkdir -p /var/swap";
 
   # Root partition containing the swap file.
   boot.resumeDevice = "/dev/disk/by-uuid/30518ca7-a203-49cb-9a34-66f31c5f04c4";
