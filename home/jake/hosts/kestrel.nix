@@ -6,9 +6,15 @@
   home.homeDirectory = "/home/work";
 
   wayland.windowManager.sway.config.output = {
-    # ASUS VG27B supports 144Hz — default negotiates 60Hz
-    "DP-1".mode = "2560x1440@144Hz";
+    "DP-1" = { mode = "2560x1440@144Hz"; pos = "0 0"; };
+    # Centre-aligned to DP-1: (1440-1200)/2 = 120
+    "DP-4"  = { pos = "2560 120"; };
   };
+
+  # Dummy plug — disable so it doesn't consume a workspace
+  wayland.windowManager.sway.config.extraConfig = ''
+    output "HDMI-A-1" disable
+  '';
 
   # home-manager-jake.service runs at boot before LUKS mounts /home/work.
   # Restart it now that the session is live and the directory is accessible.
