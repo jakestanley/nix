@@ -5,25 +5,27 @@
     ../../modules/nixos/nvidia.nix
   ];
 
-  services.xserver = {
+  programs.sway = {
     enable = true;
-    displayManager.lightdm.enable = true;
-    # i3-gaps was merged into i3 upstream; i3 now includes gap support natively
-    windowManager.i3.enable = true;
+    wrapperFeatures.gtk = true;
+  };
+
+  environment.sessionVariables = {
+    NIXOS_OZONE_WL = "1";
+    WLR_NO_HARDWARE_CURSORS = "1";
   };
 
   environment.systemPackages = [
-    pkgs.i3
-    pkgs.i3status
-    pkgs.i3lock
-    pkgs.rofi
-    pkgs.polybar
+    pkgs.swaylock
+    pkgs.swayidle
+    pkgs.waybar
+    pkgs.wofi
     pkgs.alacritty
-    pkgs.feh
-    pkgs.picom
-    pkgs.xclip
+    pkgs.wl-clipboard
     pkgs.brightnessctl
     pkgs.playerctl
+    pkgs.grim
+    pkgs.slurp
 
     # Switch to shrike boot entry and reboot
     (pkgs.writeShellScriptBin "switch-to-gaming" ''

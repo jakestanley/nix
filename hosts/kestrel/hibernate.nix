@@ -34,18 +34,18 @@
   powerManagement.enable = true;
 
   # Lock the screen before suspend or hibernate so the session is protected on wake.
-  systemd.services.i3lock-on-sleep = {
-    description = "Lock i3 screen before sleep or hibernate";
+  systemd.services.swaylock-on-sleep = {
+    description = "Lock Sway screen before sleep or hibernate";
     before = [ "sleep.target" "suspend.target" "hibernate.target" ];
     wantedBy = [ "sleep.target" "suspend.target" "hibernate.target" ];
     environment = {
-      DISPLAY = ":0";
-      XAUTHORITY = "/home/work/.Xauthority";
+      XDG_RUNTIME_DIR = "/run/user/1000";
+      WAYLAND_DISPLAY = "wayland-1";
     };
     serviceConfig = {
       Type = "forking";
       User = "jake";
-      ExecStart = "${pkgs.i3lock}/bin/i3lock -c 000000";
+      ExecStart = "${pkgs.swaylock}/bin/swaylock -c 000000";
     };
   };
 }
