@@ -14,24 +14,24 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-label/root";
+    { device = "/dev/disk/by-label/nixos-root";
       fsType = "ext4";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/4021-B661";
+    { device = "/dev/disk/by-label/LINUXBOOT";
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
     };
 
   fileSystems."/mnt/data" = 
-    { device = "/dev/disk/by-uuid/a60c9695-e093-4336-af82-8829940d3985";
+    { device = "/dev/disk/by-label/nixos-data";
       fsType = "ext4";
       options = [ "defaults" "nofail" "x-systemd.automount" "noauto" ];
     };
 
   fileSystems."/mnt/games" = 
-    { device = "/dev/disk/by-uuid/ed2ff7f2-374d-4bb7-bae6-cf87182798de";
+    { device = "/dev/disk/by-label/nixos-games";
       fsType = "ext4";
       options = [ "defaults" "nofail" "x-systemd.automount" "noauto" ];
     };
