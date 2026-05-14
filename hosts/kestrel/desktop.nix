@@ -21,6 +21,9 @@
     };
   };
 
+  # pam_fscrypt needs to lock key material in memory; raise the limit for greetd.
+  systemd.services.greetd.serviceConfig.LimitMEMLOCK = "infinity";
+
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1";
     WLR_NO_HARDWARE_CURSORS = "1";
