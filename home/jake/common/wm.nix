@@ -56,13 +56,13 @@ in
       }
       #workspaces button {
         padding: 0 8px;
+        margin: 2px 2px;
         color: ${base05};
         background-color: ${base01};
-        border-bottom: 3px solid transparent;
       }
       #workspaces button.focused {
-        background-color: ${base02};
-        border-bottom: 3px solid ${base0D};
+        background-color: ${base0D};
+        color: ${base00};
       }
       #workspaces button.urgent {
         background-color: ${base08};
