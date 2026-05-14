@@ -9,7 +9,6 @@
   # NOTE: TPM2 binding is deferred to Phase 4. Until then, the user's
   # login passphrase is the only unlock method.
   security.pam.enableFscrypt = true;
-  security.pam.services.greetd.enableFscrypt = true;
 
   # Enable the ext4 encrypt feature on the root filesystem if not already set.
   # Required once before fscrypt can encrypt any directories.
