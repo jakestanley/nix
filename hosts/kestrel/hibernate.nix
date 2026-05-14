@@ -23,7 +23,7 @@
   # Set the output value below and redeploy.
   #
   # TODO: set resume_offset after first deploy
-  # boot.kernelParams = [ "resume_offset=<value>" ];
+  boot.kernelParams = [ "resume_offset=106496" ];
 
   # Suspend to RAM first; hibernate after 30 minutes of inactivity.
   systemd.sleep.settings.Sleep = {
