@@ -8,9 +8,9 @@
   # reliably connect to the user's Wayland socket.
   services.swayidle = {
     enable = true;
-    events = [
-      { event = "before-sleep"; command = "${pkgs.swaylock}/bin/swaylock -f -c 000000"; }
-    ];
+    events = {
+      before-sleep = "${pkgs.swaylock}/bin/swaylock -f -c 000000";
+    };
   };
 
   wayland.windowManager.sway = {
