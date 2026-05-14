@@ -18,6 +18,8 @@ in
   boot.loader.systemd-boot.consoleMode = "max";
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  # Prevent shrike from resuming kestrel's hibernation image on shared hardware.
+  boot.kernelParams = [ "noresume" ];
 
   networking.hostName = "shrike";
   system.nixos.tags = [ "shrike" ];

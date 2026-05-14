@@ -41,6 +41,14 @@ boot.kernelParams = [ "resume_offset=<value>" ];
 
 Then redeploy.
 
+### Home Manager
+
+`home-manager-jake.service` runs at boot before fscrypt unlocks `/home/work` and will fail. Once the graphical session is running, sway's startup config restarts it automatically. For SSH-only access, restart it manually:
+
+```sh
+sudo systemctl restart home-manager-jake.service
+```
+
 ## Switching to shrike
 
 Run `switch-to-gaming` from a terminal. This sets shrike as the one-shot boot entry and reboots.
