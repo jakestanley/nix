@@ -15,7 +15,7 @@
     settings = {
       default_session = {
         # --unsupported-gpu required for proprietary NVIDIA driver
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd 'sway --unsupported-gpu'";
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd 'sway --unsupported-gpu'";
         user = "greeter";
       };
     };
