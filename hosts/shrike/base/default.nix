@@ -9,7 +9,7 @@ in
     ./desktop.nix
     ./greetd.nix
     ./plasma.nix
-    ./nvidia.nix
+    ../../../modules/nixos/nvidia.nix
     ./gaming.nix
     ./sleep-on-lan.nix
     ./reboot-to-windows.nix

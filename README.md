@@ -81,6 +81,14 @@ sudo -H nix --extra-experimental-features "nix-command flakes" \
 - Rebuild on `shrike` with `sudo nixos-rebuild test --flake .#shrike -L`, then `sudo nixos-rebuild switch --flake .#shrike -L` once satisfied.
 - Check the updated service with `systemctl status <unit>` and `journalctl -u <unit> -f`.
 
+## Shared modules
+
+| Module | Description |
+|--------|-------------|
+| `modules/nixos/nvidia.nix` | NVIDIA driver config (modesetting, persistence, graphics). Used by both shrike and kestrel. |
+| `modules/nixos/base.nix` | Common NixOS base settings shared across all Linux hosts. |
+| `modules/nixos/ssh.nix` | SSH server config. |
+
 ## sleep-on-lan
 
 Reusable NixOS module at `hosts/shrike/base/sleep-on-lan.nix`, also exported as `nixosModules.sleepOnLan`.

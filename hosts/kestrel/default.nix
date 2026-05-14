@@ -8,6 +8,9 @@ in
     ./hardware-configuration.nix
     ../../modules/nixos/base.nix
     ../../modules/nixos/ssh.nix
+    ./encryption.nix
+    ./hibernate.nix
+    ./desktop.nix
   ];
 
   boot.loader.systemd-boot.enable = true;
@@ -18,12 +21,12 @@ in
   networking.hostName = "kestrel";
   system.nixos.tags = [ "kestrel" ];
 
-  users.users.jake.openssh.authorizedKeys.keys = [
-    publicKeys.turing
-  ];
-
-  # TODO: import work profile once defined, e.g.:
-  # imports = [ ./work.nix ];
+  users.users.jake = {
+    home = "/home/work";
+    openssh.authorizedKeys.keys = [
+      publicKeys.turing
+    ];
+  };
 
   system.stateVersion = "26.05";
 }

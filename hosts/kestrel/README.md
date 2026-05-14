@@ -2,10 +2,40 @@
 
 Work PC. Runs on the same physical hardware as shrike, sharing `/boot` as a separate boot entry.
 
-## Current state
-
-Minimal config — SSH access only. Work profile not yet defined.
-
 ## Deploying
 
 See the root README for deployment order. Always deploy kestrel before shrike so shrike remains the default boot entry.
+
+## Post-deploy steps
+
+### Home directory encryption (fscrypt)
+
+fscrypt is enabled via `encryption.nix`. After first boot into kestrel, initialise encryption on the filesystem and encrypt the home directory:
+
+```sh
+sudo fscrypt setup
+sudo fscrypt setup /home
+sudo fscrypt encrypt /home/work --user=jake
+```
+
+The user's login passphrase is the unlock key. TPM2 binding is deferred to a later phase.
+
+### Hibernate resume offset
+
+The swap file at `/var/swap/hibernate` is created on first deploy. After deploying, SSH in and run:
+
+```sh
+sudo filefrag -v /var/swap/hibernate | awk 'NR==4{print $4}' | tr -d '.'
+```
+
+Set the output value in `hibernate.nix`:
+
+```nix
+boot.kernelParams = [ "resume_offset=<value>" ];
+```
+
+Then redeploy.
+
+## Switching to shrike
+
+Run `switch-to-gaming` from a terminal. This sets shrike as the one-shot boot entry and reboots.
