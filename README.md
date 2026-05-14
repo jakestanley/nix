@@ -71,6 +71,33 @@ sudo -H nix --extra-experimental-features "nix-command flakes" \
 - Select the non-LTS kernel option
 - Log in with password `nixos`
 
+### Partition labelling
+
+`hardware-configuration.nix` uses `/dev/disk/by-label/` for all mounts. When formatting partitions, use the correct labels or the system will not boot:
+
+| Mount | Label |
+|-------|-------|
+| `/` | `nixos-root` |
+| `/boot` | `LINUXBOOT` |
+
+Example:
+```bash
+mkfs.ext4 -L nixos-root /dev/nvme?n1p3
+```
+
+Never reference partitions by UUID (changes on reformat) or device path (NVMe enumeration is unstable).
+
+### After nixos-install
+
+`nixos-install` does not set passwords. Before rebooting, set them:
+
+```bash
+nixos-enter --root /mnt
+passwd          # root
+passwd jake     # user
+exit
+```
+
 ## Service development flow
 
 - Make app changes in the upstream service repo first.

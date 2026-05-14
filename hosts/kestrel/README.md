@@ -10,11 +10,13 @@ See the root README for deployment order. Always deploy kestrel before shrike so
 
 ### Home directory encryption (fscrypt)
 
-fscrypt is enabled via `encryption.nix`. After first boot into kestrel:
+`/home/work` lives on a dedicated partition (`/dev/disk/by-label/nixos-kestrel`). Before first boot into kestrel, enable the ext4 encrypt feature on that partition while it is unmounted (e.g. from the live USB or from shrike):
 
-1. Initialise fscrypt and encrypt the home directory. Clear any existing files first (zsh creates a few on first login), then encrypt using the login passphrase when prompted:
+```sh
+sudo tune2fs -O encrypt /dev/disk/by-label/nixos-kestrel
+```
 
-> The ext4 encrypt feature is enabled automatically on deploy via `encryption.nix`.
+This only needs to be done once. After first boot into kestrel, initialise fscrypt and encrypt the home directory. Clear any files zsh created on first login before encrypting:
 
 ```sh
 unset HISTFILE

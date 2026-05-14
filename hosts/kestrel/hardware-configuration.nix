@@ -3,4 +3,10 @@
 { ... }:
 {
   imports = [ ../shrike/hardware-configuration.nix ];
+
+  fileSystems."/home/work" = {
+    device = "/dev/disk/by-label/nixos-kestrel";
+    fsType = "ext4";
+    options = [ "defaults" "nofail" "x-systemd.automount" "noauto" ];
+  };
 }

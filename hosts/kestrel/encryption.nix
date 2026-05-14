@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
   # fscrypt filesystem-level home directory encryption.
@@ -8,15 +8,9 @@
   #
   # NOTE: TPM2 binding is deferred to Phase 4. Until then, the user's
   # login passphrase is the only unlock method.
+  #
+  # Before first use, the ext4 encrypt feature must be enabled manually
+  # on the nixos-kestrel partition (unmounted):
+  #   tune2fs -O encrypt /dev/disk/by-label/nixos-kestrel
   security.pam.enableFscrypt = true;
-
-  # Enable the ext4 encrypt feature on the root filesystem if not already set.
-  # Required once before fscrypt can encrypt any directories.
-  # Idempotent — safe to run on every activation.
-  system.activationScripts.enableFscryptOnRoot = ''
-    dev=$(${pkgs.util-linux}/bin/findmnt -n -o SOURCE /)
-    if ! ${pkgs.e2fsprogs}/bin/tune2fs -l "$dev" 2>/dev/null | grep -q encrypt; then
-      ${pkgs.e2fsprogs}/bin/tune2fs -O encrypt "$dev"
-    fi
-  '';
 }
