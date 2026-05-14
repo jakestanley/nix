@@ -16,11 +16,9 @@ See the root README for deployment order. Always deploy kestrel before shrike so
 sudo tune2fs -O encrypt /dev/disk/by-label/nixos-kestrel
 ```
 
-This only needs to be done once. After first boot into kestrel, initialise fscrypt and encrypt the home directory. Clear any files zsh created on first login before encrypting:
+This only needs to be done once. After first boot into kestrel, initialise fscrypt and encrypt the home directory:
 
 ```sh
-unset HISTFILE
-rm -f ~/.lesshst ~/.zcompdump ~/.zsh_history
 sudo fscrypt setup
 sudo fscrypt encrypt /home/work --user=jake
 ```
