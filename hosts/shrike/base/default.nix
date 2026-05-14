@@ -45,8 +45,6 @@ in
   security.pki.certificateFiles = [ ../../../ca.crt ];
 
   environment.systemPackages = [
-    pkgs.duf
-    pkgs.python3
     pkgs.vscode
     pkgs.gparted
   ];
