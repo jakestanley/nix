@@ -22,10 +22,10 @@
   # boot.kernelParams = [ "resume_offset=<value>" ];
 
   # Suspend to RAM first; hibernate after 30 minutes of inactivity.
-  systemd.sleep.extraConfig = ''
-    HibernateDelaySec=30m
-    SuspendEstimationSec=30m
-  '';
+  systemd.sleep.settings.Sleep = {
+    HibernateDelaySec = "30m";
+    SuspendEstimationSec = "30m";
+  };
 
   powerManagement.enable = true;
 
