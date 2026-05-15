@@ -14,7 +14,7 @@
     # One-time enrolment required on the machine after first deploy:
     #   systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=0+7 \
     #     /dev/disk/by-uuid/817ea6d0-01f1-4e25-907d-bba18fd4988d
-    crypttabExtraOptions = [ "tpm2-device=auto" ];
+    crypttabExtraOpts = [ "tpm2-device=auto" ];
   };
 
   fileSystems."/home/work" = {
