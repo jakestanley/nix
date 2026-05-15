@@ -71,6 +71,7 @@ in
     ethtool
     fastfetch
     efibootmgr
+    sbctl
     dig
     ncdu
   ];
