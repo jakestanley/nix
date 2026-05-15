@@ -13,6 +13,7 @@ in
     ./encryption.nix
     ./hibernate.nix
     ./desktop.nix
+    ./hardening.nix
   ];
 
   boot.loader.systemd-boot.enable = lib.mkForce false;
