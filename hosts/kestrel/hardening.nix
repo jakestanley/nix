@@ -12,7 +12,7 @@
   # that holds VPN credentials and SSH keys.
   services.openssh.settings = {
     # Restrict logins to the named account only.
-    AllowUsers = "jake";
+    AllowUsers = [ "jake" ];
     # Disable TCP tunnelling through kestrel (reduces lateral-movement risk).
     # Re-enable per-connection with `ssh -L` / `ssh -R` flags if needed.
     AllowTcpForwarding = "no";
