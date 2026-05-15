@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
   # ── Firewall ──────────────────────────────────────────────────────────────
@@ -28,9 +28,10 @@
   };
 
   # Warning banner shown to clients before authentication.
-  services.openssh.settings.Banner = toString (pkgs.writeText "sshd-banner" ''
+  environment.etc."ssh/banner".text = ''
     Authorized access only. All activity is logged and audited.
-  '');
+  '';
+  services.openssh.settings.Banner = "/etc/ssh/banner";
 
   # ── Kernel sysctl hardening ───────────────────────────────────────────────
   boot.kernel.sysctl = {
