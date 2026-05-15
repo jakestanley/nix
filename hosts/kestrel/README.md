@@ -19,7 +19,16 @@ home-manager switch --flake .#jake@kestrel
 
 ### Home directory encryption (LUKS)
 
-`/home/work` is on a LUKS-encrypted partition. The passphrase is prompted at boot by the initrd. No manual setup is required after first deploy.
+`/home/work` is on a LUKS-encrypted partition (UUID `817ea6d0-01f1-4e25-907d-bba18fd4988d`). The passphrase is prompted at boot by the initrd.
+
+A TPM2 keyslot can be enrolled to unlock automatically at boot without a passphrase prompt (tied to PCRs 0+7 — firmware integrity and Secure Boot state). To enrol:
+
+```sh
+sudo systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=0+7 \
+  /dev/disk/by-uuid/817ea6d0-01f1-4e25-907d-bba18fd4988d
+```
+
+The passphrase keyslot is preserved as a fallback. Re-enrolment is required after a UEFI firmware update (PCR 0 changes) or Secure Boot key rotation (PCR 7 changes).
 
 To reformat or re-encrypt (e.g. after reinstall), boot into shrike and run:
 

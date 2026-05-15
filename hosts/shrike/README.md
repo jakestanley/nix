@@ -11,6 +11,33 @@ After a fresh `nixos-install`, run these steps before considering the system rea
    home-manager switch --flake .#jake@shrike
    ```
 
+### Secure Boot
+
+Both shrike and kestrel use Lanzaboote. Signing keys live at `/var/lib/sbctl` on the shared root partition and are lost if the root partition is reformatted.
+
+To recover after a reinstall:
+
+1. Enter UEFI Setup Mode in the BIOS (clear all Secure Boot keys)
+2. Generate new keys:
+   ```sh
+   sudo sbctl create-keys
+   ```
+3. Rebuild both hosts:
+   ```sh
+   sudo nixos-rebuild switch --flake .#shrike
+   sudo nixos-rebuild boot --flake .#kestrel
+   ```
+4. Verify all entries are signed:
+   ```sh
+   sudo sbctl verify
+   ```
+5. Enrol keys into firmware (includes Microsoft keys for Windows):
+   ```sh
+   sudo sbctl enroll-keys --microsoft
+   ```
+6. In ASUS BIOS: set **OS Type → Windows UEFI Mode** and confirm Secure Boot is enabled
+7. Reboot — shrike, kestrel, and Windows should all boot
+
 ### Filesystems
 
 ```sh
