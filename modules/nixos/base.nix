@@ -63,7 +63,11 @@ in
     git
     htop
     screen
+    tmux
     ripgrep
+    curl
+    duf
+    python3
     ethtool
     fastfetch
     efibootmgr

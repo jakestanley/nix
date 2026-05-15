@@ -80,13 +80,10 @@
         ];
       };
 
-      shrikeProfile = "desktop";
-
       mkNixosHost = hostname: nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = {
           inherit inputs;
-          profile = shrikeProfile;
         };
         modules = [
           { nixpkgs.overlays = [ overlay ]; }
@@ -104,7 +101,9 @@
             inherit system;
             overlays = [ overlay ];
           };
-        in {
+        in
+        # sleep-on-lan is Linux-only
+        lib.optionalAttrs (lib.hasSuffix "-linux" system) {
           default = pkgs.sleep-on-lan;
           inherit (pkgs) sleep-on-lan;
         }
@@ -131,8 +130,9 @@
       homeConfigurations.adler = mkLinuxHome "adler" "x86_64-linux";
 
       nixosConfigurations = {
-        shrike = mkNixosHost "shrike";
-        adler = mkNixosHost "adler";
+        shrike      = mkNixosHost "shrike";
+        kestrel     = mkNixosHost "kestrel";
+        adler       = mkNixosHost "adler";
       };
 
       checks.x86_64-linux = {

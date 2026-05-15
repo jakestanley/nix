@@ -2,6 +2,15 @@
 
 ## Manual steps
 
+### First boot after reinstall
+
+After a fresh `nixos-install`, run these steps before considering the system ready:
+
+1. **Activate home-manager** as the user:
+   ```sh
+   home-manager switch --flake .#jake@shrike
+   ```
+
 ### Filesystems
 
 ```sh
@@ -16,7 +25,7 @@ Steam Settings -> Interface -> Enable GPU accelerated rendering in web views
 
 ## Display sync
 
-Shrike runs a `systemd --user` `display-sync` service in the desktop profile that disables any `HDMI-*` outputs when any enabled `DP-*` output is present, and re-enables `HDMI-*` outputs when no `DP-*` output is enabled.
+Shrike runs a `systemd --user` `display-sync` service that disables any `HDMI-*` outputs when any `DP-*` output is enabled, and re-enables `HDMI-*` outputs when no `DP-*` output is enabled.
 
 - `kscreen-doctor` is installed via `pkgs.kdePackages.libkscreen`.
 - PowerDevil suspend settings are managed via a literal `powerdevilrc` file in Home Manager because Plasma Manager escaped nested section names incorrectly for this setup.
@@ -32,45 +41,9 @@ kscreen-doctor -o
 
 If your user is not UID `1000`, substitute the correct UID in the paths above. If `wayland-0` does not exist, check available sockets with `ls /run/user/1000/wayland-*`.
 
-## Profiles
+## Booting
 
-The active boot profile is set via `shrikeProfile` in `flake.nix`, which is the canonical source of truth for the current default. Three profiles are always available as specialisations in the boot menu regardless of the default.
-
-| Feature                      | tenfoot  | desktop | gaming |
-|------------------------------|:--------:|:-------:|:------:|
-| Plasma                       | ✓        | ✓       | ✓      |
-| Sunshine                     | manual   | ✓       |        |
-| Docker                       | ✓        | ✓       |        |
-| display-sync                 |          | ✓       |        |
-| Steam autostart              | ✓        | ✓       | ✓      |
-
-These conditions are evaluated at build time via `activeProfile` in `hosts/shrike/conditionals/`. Changing the default profile in `flake.nix` does not affect the specialisations.
-
-### desktop / gaming
-
-Sleep and wake work correctly. Big Picture mode and the virtual keyboard work when connected to the TV.
-
-**Caveat:** Plasma's RemoteDesktop security setting must be disabled for the Steam Big Picture virtual keyboard to function. This permission is session-scoped and cannot be persisted across boots via policy.
-
-### tenfoot
-
-Runs Plasma with Steam autolaunching directly into Big Picture mode. Retains Plasma's sleep/wake and display handling while keeping a minimal environment with no desktop applications.
-
-**Note:** Sunshine is installed but does not autostart. Start it manually for remote debugging: `systemctl --user start sunshine`.
-
-### Booting into a specialisation remotely
-
-List available entries (note the generation number changes after each rebuild):
-
-```sh
-sudo bootctl list | grep -E " id:"
-```
-
-Reboot into a specific entry — the full `.conf` filename is required:
-
-```sh
-systemctl reboot --boot-loader-entry=nixos-generation-180-specialisation-desktop.conf
-```
+Shrike and kestrel share `/boot`. See the root README for deployment order and boot entry selection.
 
 ## Troubleshooting
 

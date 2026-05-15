@@ -1,16 +1,28 @@
-{ pkgs, lib, activeProfile, ... }:
+{ pkgs, lib, ... }:
 
 let
   publicKeys = (import ../../../modules/nixos/identities.nix {}).publicKeys;
 in
 {
-  imports = [ ./docker.nix ];
+  imports = [
+    ./docker.nix
+    ./desktop.nix
+    ./greetd.nix
+    ./plasma.nix
+    ../../../modules/nixos/nvidia.nix
+    ./gaming.nix
+    ./sleep-on-lan.nix
+    ./reboot-to-windows.nix
+  ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.consoleMode = "max";
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  # Prevent shrike from resuming kestrel's hibernation image on shared hardware.
+  boot.kernelParams = [ "noresume" ];
 
   networking.hostName = "shrike";
+  system.nixos.tags = [ "shrike" ];
 
   users.users.jake.openssh.authorizedKeys.keys = [
     publicKeys.turing
@@ -35,9 +47,6 @@ in
   security.pki.certificateFiles = [ ../../../ca.crt ];
 
   environment.systemPackages = [
-    pkgs.duf
-    pkgs.python3
-  ] ++ pkgs.lib.optionals (activeProfile != "tenfoot") [
     pkgs.vscode
     pkgs.gparted
   ];

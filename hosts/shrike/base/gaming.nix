@@ -82,8 +82,8 @@ in
   # xbox controller driver?
   hardware.xpadneo.enable = true;
 
-  environment.systemPackages = [ 
-    pkgs.mangohud 
+  environment.systemPackages = [
+    pkgs.mangohud
     # some actual games
     pkgs.dsda-doom
     pkgs.dsda-launcher
@@ -92,6 +92,16 @@ in
 
   users.groups.jake = { };
   users.users.jake.extraGroups = [ "jake" "gamemode" ];
+
+  systemd.user.services.steam-autostart = {
+    enable = true;
+    description = "Start Steam when the graphical session starts";
+    after = [ "graphical-session.target" ];
+    partOf = [ "graphical-session.target" ];
+    wantedBy = [ "graphical-session.target" ];
+    serviceConfig.Environment = "PATH=/run/current-system/sw/bin:/usr/bin:/bin";
+    serviceConfig.ExecStart = "${pkgs.steam}/bin/steam -silent";
+  };
 
   systemd.tmpfiles.settings."10-gaming" = {
     "/home/jake/.steam".d = {
