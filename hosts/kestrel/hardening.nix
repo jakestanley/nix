@@ -28,9 +28,9 @@
   };
 
   # Warning banner shown to clients before authentication.
-  services.openssh.settings.Banner = pkgs.writeText "sshd-banner" ''
+  services.openssh.settings.Banner = toString (pkgs.writeText "sshd-banner" ''
     Authorized access only. All activity is logged and audited.
-  '';
+  '');
 
   # ── Kernel sysctl hardening ───────────────────────────────────────────────
   boot.kernel.sysctl = {
