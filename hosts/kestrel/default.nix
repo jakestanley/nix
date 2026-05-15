@@ -1,10 +1,11 @@
-{ pkgs, ... }:
+{ inputs, pkgs, lib, ... }:
 
 let
   publicKeys = (import ../../modules/nixos/identities.nix { }).publicKeys;
 in
 {
   imports = [
+    inputs.lanzaboote.nixosModules.lanzaboote
     ./hardware-configuration.nix
     ../../modules/nixos/base.nix
     ../../modules/nixos/ssh.nix
@@ -14,9 +15,12 @@ in
     ./desktop.nix
   ];
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.systemd-boot.consoleMode = "max";
+  boot.loader.systemd-boot.enable = lib.mkForce false;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.lanzaboote = {
+    enable = true;
+    pkiBundle = "/var/lib/sbctl";
+  };
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   networking.hostName = "kestrel";

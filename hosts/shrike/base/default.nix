@@ -1,10 +1,11 @@
-{ pkgs, lib, ... }:
+{ inputs, pkgs, lib, ... }:
 
 let
   publicKeys = (import ../../../modules/nixos/identities.nix {}).publicKeys;
 in
 {
   imports = [
+    inputs.lanzaboote.nixosModules.lanzaboote
     ./docker.nix
     ./desktop.nix
     ./greetd.nix
@@ -14,9 +15,12 @@ in
     ./sleep-on-lan.nix
     ./reboot-to-windows.nix
   ];
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.systemd-boot.consoleMode = "max";
+  boot.loader.systemd-boot.enable = lib.mkForce false;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.lanzaboote = {
+    enable = true;
+    pkiBundle = "/var/lib/sbctl";
+  };
   boot.kernelPackages = pkgs.linuxPackages_latest;
   # Prevent shrike from resuming kestrel's hibernation image on shared hardware.
   boot.kernelParams = [ "noresume" ];

@@ -17,6 +17,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v0.4.2";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     cherri = {
       url = "github:electrikmilk/cherri/2ca7dfea38ef852484866ad41b232584d8e62f0c";
       inputs.nixpkgs.follows = "nixpkgs";
