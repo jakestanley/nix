@@ -61,6 +61,10 @@ in
       google-chrome
       jetbrains.idea
       nodejs
+      obsidian
+      vscodium
+      teams
+      aws-workspaces
     ];
   };
 
