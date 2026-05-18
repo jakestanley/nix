@@ -29,6 +29,11 @@ in
   networking.hostName = "kestrel";
   networking.networkmanager.plugins = [ pkgs.networkmanager-openconnect ];
 
+  programs.gnupg.agent = {
+    enable = true;
+    pinentryPackage = pkgs.pinentry-qt;
+  };
+
   home-manager.sharedModules = [
     inputs.plasma-manager.homeModules.plasma-manager
   ];
