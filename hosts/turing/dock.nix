@@ -29,26 +29,17 @@ in
       { app = "/System/Applications/Calendar.app"; }
       { app = "/Applications/1Password.app"; }
       { app = "/Applications/Nix Apps/Firefox.app"; }
-      { app = "/Applications/Nix Apps/Google Chrome.app"; }
       { app = "/Applications/Spotify.app"; }
       { app = "/Applications/WhatsApp.app"; }
       { app = "/Applications/Nix Apps/Telegram.app"; }
-      { app = "/System/Applications/Messages.app"; }
       { app = "/System/Applications/Mail.app"; }
-      { app = "/Applications/WorkSpaces.app"; }
       { app = "/Applications/Numbers Creator Studio.app"; }
       { app = "/Applications/Obsidian.app"; }
       { app = "/Applications/Nix Apps/Visual Studio Code.app"; }
       { app = "/Applications/Claude.app"; }
       { app = "/Applications/Ableton Live 11 Standard.app"; }
-      { app = "/Applications/Mixed In Key 11.app"; }
-      { app = "/Applications/Guitar Pro 8.app"; }
-      { app = "/Applications/Flight Deck.app"; }
-      { app = "/System/Applications/Music.app"; }
-      { app = "/Applications/Nix Apps/Discord.app"; }
       { app = "/System/Applications/iPhone Mirroring.app"; }
       { app = "/System/Applications/Utilities/Terminal.app"; }
-      { app = "/System/Applications/Utilities/Activity Monitor.app"; }
       { app = "/System/Applications/System Settings.app"; }
     ];
 
