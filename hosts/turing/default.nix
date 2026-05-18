@@ -47,7 +47,7 @@
     # pkgs.prismlauncher (broken on mac)
     pkgs.telegram-desktop
     # pkgs.spotify (broken on mac?)
-    pkgs.vscodium
+    pkgs.vscode
     pkgs.discord
     # mac only (in case i merge later)
     pkgs.zoom-us
