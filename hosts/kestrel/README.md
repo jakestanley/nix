@@ -57,6 +57,24 @@ boot.kernelParams = [ "resume_offset=<value>" ];
 Then redeploy.
 
 
+## VPN (corporate SSO)
+
+1. Open **System Settings → Connections → Add → VPN → Cisco AnyConnect Compatible VPN (openconnect)**
+2. Set **Protocol** to `Cisco AnyConnect`
+3. Set **Gateway** to the VPN hostname (no `https://`)
+4. Connect — a browser window will open for SSO authentication
+5. If the browser window doesn't appear, reboot and retry
+
+## GPG and KWallet
+
+Generate a GPG key before configuring KWallet, otherwise KWallet will report no suitable encryption keys:
+
+```sh
+gpg --full-generate-key
+```
+
+Then open KWallet Manager, create a new wallet, and select the GPG key for encryption.
+
 ## Switching to shrike
 
 Run `switch-to-gaming` from a terminal. This sets shrike as the one-shot boot entry and reboots.
