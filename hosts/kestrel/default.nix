@@ -12,7 +12,8 @@ in
     ../../modules/nixos/home-manager.nix
     ./encryption.nix
     ./hibernate.nix
-    ./desktop.nix
+    ./wm/plasma.nix
+    ./wm/greetd.nix
     ./hardening.nix
   ];
 

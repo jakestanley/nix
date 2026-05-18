@@ -1,24 +1,49 @@
-{ ... }:
+{ config, lib, inputs, pkgs, ... }:
+
+let
+  qfont = import "${inputs.plasma-manager}/lib/qfont.nix" { inherit lib; };
+  konsoleUbuntuMono = qfont.fontToString {
+    family = "Ubuntu Mono";
+    pointSize = 11;
+    styleHint = "monospace";
+    fixedPitch = true;
+    styleStrategy.antialiasing = "disable";
+  };
+  konsoleProfileName = "Kestrel";
+in
 
 {
-  imports = [ ../common/wm.nix ];
+  home.activation.removeLegacyPlasmaSymlinks = lib.hm.dag.entryBefore [ "writeBoundary" ] ''
+    for file in \
+      "${config.xdg.configHome}/kscreenlockerrc" \
+      "${config.xdg.configHome}/powerdevilrc"
+    do
+      if [ -L "$file" ]; then
+        $DRY_RUN_CMD rm $VERBOSE_ARG "$file"
+      fi
+    done
+  '';
 
   home.homeDirectory = "/home/work";
 
-  wayland.windowManager.sway.config.output = {
-    "DP-1" = { mode = "2560x1440@144Hz"; pos = "0 0"; };
-    # Centre-aligned to DP-1: (1440-1200)/2 = 120
-    "DP-4"  = { pos = "2560 120"; };
+  programs.plasma = {
+    enable = true;
+    session.sessionRestore.restoreOpenApplicationsOnLogin = "startWithEmptySession";
+    workspace.colorScheme = "BreezeDark";
+    configFile = {
+      "kscreenlockerrc"."Daemon"."Autolock" = false;
+      "kscreenlockerrc"."Daemon"."LockOnResume" = false;
+      "konsolerc"."Desktop Entry"."DefaultProfile" = "${konsoleProfileName}.profile";
+    };
   };
 
-  # Dummy plug — disable so it doesn't consume a workspace
-  wayland.windowManager.sway.extraConfig = ''
-    output "HDMI-A-1" disable
-  '';
-
-  # home-manager-jake.service runs at boot before LUKS mounts /home/work.
-  # Restart it now that the session is live and the directory is accessible.
-  wayland.windowManager.sway.config.startup = [
-    { command = "systemctl restart home-manager-jake.service"; }
-  ];
+  xdg.dataFile."konsole/${konsoleProfileName}.profile".text = lib.generators.toINI { } {
+    General = {
+      Name = konsoleProfileName;
+      Parent = "FALLBACK/";
+    };
+    Appearance = {
+      Font = konsoleUbuntuMono;
+    };
+  };
 }
