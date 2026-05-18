@@ -42,6 +42,7 @@ in
     openssh.authorizedKeys.keys = [
       publicKeys.turing
     ];
+    packages = [ pkgs.openconnect-sso ];
   };
 
   system.stateVersion = "26.05";
