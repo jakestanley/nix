@@ -64,7 +64,7 @@ in
       obsidian
       vscodium
       teams-for-linux
-      aws-workspaces
+      # aws-workspaces
     ];
   };
 
