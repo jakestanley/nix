@@ -29,7 +29,6 @@
       url = "git+ssh://git@github.com/jakestanley/homelab-infra";
       flake = false;
     };
-    openconnect-sso.url = "github:vlaci/openconnect-sso";
   };
 
   outputs = inputs@{ nixpkgs, ... }:
