@@ -29,6 +29,8 @@ in
   networking.hostName = "kestrel";
   networking.networkmanager.plugins = [ pkgs.networkmanager-openconnect ];
 
+  programs.firefox.enable = true;
+
   programs.gnupg.agent = {
     enable = true;
     pinentryPackage = pkgs.pinentry-qt;
