@@ -3,6 +3,8 @@
 lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
   home.homeDirectory = lib.mkDefault "/home/jake";
 
+  home.packages = [ pkgs.spotify ];
+
   programs.git.settings = {
     diff.tool = "meld";
     difftool.prompt = false;

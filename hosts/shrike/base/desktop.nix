@@ -39,7 +39,6 @@ in
   ];
 
   environment.systemPackages = with pkgs; [
-    spotify
     kdePackages.kdialog
     displaySync
     kdePackages.libkscreen
