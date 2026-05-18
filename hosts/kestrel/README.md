@@ -62,7 +62,7 @@ Then redeploy.
 Some packages are not in nixpkgs and must be installed manually:
 
 ```sh
-pipx install openconnect-sso
+nix-env -if https://github.com/vlaci/openconnect-sso/archive/master.tar.gz
 ```
 
 ## Switching to shrike
