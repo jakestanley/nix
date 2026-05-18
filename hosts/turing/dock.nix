@@ -23,7 +23,7 @@ let
   dockCommonAppsHead = [
     { app = "/System/Applications/Calendar.app"; }
     { app = "/Applications/1Password.app"; }
-    { app = "/Applications/Safari.app"; }
+    { app = "/Applications/Nix Apps/Firefox.app"; }
     { app = "/Applications/Spotify.app"; }
     { app = "/Applications/WhatsApp.app"; }
   ];
