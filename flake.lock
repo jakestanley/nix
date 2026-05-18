@@ -71,6 +71,21 @@
         "type": "github"
       }
     },
+    "flake-utils_2": {
+      "locked": {
+        "lastModified": 1622445595,
+        "narHash": "sha256-m+JRe6Wc5OZ/mKw2bB3+Tl0ZbtyxxxfnAWln8Q5qs+Y=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "7d706970d94bc5559077eb1a6600afddcd25a7c8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "gitignore": {
       "inputs": {
         "nixpkgs": [
@@ -188,6 +203,27 @@
         "type": "github"
       }
     },
+    "openconnect-sso": {
+      "inputs": {
+        "flake-utils": "flake-utils_2",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1692692901,
+        "narHash": "sha256-JFVvTw11KFnrd/A5z3QCh30ac9MZG+ojDY3udAFpmCE=",
+        "owner": "vlaci",
+        "repo": "openconnect-sso",
+        "rev": "94128073ef49acb3bad84a2ae19fdef926ab7bdf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "vlaci",
+        "repo": "openconnect-sso",
+        "type": "github"
+      }
+    },
     "plasma-manager": {
       "inputs": {
         "home-manager": [
@@ -242,6 +278,7 @@
         "lanzaboote": "lanzaboote",
         "nix-darwin": "nix-darwin",
         "nixpkgs": "nixpkgs",
+        "openconnect-sso": "openconnect-sso",
         "plasma-manager": "plasma-manager"
       }
     },
