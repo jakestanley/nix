@@ -63,7 +63,7 @@ in
       nodejs
       obsidian
       vscodium
-      teams
+      teams-for-linux
       aws-workspaces
     ];
   };
