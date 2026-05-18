@@ -43,7 +43,7 @@ in
       publicKeys.turing
     ];
     packages = with pkgs; [
-      inputs.openconnect-sso.packages.${pkgs.system}.openconnect-sso
+      inputs.openconnect-sso.packages.x86_64-linux.openconnect-sso
       awscli2
     ];
   };
