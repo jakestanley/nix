@@ -31,6 +31,12 @@ in
 
   programs.firefox.enable = true;
 
+  programs._1password.enable = true;
+  programs._1password-gui = {
+    enable = true;
+    polkitPolicyOwners = [ "jake" ];
+  };
+
   programs.gnupg.agent = {
     enable = true;
     pinentryPackage = pkgs.pinentry-qt;
