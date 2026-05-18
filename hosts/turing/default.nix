@@ -38,6 +38,7 @@
     pkgs.htop
     pkgs.ollama
     pkgs.keyfinder-cli
+    pkgs.mpv
     # non-graphical, work only
     pkgs.redis
     # graphical. expand "platforms" when searching here: https://search.nixos.org/packages?channel=25.11
