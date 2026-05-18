@@ -57,6 +57,14 @@ boot.kernelParams = [ "resume_offset=<value>" ];
 Then redeploy.
 
 
+## Java development
+
+Use `nix shell` to drop into a shell with a specific JDK on PATH:
+
+```sh
+nix shell nixpkgs#jdk21   # or jdk17, jdk11, etc.
+```
+
 ## VPN (corporate SSO)
 
 1. Open **System Settings → Connections → Add → VPN → Cisco AnyConnect Compatible VPN (openconnect)**
