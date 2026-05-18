@@ -16,7 +16,6 @@ sudo systemctl stop plexmediaserver
 
 echo "Stopped docker and plex. Beginning backup"
 
-MAX_BACKUPS=60
 BACKUP_TARGET_HOME=/home/jake
 BACKUP_DEST="$BACKUP_TARGET_HOME/Dropbox/backups/adler"
 TIMESTAMP=$(date +%F_%H-%M)
@@ -54,9 +53,42 @@ sudo tar -czf "$BACKUP_FILE" \
     /etc/homelab/certs \
     /var/lib/plexmediaserver
 
-# keep last $MAX_BACKUPS backups
-# shellcheck disable=SC2012
-ls -t "$BACKUP_DEST"/adler-*.tar.gz | tail -n +$((MAX_BACKUPS + 1)) | xargs -r rm
+# Tiered retention: daily for 7d, weekly for 8w, monthly for 6m
+prune_backups() {
+    local dir="$1"
+    declare -A keep seen_day seen_week seen_month
+    local today
+    today=$(date +%s)
+
+    while IFS= read -r file; do
+        local name
+        name=$(basename "$file")
+        local date_str="${name:6:10}"  # adler-YYYY-MM-DD_…
+        local file_ts
+        file_ts=$(date -d "$date_str" +%s 2>/dev/null) || continue
+        local age=$(( today - file_ts ))
+        local week_key
+        week_key=$(date -d "$date_str" +%G-%V)
+        local month_key="${date_str:0:7}"
+
+        if   (( age <=   7 * 86400 )) && [[ -z ${seen_day[$date_str]+x}    ]]; then
+            seen_day[$date_str]=1;  keep[$file]=1
+        elif (( age <=  56 * 86400 )) && [[ -z ${seen_week[$week_key]+x}   ]]; then
+            seen_week[$week_key]=1; keep[$file]=1
+        elif (( age <= 180 * 86400 )) && [[ -z ${seen_month[$month_key]+x} ]]; then
+            seen_month[$month_key]=1; keep[$file]=1
+        fi
+    done < <(ls -t "$dir"/adler-*.tar.gz 2>/dev/null)
+
+    while IFS= read -r file; do
+        if [[ -z ${keep[$file]+x} ]]; then
+            echo "Pruning: $file"
+            rm "$file"
+        fi
+    done < <(ls "$dir"/adler-*.tar.gz 2>/dev/null)
+}
+
+prune_backups "$BACKUP_DEST"
 
 sudo chown jake:jake "$BACKUP_FILE"
 echo "Backup complete: $BACKUP_FILE"
