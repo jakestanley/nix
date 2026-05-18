@@ -203,12 +203,23 @@
         "type": "github"
       }
     },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1622282707,
+        "narHash": "sha256-+GOrUDsdneUqrOm9d+9bHXjEVoVcU8tm14WGVzbt6gg=",
+        "path": "/nix/store/9za793c35j4rnawwf2n2wpbwwnah1rq9-source",
+        "rev": "6933d068c5d2fcff398e802f7c4e271bbdab6705",
+        "type": "path"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
     "openconnect-sso": {
       "inputs": {
         "flake-utils": "flake-utils_2",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
+        "nixpkgs": "nixpkgs_2"
       },
       "locked": {
         "lastModified": 1692692901,

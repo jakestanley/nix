@@ -29,10 +29,7 @@
       url = "git+ssh://git@github.com/jakestanley/homelab-infra";
       flake = false;
     };
-    openconnect-sso = {
-      url = "github:vlaci/openconnect-sso";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    openconnect-sso.url = "github:vlaci/openconnect-sso";
   };
 
   outputs = inputs@{ nixpkgs, ... }:
