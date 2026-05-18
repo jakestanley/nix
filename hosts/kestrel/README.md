@@ -59,6 +59,8 @@ Then redeploy.
 
 ## Java development
 
+Default installed JDK is 21.
+
 Use `nix shell` to drop into a shell with a specific JDK on PATH:
 
 ```sh

@@ -26,6 +26,11 @@ in
 
   home.homeDirectory = "/home/work";
 
+  programs.java = {
+    enable = true;
+    package = pkgs.jdk21;
+  };
+
   programs.plasma = {
     enable = true;
     session.sessionRestore.restoreOpenApplicationsOnLogin = "startWithEmptySession";
