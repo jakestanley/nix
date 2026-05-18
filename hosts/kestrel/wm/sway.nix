@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../../modules/nixos/nvidia.nix
+    ../../../modules/nixos/nvidia.nix
   ];
 
   programs.sway = {

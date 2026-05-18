@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../../modules/nixos/nvidia.nix
+    ../../../modules/nixos/nvidia.nix
   ];
 
   services.desktopManager.plasma6.enable = true;
