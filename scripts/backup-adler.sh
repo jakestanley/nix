@@ -36,7 +36,8 @@ sudo tar -czf "$BACKUP_FILE" \
     --exclude="$BACKUP_TARGET_HOME/.dropbox-dist" \
     --exclude="$BACKUP_TARGET_HOME/.vscode-server" \
     --exclude="$BACKUP_TARGET_HOME/.cargo" \
-    --exclude="$BACKUP_TARGET_HOME/node_modules" \
+    --exclude="*/node_modules" \
+    --exclude="*.mp4" \
     --exclude="$BACKUP_TARGET_HOME/Downloads" \
     --exclude="$BACKUP_TARGET_HOME/Dropbox" \
     --exclude="$BACKUP_TARGET_HOME/.local/share/Steam" \
