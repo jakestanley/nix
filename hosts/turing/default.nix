@@ -52,6 +52,7 @@
     pkgs.zoom-us
     # pkgs.blender (currently broken)
     pkgs.cyberduck
+    pkgs.claude-code
     pkgs.chatgpt
     pkgs.postman
     # pkgs.teams (login problems)
