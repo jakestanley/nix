@@ -27,6 +27,7 @@ in
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   networking.hostName = "kestrel";
+  networking.networkmanager.plugins = [ pkgs.networkmanager-openconnect ];
 
   home-manager.sharedModules = [
     inputs.plasma-manager.homeModules.plasma-manager
@@ -42,7 +43,7 @@ in
     openssh.authorizedKeys.keys = [
       publicKeys.turing
     ];
-    packages = with pkgs; [ awscli2 openconnect ];
+    packages = with pkgs; [ awscli2 ];
   };
 
   system.stateVersion = "26.05";

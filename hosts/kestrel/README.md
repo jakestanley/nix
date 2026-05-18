@@ -57,14 +57,6 @@ boot.kernelParams = [ "resume_offset=<value>" ];
 Then redeploy.
 
 
-## Manual post-deploy installs
-
-Some packages are not in nixpkgs and must be installed manually:
-
-```sh
-nix-env -if https://github.com/vlaci/openconnect-sso/archive/master.tar.gz
-```
-
 ## Switching to shrike
 
 Run `switch-to-gaming` from a terminal. This sets shrike as the one-shot boot entry and reboots.
