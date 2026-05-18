@@ -59,7 +59,7 @@ in
     packages = with pkgs; [
       awscli2
       google-chrome
-      jetbrains.idea-ultimate
+      jetbrains.idea
       nodejs
     ];
   };
