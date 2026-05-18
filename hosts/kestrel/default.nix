@@ -28,6 +28,10 @@ in
 
   networking.hostName = "kestrel";
 
+  home-manager.sharedModules = [
+    inputs.plasma-manager.homeModules.plasma-manager
+  ];
+
   home-manager.extraSpecialArgs = {
     hostname = "kestrel";
   };
