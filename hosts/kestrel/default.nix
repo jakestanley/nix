@@ -42,7 +42,10 @@ in
     openssh.authorizedKeys.keys = [
       publicKeys.turing
     ];
-    packages = with pkgs; [ openconnect awscli2 ];
+    packages = with pkgs; [
+      inputs.openconnect-sso.packages.${pkgs.system}.openconnect-sso
+      awscli2
+    ];
   };
 
   system.stateVersion = "26.05";
