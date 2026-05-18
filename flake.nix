@@ -46,31 +46,6 @@
         sleep-on-lan = final.callPackage ./pkgs/sleep-on-lan { };
       };
 
-      mkTuringDarwin = dockProfile: inputs.nix-darwin.lib.darwinSystem {
-        system = "aarch64-darwin";
-        specialArgs = {
-          inherit inputs;
-          inherit dockProfile;
-        };
-        modules = [
-          { nixpkgs.overlays = [ overlay ]; }
-          ./hosts/turing/default.nix
-          inputs.home-manager.darwinModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              backupFileExtension = "hm-backup";
-              extraSpecialArgs = {
-                inherit inputs;
-                hostname = "turing";
-              };
-              users.jake = import ./home/jake/home.nix;
-            };
-          }
-        ];
-      };
-
       mkLinuxHome = hostname: system: inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {
           inherit system;
@@ -115,9 +90,27 @@
           darwin-rebuild = inputs.nix-darwin.packages.${system}.darwin-rebuild;
         });
 
-      darwinConfigurations.turing = mkTuringDarwin "personal";
-      darwinConfigurations.turing-personal = mkTuringDarwin "personal";
-      darwinConfigurations.turing-work = mkTuringDarwin "work";
+      darwinConfigurations.turing = inputs.nix-darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        specialArgs = { inherit inputs; };
+        modules = [
+          { nixpkgs.overlays = [ overlay ]; }
+          ./hosts/turing/default.nix
+          inputs.home-manager.darwinModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              backupFileExtension = "hm-backup";
+              extraSpecialArgs = {
+                inherit inputs;
+                hostname = "turing";
+              };
+              users.jake = import ./home/jake/home.nix;
+            };
+          }
+        ];
+      };
 
       homeConfigurations.turing = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {

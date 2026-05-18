@@ -1,6 +1,13 @@
-{ lib, ... }:
+{ lib, config, ... }:
 
 {
+  home.file = {
+    "Desktop/Dock Folders/Work/Microsoft Teams.app".source =
+      config.lib.file.mkOutOfStoreSymlink "/Applications/Microsoft Teams.app";
+    "Desktop/Dock Folders/Work/Microsoft Outlook.app".source =
+      config.lib.file.mkOutOfStoreSymlink "/Applications/Microsoft Outlook.app";
+  };
+
   home.sessionPath = [
     "/opt/homebrew/bin"
     "/opt/homebrew/sbin"
