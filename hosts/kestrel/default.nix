@@ -50,7 +50,12 @@ in
     openssh.authorizedKeys.keys = [
       publicKeys.turing
     ];
-    packages = with pkgs; [ awscli2 ];
+    packages = with pkgs; [
+      awscli2
+      google-chrome
+      jetbrains.idea-ultimate
+      nodejs
+    ];
   };
 
   system.stateVersion = "26.05";
