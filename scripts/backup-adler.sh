@@ -27,6 +27,7 @@ sudo tar -czf "$BACKUP_FILE" \
     --warning=no-file-ignored \
     --exclude="$BACKUP_TARGET_HOME/.cache" \
     --exclude="$BACKUP_TARGET_HOME/.local/share/Trash" \
+    --exclude="$BACKUP_TARGET_HOME/.local/lib" \
     --exclude="$BACKUP_TARGET_HOME/.local/pipx" \
     --exclude="$BACKUP_TARGET_HOME/.npm" \
     --exclude="$BACKUP_TARGET_HOME/.nvm" \
