@@ -44,6 +44,8 @@
   };
 
   home.sessionPath = [
+    "/opt/local/bin"
+    "/opt/local/sbin"
     "/opt/homebrew/bin"
     "/opt/homebrew/sbin"
     "$HOME/bin"
