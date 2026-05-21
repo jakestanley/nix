@@ -100,7 +100,7 @@ in
     partOf = [ "graphical-session.target" ];
     wantedBy = [ "graphical-session.target" ];
     serviceConfig.Environment = "PATH=/run/current-system/sw/bin:/usr/bin:/bin";
-    serviceConfig.ExecStart = "${pkgs.steam}/bin/steam -silent";
+    serviceConfig.ExecStart = "${pkgs.steam}/bin/steam -silent -pipewire";
   };
 
   systemd.tmpfiles.settings."10-gaming" = {
