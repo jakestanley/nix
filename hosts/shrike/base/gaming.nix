@@ -88,7 +88,7 @@ in
     pkgs.dsda-doom
     pkgs.dsda-launcher
     pkgs.prismlauncher
-    pkgs._2ship2harkinian
+    pkgs.shipwright
   ];
 
   users.groups.jake = { };
