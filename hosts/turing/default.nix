@@ -30,7 +30,7 @@
     pkgs.wireguard-tools
     pkgs.bash
     pkgs.readline
-    pkgs.awscli
+    # pkgs.awscli (not latest with aws sso login)
     pkgs.pipx
     pkgs.ffmpeg
     pkgs.id3v2
@@ -47,8 +47,8 @@
     # pkgs.prismlauncher (broken on mac)
     pkgs.telegram-desktop
     # pkgs.spotify (broken on mac?)
-    pkgs.vscode
-    pkgs.discord
+    # pkgs.vscode (broken on mac? constantly spams bloody install helpers)
+    # pkgs.discord (broken on mac? constantly spams bloody install helpers)
     # mac only (in case i merge later)
     pkgs.zoom-us
     # pkgs.blender (currently broken)

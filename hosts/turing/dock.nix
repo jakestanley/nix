@@ -35,7 +35,7 @@ in
       { app = "/System/Applications/Mail.app"; }
       { app = "/Applications/Numbers Creator Studio.app"; }
       { app = "/Applications/Obsidian.app"; }
-      { app = "/Applications/Nix Apps/Visual Studio Code.app"; }
+      { app = "/Applications/Visual Studio Code.app"; }
       { app = "/Applications/Claude.app"; }
       { app = "/Applications/Ableton Live 11 Standard.app"; }
       { app = "/System/Applications/iPhone Mirroring.app"; }
