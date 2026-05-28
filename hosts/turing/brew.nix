@@ -43,6 +43,7 @@
       "amazon-workspaces"
       "visual-studio-code"
       "obsidian"
+      "obs"
       "ableton-live-standard@11"
       "mixed-in-key"
       "font-ubuntu-mono-nerd-font"
