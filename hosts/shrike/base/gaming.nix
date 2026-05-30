@@ -60,6 +60,7 @@ in
     localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
 
     package = pkgs.steam.override {
+      extraArgs = "-pipewire";
       extraEnv = {
         MANGOHUD= "1";
         # run mangohud but don't display initially, i.e you're streaming to a 10foot
