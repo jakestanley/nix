@@ -45,10 +45,10 @@ in
 
     persistent-others =
       (map mkNamedFolder [
-        { name = "Music";       showas = "fan"; }
-        { name = "Games";       showas = "automatic"; }
-        { name = "Development"; showas = "fan"; }
-        { name = "Work";        showas = "fan"; }
+        { name = "Music";       showas = "grid"; }
+        { name = "Games";       showas = "grid"; }
+        { name = "Development"; showas = "grid"; }
+        { name = "Work";        showas = "grid"; }
       ])
       ++ [
         (mkDockFolder {
