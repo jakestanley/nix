@@ -10,6 +10,12 @@ from datetime import datetime
 DEBUG = os.environ.get("DISPLAY_SYNC_DEBUG") == "1"
 POLL_SECONDS = 3
 
+# EDIDs of known dummy plugs. Any connected output not in this set is treated
+# as a real display. Add more UUIDs here if additional dummy plugs are used.
+DUMMY_PLUG_UUIDS: frozenset[str] = frozenset({
+    "d5ec3d5d-0120-4826-8b84-0e8dbec0af1c",
+})
+
 
 def log_debug(message: str) -> None:
     if DEBUG:
@@ -73,29 +79,25 @@ def get_outputs():
     return outputs if isinstance(outputs, list) else []
 
 
-def is_primary_enabled(outputs) -> bool:
-    for output in outputs:
-        if not isinstance(output, dict):
-            continue
-        name = output.get("name")
-        if (
-            isinstance(name, str)
-            and name.startswith("DP-")
-            and output.get("enabled")
-        ):
-            return True
-    return False
+def is_dummy(output: dict) -> bool:
+    return output.get("uuid") in DUMMY_PLUG_UUIDS
 
 
-def set_dummy_enabled(outputs, enable: bool) -> None:
+def real_display_connected(outputs: list) -> bool:
+    return any(
+        isinstance(o, dict) and o.get("connected") and not is_dummy(o)
+        for o in outputs
+    )
+
+
+def set_dummy_plugs_enabled(outputs: list, enable: bool) -> None:
     action = "enable" if enable else "disable"
     for output in outputs:
-        if not isinstance(output, dict):
+        if not isinstance(output, dict) or not is_dummy(output):
             continue
         name = output.get("name")
-        if not (isinstance(name, str) and name.startswith("HDMI-")):
+        if not isinstance(name, str):
             continue
-
         command = ["kscreen-doctor", f"output.{name}.{action}"]
         try:
             if DEBUG:
@@ -116,16 +118,16 @@ def main() -> None:
     last_state = None
     while True:
         outputs = get_outputs()
-        primary_enabled = is_primary_enabled(outputs)
-        primary_state = "enabled" if primary_enabled else "not-enabled"
-        dummy_should_enable = not primary_enabled
+        has_real = real_display_connected(outputs)
+        state = "real display connected" if has_real else "no real display"
+        dummy_should_enable = not has_real
 
-        if primary_state != last_state:
+        if state != last_state:
             action = "enable" if dummy_should_enable else "disable"
-            log_debug(f"DP outputs are {primary_state}; {action} HDMI outputs")
-            last_state = primary_state
+            log_debug(f"{state}; {action} dummy plug(s)")
+            last_state = state
 
-        set_dummy_enabled(outputs, dummy_should_enable)
+        set_dummy_plugs_enabled(outputs, dummy_should_enable)
         time.sleep(POLL_SECONDS)
 
 
