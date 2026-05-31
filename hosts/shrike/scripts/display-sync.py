@@ -47,7 +47,12 @@ def get_outputs() -> list[dict]:
         if m:
             if current is not None:
                 outputs.append(current)
-            current = {"name": m.group(1), "uuid": m.group(2), "connected": False, "enabled": False}
+            current = {
+                    "name": m.group(1),
+                    "uuid": m.group(2),
+                    "connected": False,
+                    "enabled": False,
+                }
         elif current is not None:
             token = line.strip()
             if token == "enabled":
