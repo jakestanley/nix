@@ -23,7 +23,11 @@ OUTPUT_HEADER = re.compile(r"^Output:\s+\d+\s+(\S+)\s+([0-9a-f-]{36})")
 def log_debug(message: str) -> None:
     if DEBUG:
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        print(f"[display-sync] {timestamp} {message}", file=sys.stderr, flush=True)
+        print(
+            f"[display-sync] {timestamp} {message}",
+            file=sys.stderr,
+            flush=True,
+        )
 
 
 def get_outputs() -> list[dict]:
@@ -48,11 +52,11 @@ def get_outputs() -> list[dict]:
             if current is not None:
                 outputs.append(current)
             current = {
-                    "name": m.group(1),
-                    "uuid": m.group(2),
-                    "connected": False,
-                    "enabled": False,
-                }
+                "name": m.group(1),
+                "uuid": m.group(2),
+                "connected": False,
+                "enabled": False,
+            }
         elif current is not None:
             token = line.strip()
             if token == "enabled":
@@ -87,7 +91,12 @@ def set_dummy_plugs_enabled(outputs: list[dict], enable: bool) -> None:
             if DEBUG:
                 subprocess.run(command, check=True)
             else:
-                subprocess.run(command, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                subprocess.run(
+                    command,
+                    check=True,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                )
         except Exception as exc:
             log_debug(f"command failed ({' '.join(command)}): {exc}")
 
