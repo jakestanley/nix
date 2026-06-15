@@ -98,11 +98,45 @@ in
   systemd.user.services.steam-autostart = {
     enable = true;
     description = "Start Steam when the graphical session starts";
-    after = [ "graphical-session.target" ];
+    # Steam must start AFTER the xdg-desktop-portal ScreenCast backend and
+    # PipeWire are ready. If Steam wins the race it decides the portal is
+    # unavailable and silently uses X11/xcomposite capture for the whole
+    # session, which renders streamed (composited Xwayland) game windows as a
+    # black frame. Starting after the portal lets Steam take the PipeWire
+    # output-capture path, which streams games correctly.
+    after = [
+      "graphical-session.target"
+      "xdg-desktop-portal.service"
+      "plasma-xdg-desktop-portal-kde.service"
+      "pipewire.service"
+      "wireplumber.service"
+    ];
+    wants = [
+      "xdg-desktop-portal.service"
+      "plasma-xdg-desktop-portal-kde.service"
+      "pipewire.service"
+    ];
     partOf = [ "graphical-session.target" ];
     wantedBy = [ "graphical-session.target" ];
-    serviceConfig.Environment = "PATH=/run/current-system/sw/bin:/usr/bin:/bin";
-    serviceConfig.ExecStart = "${pkgs.steam}/bin/steam -silent -pipewire";
+    serviceConfig = {
+      Environment = "PATH=/run/current-system/sw/bin:/usr/bin:/bin";
+      # The portal is D-Bus activated, so unit ordering alone isn't enough.
+      # Wait until the ScreenCast interface actually answers on the bus before
+      # launching Steam. Times out after ~30s so Steam still starts regardless.
+      ExecStartPre = pkgs.writeShellScript "wait-for-screencast-portal" ''
+        for _ in $(seq 1 30); do
+          if ${pkgs.systemd}/bin/busctl --user introspect \
+              org.freedesktop.portal.Desktop \
+              /org/freedesktop/portal/desktop \
+              org.freedesktop.portal.ScreenCast >/dev/null 2>&1; then
+            exit 0
+          fi
+          sleep 1
+        done
+        exit 0
+      '';
+      ExecStart = "${pkgs.steam}/bin/steam -silent -pipewire";
+    };
   };
 
   systemd.tmpfiles.settings."10-gaming" = {
