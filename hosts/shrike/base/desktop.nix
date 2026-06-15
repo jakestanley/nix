@@ -55,6 +55,10 @@ in
       ExecStart = "${displaySync}/bin/display-sync";
       Restart = "always";
       RestartSec = 3;
+      Environment = [
+        "PATH=/run/current-system/sw/bin:/usr/bin:/bin"
+        "WAYLAND_DISPLAY=wayland-0"
+      ];
     };
   };
 
