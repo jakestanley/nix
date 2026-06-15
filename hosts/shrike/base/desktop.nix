@@ -34,6 +34,17 @@ in
 
   programs.firefox.enable = true;
 
+  # Pin the ScreenCast portal backend to KDE so Steam Remote Play's PipeWire
+  # capture path is deterministic. Without a working ScreenCast portal session
+  # Steam silently falls back to X11/xcomposite capture, which renders composited
+  # Xwayland game windows as a black frame. This matches the current implicit
+  # behavior (portals.conf default=kde) but makes it explicit and regression-proof.
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.kdePackages.xdg-desktop-portal-kde ];
+    config.common."org.freedesktop.impl.portal.ScreenCast" = "kde";
+  };
+
   users.users.jake.packages = with pkgs; [
     kdePackages.kate
   ];
