@@ -14,6 +14,7 @@ POLL_SECONDS = 3
 # as a real display. Add more UUIDs here if additional dummy plugs are used.
 DUMMY_PLUG_UUIDS: frozenset[str] = frozenset({
     "d5ec3d5d-0120-4826-8b84-0e8dbec0af1c",
+    "beb0976b-0e24-419f-90be-f63c811b0dae",
 })
 
 ANSI_ESCAPE = re.compile(r"\x1b\[[0-9;]*m")
