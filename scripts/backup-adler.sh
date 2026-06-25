@@ -3,6 +3,7 @@ set -euo pipefail
 
 cleanup() {
     echo "Starting docker and plex..."
+    sudo systemctl start docker.socket
     sudo systemctl start docker
     sudo systemctl start plexmediaserver
 }
@@ -11,6 +12,7 @@ trap cleanup EXIT
 
 echo "Stopping docker and plex"
 
+sudo systemctl stop docker.socket
 sudo systemctl stop docker
 sudo systemctl stop plexmediaserver
 
@@ -23,6 +25,7 @@ BACKUP_FILE="$BACKUP_DEST/adler-$TIMESTAMP.tar.gz"
 
 mkdir -p "$BACKUP_DEST"
 
+tar_exit=0
 sudo tar -czf "$BACKUP_FILE" \
     --warning=no-file-ignored \
     --exclude="$BACKUP_TARGET_HOME/.cache" \
@@ -52,7 +55,13 @@ sudo tar -czf "$BACKUP_FILE" \
     /etc/openvpn \
     /etc/wireguard \
     /etc/homelab/certs \
-    /var/lib/plexmediaserver
+    /var/lib/plexmediaserver || tar_exit=$?
+
+# exit code 1 = files changed during archive (warning); 2+ = fatal
+if [ "$tar_exit" -gt 1 ]; then
+    echo "tar failed with exit code $tar_exit"
+    exit "$tar_exit"
+fi
 
 # Tiered retention: daily for 7d, weekly for 8w, monthly for 6m
 prune_backups() {
