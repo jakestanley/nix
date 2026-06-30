@@ -28,6 +28,9 @@ mkdir -p "$BACKUP_DEST"
 tar_exit=0
 sudo tar -czf "$BACKUP_FILE" \
     --warning=no-file-ignored \
+    --exclude="$BACKUP_TARGET_HOME/tmp" \
+    --exclude="$BACKUP_TARGET_HOME/.local/share/claude" \
+    --exclude="$BACKUP_TARGET_HOME/.zed_server" \
     --exclude="$BACKUP_TARGET_HOME/.cache" \
     --exclude="$BACKUP_TARGET_HOME/.local/share/Trash" \
     --exclude="$BACKUP_TARGET_HOME/.local/lib" \
