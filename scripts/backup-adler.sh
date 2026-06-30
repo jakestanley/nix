@@ -26,7 +26,15 @@ BACKUP_FILE="$BACKUP_DEST/adler-$TIMESTAMP.tar.gz"
 mkdir -p "$BACKUP_DEST"
 
 tar_exit=0
-sudo tar -czf "$BACKUP_FILE" \
+# This script runs from root's crontab (and occasionally by hand as jake). tar
+# reads root-only sources, but the OUTPUT FILE must be owned by jake: the Dropbox
+# daemon runs as jake and silently will not sync root-owned files. A trailing
+# `chown` is too fragile (any earlier non-zero exit under `set -e` skips it,
+# leaving a complete-looking backup that never reaches Dropbox). So tar writes to
+# stdout and `tee`, running explicitly as jake, creates the file — giving correct
+# ownership from creation regardless of who runs the script. pipefail (set above)
+# ensures tar's failure (not tee's success) propagates to tar_exit.
+sudo tar -czf - \
     --warning=no-file-ignored \
     --exclude="$BACKUP_TARGET_HOME/tmp" \
     --exclude="$BACKUP_TARGET_HOME/.local/share/claude" \
@@ -58,7 +66,8 @@ sudo tar -czf "$BACKUP_FILE" \
     /etc/openvpn \
     /etc/wireguard \
     /etc/homelab/certs \
-    /var/lib/plexmediaserver || tar_exit=$?
+    /var/lib/plexmediaserver \
+    | sudo -u jake tee "$BACKUP_FILE" > /dev/null || tar_exit=$?
 
 # exit code 1 = files changed during archive (warning); 2+ = fatal
 if [ "$tar_exit" -gt 1 ]; then
@@ -103,5 +112,4 @@ prune_backups() {
 
 prune_backups "$BACKUP_DEST"
 
-sudo chown jake:jake "$BACKUP_FILE"
 echo "Backup complete: $BACKUP_FILE"
