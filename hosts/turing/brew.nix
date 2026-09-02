@@ -18,6 +18,13 @@
       "dsda-doom"
       "aubio"
       "cassandra"
+      "cmake"
+      "ghostscript"
+      "sox"
+      "summarize"
+      "wireguard-tools"
+      "woodpecker-cli"
+      "yakitrak/yakitrak/obsidian-cli"
     ];
 
     casks = [
@@ -55,6 +62,7 @@
       "protonvpn"
       "macs-fan-control"
       "inkscape"
+      "prismlauncher"
     ];
   };
 }
