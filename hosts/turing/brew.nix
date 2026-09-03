@@ -24,10 +24,10 @@
       "summarize"
       "wireguard-tools"
       "woodpecker-cli"
-      "yakitrak/yakitrak/obsidian-cli"
     ];
 
     casks = [
+      "powershell"
       "moonlight"
       "vlc"
       "godot"
