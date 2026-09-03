@@ -62,8 +62,9 @@ sudo tar -czf - \
     --exclude="*/.venv" \
     --exclude="*/venv" \
     --exclude="*/ipc-socket" \
+    --exclude="$BACKUP_TARGET_HOME/.ssh/id_ed25519" \
+    --exclude="$BACKUP_TARGET_HOME/.ssh/id_rsa_kindle" \
     $BACKUP_TARGET_HOME \
-    /etc/openvpn \
     /etc/wireguard \
     /etc/homelab/certs \
     /var/lib/plexmediaserver \
