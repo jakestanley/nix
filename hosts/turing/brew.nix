@@ -17,6 +17,7 @@
     brews = [
       "dsda-doom"
       "aubio"
+      "powershell"
       "cassandra"
       "cmake"
       "ghostscript"
@@ -27,7 +28,6 @@
     ];
 
     casks = [
-      "powershell"
       "moonlight"
       "vlc"
       "godot"
