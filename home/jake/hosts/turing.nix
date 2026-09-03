@@ -1,6 +1,11 @@
-{ lib, config, ... }:
+{ lib, config, pkgs, ... }:
 
 {
+  home.packages = with pkgs; [
+    portablemc
+    ferium
+  ];
+
   home.file = {
     "Desktop/Dock Folders/Work/Microsoft Teams.app".source =
       config.lib.file.mkOutOfStoreSymlink "/Applications/Microsoft Teams.app";
@@ -68,6 +73,10 @@
         "git"
         "docker"
       ];
+    };
+
+    shellAliases = {
+      minecraft = "portablemc start --jvm ${pkgs.jdk25}/bin/java fabric:26.1";
     };
 
     # Keep this host-specific until explicitly promoted into common shell.nix.
