@@ -6,17 +6,28 @@ steps:
   - name: validate
     image: nixos/nix
     environment:
-      GIT_SSH_COMMAND: ssh -F /tmp/ssh/config -i /tmp/ssh/id_ed25519
+      # Was: jake's real ~/.ssh bind-mounted in wholesale (id_ed25519 trusted by
+      # every host in the fleet). Now: a dedicated read-only GitHub deploy key,
+      # scoped to only the homelab-infra repo, injected as a Woodpecker secret --
+      # never touches the host filesystem, never leaves this step.
+      GIT_SSH_COMMAND: ssh -i /tmp/ssh/id_ed25519 -o UserKnownHostsFile=/tmp/ssh/known_hosts
       NIX_CONFIG: |
         system-features = kvm nixos-test
         build-users-group =
+      HOMELAB_INFRA_DEPLOY_KEY:
+        from_secret: homelab_infra_deploy_key
     volumes:
       - nix-cache:/nix
-      - /home/jake/.ssh:/root/.ssh:ro 
     commands:
-      - cp -r /root/.ssh /tmp/ssh
+      - mkdir -p /tmp/ssh
       - chmod 700 /tmp/ssh
-      - chmod 600 /tmp/ssh/*
+      - echo "$HOMELAB_INFRA_DEPLOY_KEY" > /tmp/ssh/id_ed25519
+      - chmod 600 /tmp/ssh/id_ed25519
+      # Pin github.com's host key via keyscan rather than relying on a
+      # pre-populated known_hosts (there is none, this key never touches jake's
+      # real .ssh) -- nixos/nix's image doesn't ship an ssh client, pull one
+      # on demand.
+      - nix --extra-experimental-features "nix-command flakes" shell nixpkgs#openssh -c ssh-keyscan -t ed25519 github.com >> /tmp/ssh/known_hosts
       - >-
         nix
         --extra-experimental-features "nix-command flakes"
