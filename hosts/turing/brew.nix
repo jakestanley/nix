@@ -21,6 +21,7 @@
       "cassandra"
       "cmake"
       "ghostscript"
+      "imagemagick"
       "sox"
       "summarize"
       "wireguard-tools"
