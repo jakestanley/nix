@@ -69,6 +69,7 @@
       "inkscape"
       "prismlauncher"
       "anomalyco/tap/hex"
+      "raycast"
     ];
   };
 }
