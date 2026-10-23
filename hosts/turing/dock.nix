@@ -26,9 +26,11 @@ in
     magnification = false;
 
     persistent-apps = [
+      { app = "/System/Applications/Clock.app"; }
       { app = "/System/Applications/Calendar.app"; }
       { app = "/Applications/1Password.app"; }
       { app = "/Applications/Nix Apps/Firefox.app"; }
+      { app = "/System/Applications/Music.app"; }
       { app = "/Applications/Spotify.app"; }
       { app = "/Applications/WhatsApp.app"; }
       { app = "/Applications/Nix Apps/Telegram.app"; }
