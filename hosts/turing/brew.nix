@@ -13,6 +13,10 @@
       cleanup = "uninstall";
     };
 
+    taps = [
+      "anomalyco/tap"
+    ];
+
     # use `brew leaves --installed-on-request` to compile these lists in future
     brews = [
       "dsda-doom"
@@ -64,6 +68,7 @@
       "macs-fan-control"
       "inkscape"
       "prismlauncher"
+      "anomalyco/tap/hex"
     ];
   };
 }
