@@ -42,7 +42,8 @@
     # non-graphical, work only
     pkgs.redis
     # graphical. expand "platforms" when searching here: https://search.nixos.org/packages?channel=25.11
-    pkgs.firefox
+    # pkgs.firefox (ad-hoc signed, so each rebuild looks like a new app to macOS and loses access
+    #   to its own ~/Library/Application Support/Firefox; use the Mozilla-signed cask instead)
     # pkgs.prismlauncher (broken on mac)
     pkgs.telegram-desktop
     # pkgs.spotify (broken on mac?)

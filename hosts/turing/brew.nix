@@ -70,6 +70,7 @@
       "prismlauncher"
       "anomalyco/tap/hex"
       "raycast"
+      "firefox"
     ];
   };
 }
