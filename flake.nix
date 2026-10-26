@@ -25,16 +25,11 @@
       url = "github:electrikmilk/cherri/2ca7dfea38ef852484866ad41b232584d8e62f0c";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    homelab-infra = {
-      url = "git+ssh://git@github.com/jakestanley/homelab-infra";
-      flake = false;
-    };
   };
 
   outputs = inputs@{ nixpkgs, ... }:
     let
       lib = nixpkgs.lib;
-      pkgs = nixpkgs.legacyPackages.x86_64-linux;
       supportedSystems = [
         "aarch64-darwin"
         "aarch64-linux"
@@ -130,11 +125,6 @@
         shrike      = mkNixosHost "shrike";
         kestrel     = mkNixosHost "kestrel";
         adler       = mkNixosHost "adler";
-      };
-
-      checks.x86_64-linux = {
-        dns = import ./tests/dns.nix { inherit pkgs; };
-        nginx = import ./tests/nginx.nix { inherit pkgs; };
       };
     };
 }

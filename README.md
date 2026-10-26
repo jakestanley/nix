@@ -17,10 +17,6 @@ See [hosts/INSTALL.md](hosts/INSTALL.md).
 
 Update inputs: `nix flake update`, then deploy the relevant host.
 
-> **Note:** `nix flake check` must be run from an `x86_64-linux` machine (e.g. shrike or adler).
-> `adler`'s config uses IFD (`pkgs.runCommandLocal`) to parse its service registry at eval time,
-> which cannot run on `aarch64-darwin`.
-
 ### shrike / kestrel
 
 Both configurations share `/boot` and coexist as separate boot entries. Deploying one does not affect the other's boot entry.

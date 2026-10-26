@@ -8,12 +8,12 @@ Multi-host NixOS and nix-darwin configuration managing four machines:
 
 - **shrike** — gaming/living room PC (x86_64-linux), KDE Plasma, NVIDIA, Docker, Lanzaboote Secure Boot
 - **kestrel** — work PC on shared hardware with shrike (x86_64-linux), Sway, LUKS-encrypted `/home/work`, Lanzaboote Secure Boot
-- **adler** — home server (x86_64-linux), ZFS, homelab services (DNS, Nginx, Plex, Samba, OpenVPN)
+- **adler** — home server (x86_64-linux), ZFS, homelab services (Plex, Samba, OpenVPN, WireGuard)
 - **turing** — MacBook (aarch64-darwin), nix-darwin
 
 ## Build and Deploy Commands
 
-### Validate (must run on x86_64-linux — adler uses IFD)
+### Validate
 ```bash
 nix flake check
 ```
@@ -74,15 +74,12 @@ nix flake update
 - `modules/nixos/` — Reusable NixOS system modules (`base.nix`, `nvidia.nix`, `ssh.nix`, `identities.nix`)
 - `modules/shared/` — Cross-target values (e.g. editor env vars)
 - `pkgs/` — Custom Nix packages
-- `tests/` — NixOS VM tests for DNS and Nginx
 
 ### Key design patterns
 
 **Home Manager entry point** — `home/jake/home.nix` conditionally imports `home/jake/hosts/${hostname}.nix` if it exists, then imports platform and common modules.
 
 **Shared boot partition** — shrike and kestrel share `/boot` as separate Lanzaboote entries. Each has its own signing keys under `/var/lib/sbctl`. Recovery requires UEFI setup mode.
-
-**IFD restriction** — `hosts/adler/homelab/registry.nix` uses `pkgs.runCommandLocal` at eval time. `nix flake check` and adler builds must run on x86_64-linux, not on turing (aarch64-darwin).
 
 **Cross-host SSH keys** — `modules/nixos/identities.nix` centralises public keys for jake@turing, jake@shrike, jake@adler used across host `authorized_keys`.
 
