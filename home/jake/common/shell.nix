@@ -44,8 +44,8 @@ in
     enable = true;
     enableZshIntegration = true;
     defaultCommand = fzfFileCommand;
-    fileWidgetCommand = fzfFileCommand;
-    changeDirWidgetCommand = fzfDirCommand;
+    fileWidget.command = fzfFileCommand;
+    changeDirWidget.command = fzfDirCommand;
   };
 
   programs.zsh = {

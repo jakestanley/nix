@@ -4,29 +4,23 @@
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks = {
+    settings = {
       "windows.shrike.stanley.arpa" = {
-        hostname = "shrike.stanley.arpa";
-        user = "mail";
-        extraOptions = {
-          HostKeyAlias = "windows.shrike.stanley.arpa";
-        };
+        HostName = "shrike.stanley.arpa";
+        User = "mail";
+        HostKeyAlias = "windows.shrike.stanley.arpa";
       };
 
       "shrike.stanley.arpa" = {
-        hostname = "shrike.stanley.arpa";
-        user = "jake";
-        extraOptions = {
-          HostKeyAlias = "shrike.stanley.arpa";
-        };
+        HostName = "shrike.stanley.arpa";
+        User = "jake";
+        HostKeyAlias = "shrike.stanley.arpa";
       };
 
       "adler.stanley.arpa" = {
-        hostname = "adler.stanley.arpa";
-        user = "jake";
-        extraOptions = {
-          HostKeyAlias = "adler.stanley.arpa";
-        };
+        HostName = "adler.stanley.arpa";
+        User = "jake";
+        HostKeyAlias = "adler.stanley.arpa";
       };
     };
   };
