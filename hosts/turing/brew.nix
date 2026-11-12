@@ -71,6 +71,7 @@
       "anomalyco/tap/hex"
       "raycast"
       "firefox"
+      "camo-studio"
     ];
   };
 }
