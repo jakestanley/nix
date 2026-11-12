@@ -29,7 +29,7 @@ in
       { app = "/System/Applications/Clock.app"; }
       { app = "/System/Applications/Calendar.app"; }
       { app = "/Applications/1Password.app"; }
-      { app = "/Applications/Firefox.app"; }
+      { app = "/Applications/Safari.app"; }
       { app = "/System/Applications/Music.app"; }
       { app = "/Applications/Spotify.app"; }
       { app = "/Applications/WhatsApp.app"; }
