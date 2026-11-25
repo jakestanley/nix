@@ -61,6 +61,8 @@
     pkgs.upscayl
     # non-graphical, mac only
     pkgs.openconnect
+    pkgs.xcodegen
+    pkgs.poetry
     inputs.cherri.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
